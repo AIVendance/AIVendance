@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+psycopg2-binary
+opencv-python>=4.8.0
+numpy
+python-multipart
+websockets
+requests
