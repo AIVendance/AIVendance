@@ -12,12 +12,7 @@ class FaceRecognizer:
         self.model_path = os.path.join(base, "models", "arcface_int8.onnx")  # <--- CHANGED
         
         if not os.path.exists(self.aligner_path):
-            raise FileNotFoundError("❌ Missing SFace Model!")
-        if not os.path.exists(self.model_path):
-            raise FileNotFoundError("❌ Missing ArcFace INT8 Model! Run the download command.")
-
-        # Load Aligner
-        self.aligner = cv2.FaceRecognizerSF.create(
+            raise FileNotFoundError("❌ Missing SFace Model!")src/ml_engine/models/arcface_int8.onnx src/ml_engine/models/face_detection_yunet.onnx src/ml_engine/models/face_recognition_sface.onnx
             model=self.aligner_path,
             config="",
             backend_id=cv2.dnn.DNN_BACKEND_OPENCV,

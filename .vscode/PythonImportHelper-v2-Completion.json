@@ -1,0 +1,926 @@
+[
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "WebSocket",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Form",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Depends",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "WebSocket",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "get_db",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "get_db",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "get_db",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "get_db",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "engine",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "isExtraImport": true,
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceRepository",
+        "importPath": "src.db.repository",
+        "description": "src.db.repository",
+        "isExtraImport": true,
+        "detail": "src.db.repository",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceRepository",
+        "importPath": "src.db.repository",
+        "description": "src.db.repository",
+        "isExtraImport": true,
+        "detail": "src.db.repository",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceRepository",
+        "importPath": "src.db.repository",
+        "description": "src.db.repository",
+        "isExtraImport": true,
+        "detail": "src.db.repository",
+        "documentation": {}
+    },
+    {
+        "label": "attendance_service",
+        "importPath": "src.services.attendance_service",
+        "description": "src.services.attendance_service",
+        "isExtraImport": true,
+        "detail": "src.services.attendance_service",
+        "documentation": {}
+    },
+    {
+        "label": "FaceDetector",
+        "importPath": "src.ml_engine.detector",
+        "description": "src.ml_engine.detector",
+        "isExtraImport": true,
+        "detail": "src.ml_engine.detector",
+        "documentation": {}
+    },
+    {
+        "label": "FaceDetector",
+        "importPath": "src.ml_engine.detector",
+        "description": "src.ml_engine.detector",
+        "isExtraImport": true,
+        "detail": "src.ml_engine.detector",
+        "documentation": {}
+    },
+    {
+        "label": "FaceRecognizer",
+        "importPath": "src.ml_engine.recognizer",
+        "description": "src.ml_engine.recognizer",
+        "isExtraImport": true,
+        "detail": "src.ml_engine.recognizer",
+        "documentation": {}
+    },
+    {
+        "label": "FaceRecognizer",
+        "importPath": "src.ml_engine.recognizer",
+        "description": "src.ml_engine.recognizer",
+        "isExtraImport": true,
+        "detail": "src.ml_engine.recognizer",
+        "documentation": {}
+    },
+    {
+        "label": "read_image_from_bytes",
+        "importPath": "src.utils.image_processing",
+        "description": "src.utils.image_processing",
+        "isExtraImport": true,
+        "detail": "src.utils.image_processing",
+        "documentation": {}
+    },
+    {
+        "label": "read_image_from_bytes",
+        "importPath": "src.utils.image_processing",
+        "description": "src.utils.image_processing",
+        "isExtraImport": true,
+        "detail": "src.utils.image_processing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "create_async_engine",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSession",
+        "importPath": "sqlalchemy.ext.asyncio",
+        "description": "sqlalchemy.ext.asyncio",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.ext.asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "select",
+        "importPath": "sqlalchemy.future",
+        "description": "sqlalchemy.future",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.future",
+        "documentation": {}
+    },
+    {
+        "label": "select",
+        "importPath": "sqlalchemy.future",
+        "description": "sqlalchemy.future",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.future",
+        "documentation": {}
+    },
+    {
+        "label": "Session",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Course",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "FacialEmbedding",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Session",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceLog",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Enrollment",
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "isExtraImport": true,
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "enrollment_service",
+        "importPath": "src.services.enrollment_service",
+        "description": "src.services.enrollment_service",
+        "isExtraImport": true,
+        "detail": "src.services.enrollment_service",
+        "documentation": {}
+    },
+    {
+        "label": "sessionmaker",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "declarative_base",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "src.config",
+        "description": "src.config",
+        "isExtraImport": true,
+        "detail": "src.config",
+        "documentation": {}
+    },
+    {
+        "label": "Column",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Integer",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Boolean",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "ForeignKey",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "DateTime",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Text",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Time",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "Date",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "func",
+        "importPath": "sqlalchemy.sql",
+        "description": "sqlalchemy.sql",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.sql",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "CORSMiddleware",
+        "importPath": "fastapi.middleware.cors",
+        "description": "fastapi.middleware.cors",
+        "isExtraImport": true,
+        "detail": "fastapi.middleware.cors",
+        "documentation": {}
+    },
+    {
+        "label": "attendance",
+        "importPath": "src.api.routers",
+        "description": "src.api.routers",
+        "isExtraImport": true,
+        "detail": "src.api.routers",
+        "documentation": {}
+    },
+    {
+        "label": "enrollment",
+        "importPath": "src.api.routers",
+        "description": "src.api.routers",
+        "isExtraImport": true,
+        "detail": "src.api.routers",
+        "documentation": {}
+    },
+    {
+        "label": "classrooms",
+        "importPath": "src.api.routers",
+        "description": "src.api.routers",
+        "isExtraImport": true,
+        "detail": "src.api.routers",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.api.routers.attendance",
+        "description": "src.api.routers.attendance",
+        "peekOfCode": "router = APIRouter()\n# Initialize AI Engines once\nprint(\"🚀 Initializing AI Engines...\")\ndetector = FaceDetector()\nrecognizer = FaceRecognizer()\nprint(\"✅ AI Engines Ready\")\n@router.post(\"/recognize\")\nasync def recognize(classroom_id: str = \"CS101\", image: UploadFile = File(...), db=Depends(get_db)):\n    # 1. Read Image\n    img_bytes = await image.read()",
+        "detail": "src.api.routers.attendance",
+        "documentation": {}
+    },
+    {
+        "label": "detector",
+        "kind": 5,
+        "importPath": "src.api.routers.attendance",
+        "description": "src.api.routers.attendance",
+        "peekOfCode": "detector = FaceDetector()\nrecognizer = FaceRecognizer()\nprint(\"✅ AI Engines Ready\")\n@router.post(\"/recognize\")\nasync def recognize(classroom_id: str = \"CS101\", image: UploadFile = File(...), db=Depends(get_db)):\n    # 1. Read Image\n    img_bytes = await image.read()\n    img = read_image_from_bytes(img_bytes)\n    # DEBUG: Print image shape to terminal\n    if img is None:",
+        "detail": "src.api.routers.attendance",
+        "documentation": {}
+    },
+    {
+        "label": "recognizer",
+        "kind": 5,
+        "importPath": "src.api.routers.attendance",
+        "description": "src.api.routers.attendance",
+        "peekOfCode": "recognizer = FaceRecognizer()\nprint(\"✅ AI Engines Ready\")\n@router.post(\"/recognize\")\nasync def recognize(classroom_id: str = \"CS101\", image: UploadFile = File(...), db=Depends(get_db)):\n    # 1. Read Image\n    img_bytes = await image.read()\n    img = read_image_from_bytes(img_bytes)\n    # DEBUG: Print image shape to terminal\n    if img is None:\n        print(f\"❌ Error: Received Empty Image for {classroom_id}\")",
+        "detail": "src.api.routers.attendance",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.api.routers.classrooms",
+        "description": "src.api.routers.classrooms",
+        "peekOfCode": "router = APIRouter()\n@router.post(\"/classroom/{classroom_id}/start\")\nasync def start_class(classroom_id: str, db: AsyncSession = Depends(get_db)):\n    \"\"\"\n    Starts a new session for a specific classroom.\n    \"\"\"\n    # 1. Check if there is a course in this room\n    # In a real app, you would filter by room_id or time. \n    # For this demo, we pick the first course or create a dummy one.\n    result = await db.execute(select(Course))",
+        "detail": "src.api.routers.classrooms",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "src.api.routers.enrollment",
+        "description": "src.api.routers.enrollment",
+        "peekOfCode": "router = APIRouter()\ndetector = FaceDetector()\nrec_engine = FaceRecognizer()\n@router.post(\"/enroll\")\nasync def enroll(student_id: str=Form(...), full_name: str=Form(...), files: List[UploadFile]=File(...), db=Depends(get_db)):\n    repo = AttendanceRepository(db)\n    count = await enrollment_service.enroll_student(repo, detector, rec_engine, student_id, full_name, files)\n    return {\"status\": \"enrolled\", \"count\": count}",
+        "detail": "src.api.routers.enrollment",
+        "documentation": {}
+    },
+    {
+        "label": "detector",
+        "kind": 5,
+        "importPath": "src.api.routers.enrollment",
+        "description": "src.api.routers.enrollment",
+        "peekOfCode": "detector = FaceDetector()\nrec_engine = FaceRecognizer()\n@router.post(\"/enroll\")\nasync def enroll(student_id: str=Form(...), full_name: str=Form(...), files: List[UploadFile]=File(...), db=Depends(get_db)):\n    repo = AttendanceRepository(db)\n    count = await enrollment_service.enroll_student(repo, detector, rec_engine, student_id, full_name, files)\n    return {\"status\": \"enrolled\", \"count\": count}",
+        "detail": "src.api.routers.enrollment",
+        "documentation": {}
+    },
+    {
+        "label": "rec_engine",
+        "kind": 5,
+        "importPath": "src.api.routers.enrollment",
+        "description": "src.api.routers.enrollment",
+        "peekOfCode": "rec_engine = FaceRecognizer()\n@router.post(\"/enroll\")\nasync def enroll(student_id: str=Form(...), full_name: str=Form(...), files: List[UploadFile]=File(...), db=Depends(get_db)):\n    repo = AttendanceRepository(db)\n    count = await enrollment_service.enroll_student(repo, detector, rec_engine, student_id, full_name, files)\n    return {\"status\": \"enrolled\", \"count\": count}",
+        "detail": "src.api.routers.enrollment",
+        "documentation": {}
+    },
+    {
+        "label": "engine",
+        "kind": 5,
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "peekOfCode": "engine = create_async_engine(settings.DATABASE_URL, echo=False)\nAsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)\nBase = declarative_base()\nasync def get_db():\n    async with AsyncSessionLocal() as session:\n        yield session",
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncSessionLocal",
+        "kind": 5,
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "peekOfCode": "AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)\nBase = declarative_base()\nasync def get_db():\n    async with AsyncSessionLocal() as session:\n        yield session",
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "Base",
+        "kind": 5,
+        "importPath": "src.db.database",
+        "description": "src.db.database",
+        "peekOfCode": "Base = declarative_base()\nasync def get_db():\n    async with AsyncSessionLocal() as session:\n        yield session",
+        "detail": "src.db.database",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class User(Base):\n    __tablename__ = \"users\"\n    user_id = Column(String, primary_key=True)\n    full_name = Column(String, nullable=False)\n    email = Column(String, unique=True, nullable=False)\n    role = Column(String, default=\"Student\")\n    created_at = Column(DateTime(timezone=True), server_default=func.now())\nclass Enrollment(Base):\n    \"\"\"Links Students to Courses\"\"\"\n    __tablename__ = \"enrollments\"",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Enrollment",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class Enrollment(Base):\n    \"\"\"Links Students to Courses\"\"\"\n    __tablename__ = \"enrollments\"\n    enrollment_id = Column(Integer, primary_key=True, index=True)\n    student_id = Column(String, ForeignKey(\"users.user_id\"))\n    course_code = Column(String, nullable=False) # e.g. CS101\nclass FacialEmbedding(Base):\n    __tablename__ = \"facial_embeddings\"\n    embedding_id = Column(Integer, primary_key=True, index=True)\n    student_id = Column(String, ForeignKey(\"users.user_id\"), nullable=False)",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "FacialEmbedding",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class FacialEmbedding(Base):\n    __tablename__ = \"facial_embeddings\"\n    embedding_id = Column(Integer, primary_key=True, index=True)\n    student_id = Column(String, ForeignKey(\"users.user_id\"), nullable=False)\n    embedding_vector = Column(Text, nullable=False) \n    created_at = Column(DateTime(timezone=True), server_default=func.now())\nclass Course(Base):\n    __tablename__ = \"courses\"\n    course_id = Column(Integer, primary_key=True, index=True)\n    course_code = Column(String, nullable=False)",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Course",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class Course(Base):\n    __tablename__ = \"courses\"\n    course_id = Column(Integer, primary_key=True, index=True)\n    course_code = Column(String, nullable=False)\n    title = Column(String, nullable=False)\n    start_time = Column(Time, nullable=False)\n    end_time = Column(Time, nullable=False)\n    is_active = Column(Boolean, default=True)\nclass Session(Base):\n    __tablename__ = \"sessions\"",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "Session",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class Session(Base):\n    __tablename__ = \"sessions\"\n    session_id = Column(Integer, primary_key=True, index=True)\n    course_id = Column(Integer, ForeignKey(\"courses.course_id\"))\n    # We store course_code here too for easier lookup\n    course_code = Column(String, nullable=False) \n    actual_start_time = Column(DateTime(timezone=True), server_default=func.now())\n    is_active = Column(Boolean, default=True)\nclass AttendanceLog(Base):\n    __tablename__ = \"attendance_logs\"",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceLog",
+        "kind": 6,
+        "importPath": "src.db.models",
+        "description": "src.db.models",
+        "peekOfCode": "class AttendanceLog(Base):\n    __tablename__ = \"attendance_logs\"\n    log_id = Column(Integer, primary_key=True, index=True)\n    session_id = Column(Integer, ForeignKey(\"sessions.session_id\"))\n    student_id = Column(String, ForeignKey(\"users.user_id\"))\n    first_seen = Column(DateTime(timezone=True), server_default=func.now())\n    last_seen = Column(DateTime(timezone=True), onupdate=func.now())\n    # NEW: The counter for exact time tracking\n    frames_seen = Column(Integer, default=1) \n    status = Column(String, default=\"Present\")",
+        "detail": "src.db.models",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceRepository",
+        "kind": 6,
+        "importPath": "src.db.repository",
+        "description": "src.db.repository",
+        "peekOfCode": "class AttendanceRepository:\n    def __init__(self, db: AsyncSession):\n        self.db = db\n    async def get_all_embeddings(self):\n        result = await self.db.execute(select(FacialEmbedding))\n        embeddings = result.scalars().all()\n        data = {}\n        for rec in embeddings:\n            if rec.student_id not in data: data[rec.student_id] = []\n            try: data[rec.student_id].append(np.array(json.loads(rec.embedding_vector)))",
+        "detail": "src.db.repository",
+        "documentation": {}
+    },
+    {
+        "label": "StudentCreate",
+        "kind": 6,
+        "importPath": "src.db.schema",
+        "description": "src.db.schema",
+        "peekOfCode": "class StudentCreate(BaseModel):\n    student_id: str\n    full_name: str\nclass SessionStart(BaseModel):\n    classroom_id: str\nclass RecognitionResponse(BaseModel):\n    results: List[dict]",
+        "detail": "src.db.schema",
+        "documentation": {}
+    },
+    {
+        "label": "SessionStart",
+        "kind": 6,
+        "importPath": "src.db.schema",
+        "description": "src.db.schema",
+        "peekOfCode": "class SessionStart(BaseModel):\n    classroom_id: str\nclass RecognitionResponse(BaseModel):\n    results: List[dict]",
+        "detail": "src.db.schema",
+        "documentation": {}
+    },
+    {
+        "label": "RecognitionResponse",
+        "kind": 6,
+        "importPath": "src.db.schema",
+        "description": "src.db.schema",
+        "peekOfCode": "class RecognitionResponse(BaseModel):\n    results: List[dict]",
+        "detail": "src.db.schema",
+        "documentation": {}
+    },
+    {
+        "label": "FaceDetector",
+        "kind": 6,
+        "importPath": "src.ml_engine.detector",
+        "description": "src.ml_engine.detector",
+        "peekOfCode": "class FaceDetector:\n    def __init__(self):\n        base = os.path.dirname(os.path.abspath(__file__))\n        model_path = os.path.join(base, \"models\", \"face_detection_yunet.onnx\")\n        if not os.path.exists(model_path):\n            raise FileNotFoundError(f\"❌ Missing Model: {model_path}\")\n        self.detector = cv2.FaceDetectorYN.create(\n            model=model_path,\n            config=\"\",\n            input_size=(320, 320), # Fixed size for consistency",
+        "detail": "src.ml_engine.detector",
+        "documentation": {}
+    },
+    {
+        "label": "FaceRecognizer",
+        "kind": 6,
+        "importPath": "src.ml_engine.recognizer",
+        "description": "src.ml_engine.recognizer",
+        "peekOfCode": "class FaceRecognizer:\n    def __init__(self):\n        base = os.path.dirname(os.path.abspath(__file__))\n        # 1. SFace (Alignment)\n        self.aligner_path = os.path.join(base, \"models\", \"face_recognition_sface.onnx\")\n        # 2. LIGHT ArcFace (Recognition)\n        self.model_path = os.path.join(base, \"models\", \"arcface_int8.onnx\")  # <--- CHANGED\n        if not os.path.exists(self.aligner_path):\n            raise FileNotFoundError(\"❌ Missing SFace Model!\")src/ml_engine/models/arcface_int8.onnx src/ml_engine/models/face_detection_yunet.onnx src/ml_engine/models/face_recognition_sface.onnx\n            model=self.aligner_path,",
+        "detail": "src.ml_engine.recognizer",
+        "documentation": {}
+    },
+    {
+        "label": "AttendanceService",
+        "kind": 6,
+        "importPath": "src.services.attendance_service",
+        "description": "src.services.attendance_service",
+        "peekOfCode": "class AttendanceService:\n    def __init__(self):\n        self.connections: Dict[str, List[WebSocket]] = {}\n    def calculate_arrival_status(self, session, now):\n        start = session.actual_start_time.replace(tzinfo=None) if session.actual_start_time else datetime.now()\n        delay = (now - start).total_seconds() / 60\n        if delay <= 10: return \"Present\"\n        elif delay <= 30: return \"Late\"\n        else: return \"Very Late\"\n    async def process_frame(self, repo, detector, recognizer, frame, classroom_id):",
+        "detail": "src.services.attendance_service",
+        "documentation": {}
+    },
+    {
+        "label": "attendance_service",
+        "kind": 5,
+        "importPath": "src.services.attendance_service",
+        "description": "src.services.attendance_service",
+        "peekOfCode": "attendance_service = AttendanceService()",
+        "detail": "src.services.attendance_service",
+        "documentation": {}
+    },
+    {
+        "label": "EnrollmentService",
+        "kind": 6,
+        "importPath": "src.services.enrollment_service",
+        "description": "src.services.enrollment_service",
+        "peekOfCode": "class EnrollmentService:\n    async def enroll_student(self, repo, detector, recognizer, student_id, full_name, files):\n        if len(files) > 10: raise HTTPException(400, \"Max 10 images\")\n        if len(files) < 3: raise HTTPException(400, \"Need 3 images\")\n        valid_embeddings = []\n        for f in files:\n            img = read_image_from_bytes(await f.read())\n            faces = detector.detect(img)\n            if faces:\n                # Largest face",
+        "detail": "src.services.enrollment_service",
+        "documentation": {}
+    },
+    {
+        "label": "enrollment_service",
+        "kind": 5,
+        "importPath": "src.services.enrollment_service",
+        "description": "src.services.enrollment_service",
+        "peekOfCode": "enrollment_service = EnrollmentService()",
+        "detail": "src.services.enrollment_service",
+        "documentation": {}
+    },
+    {
+        "label": "read_image_from_bytes",
+        "kind": 2,
+        "importPath": "src.utils.image_processing",
+        "description": "src.utils.image_processing",
+        "peekOfCode": "def read_image_from_bytes(file_content: bytes) -> np.ndarray:\n    \"\"\"Helper to convert uploaded bytes to an OpenCV image.\"\"\"\n    nparr = np.frombuffer(file_content, np.uint8)\n    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    return img\ndef resize_image(image: np.ndarray, width: int = 640) -> np.ndarray:\n    \"\"\"Resizes image while keeping aspect ratio.\"\"\"\n    h, w = image.shape[:2]\n    if w > width:\n        ratio = width / float(w)",
+        "detail": "src.utils.image_processing",
+        "documentation": {}
+    },
+    {
+        "label": "resize_image",
+        "kind": 2,
+        "importPath": "src.utils.image_processing",
+        "description": "src.utils.image_processing",
+        "peekOfCode": "def resize_image(image: np.ndarray, width: int = 640) -> np.ndarray:\n    \"\"\"Resizes image while keeping aspect ratio.\"\"\"\n    h, w = image.shape[:2]\n    if w > width:\n        ratio = width / float(w)\n        dim = (width, int(h * ratio))\n        return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)\n    return image",
+        "detail": "src.utils.image_processing",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "kind": 6,
+        "importPath": "src.config",
+        "description": "src.config",
+        "peekOfCode": "class Settings:\n    # UPDATE THIS WITH YOUR PASSWORD\n    DATABASE_URL = \"postgresql+asyncpg://postgres:9548911@localhost:5432/aivendance_db\"\n    BASE_DIR = os.path.dirname(os.path.abspath(__file__))\n    # DeepFace handles its own model paths, so we don't need a manual dir here anymore\n    # Websocket\n    WS_HEARTBEAT_INTERVAL = 30\nsettings = Settings()",
+        "detail": "src.config",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "kind": 5,
+        "importPath": "src.config",
+        "description": "src.config",
+        "peekOfCode": "settings = Settings()",
+        "detail": "src.config",
+        "documentation": {}
+    },
+    {
+        "label": "root",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def root():\n    return {\"system\": \"AIVendance V3\", \"status\": \"Online\"}\nif __name__ == \"__main__\":\n    import uvicorn\n    uvicorn.run(app, host=\"0.0.0.0\", port=8000)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app = FastAPI(title=\"AIVendance API\", version=\"3.0\")\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n@app.on_event(\"startup\")\nasync def startup_event():\n    # Force creation of tables",
+        "detail": "main",
+        "documentation": {}
+    }
+]
