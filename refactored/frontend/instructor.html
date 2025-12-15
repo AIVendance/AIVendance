@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Instructor Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "bg-dark": "#111418" }, fontFamily: { "display": ["Space Grotesk"] } } } }</script>
+</head>
+<body class="bg-[#f6f7f8] dark:bg-bg-dark text-slate-900 dark:text-white font-display h-screen flex overflow-hidden">
+    
+    <aside class="w-64 bg-[#111418] border-r border-[#283039] p-6 hidden md:block">
+        <h1 class="text-white font-bold text-xl mb-8 flex items-center gap-2"><span class="material-symbols-outlined text-primary">school</span> Aivendance</h1>
+        <a class="flex items-center gap-3 text-white font-bold bg-[#283039] p-3 rounded-xl"><span class="material-symbols-outlined">class</span> My Classes</a>
+        <button onclick="localStorage.clear(); window.location.href='/'" class="mt-10 flex items-center gap-3 text-red-400 font-bold"><span class="material-symbols-outlined">logout</span> Logout</button>
+    </aside>
+
+    <main class="flex-1 p-10 overflow-y-auto">
+        <h1 class="text-4xl font-black mb-8 text-white">My Classes</h1>
+        
+        <div id="class-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <p class="text-gray-500">Loading your schedule...</p>
+        </div>
+
+        <div id="roster-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div class="bg-[#1c2127] w-full max-w-2xl p-8 rounded-2xl border border-[#3b4754] h-[80vh] flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="roster-title" class="text-2xl font-bold text-white">Class Roster</h2>
+                    <button onclick="document.getElementById('roster-modal').classList.add('hidden')" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <div class="flex-1 overflow-y-auto">
+                    <ul id="roster-list" class="space-y-2"></ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+        const TOKEN = localStorage.getItem('token');
+
+        window.onload = async () => {
+            if(!TOKEN) window.location.href='/';
+            
+            const res = await fetch(`${API}/instructor/my-classes`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const classes = await res.json();
+            
+            const grid = document.getElementById('class-grid');
+            if(classes.length === 0) grid.innerHTML = "<p class='text-gray-500'>No classes assigned.</p>";
+            else {
+                grid.innerHTML = classes.map(c => `
+                    <div class="bg-[#1c242e] border border-[#283039] p-6 rounded-2xl hover:border-primary/50 transition-all group relative">
+                        <div class="absolute top-4 right-4 bg-primary/10 text-primary p-2 rounded-lg"><span class="material-symbols-outlined">groups</span></div>
+                        <h3 class="text-xl font-bold text-white mb-1">${c.course_code}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${c.course_name}</p>
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+                            <span class="material-symbols-outlined text-sm">schedule</span> ${c.days} ${c.lecture_time}
+                        </div>
+                        <button onclick="viewRoster('${c.section_id}', '${c.course_name}')" class="w-full bg-[#283039] hover:bg-primary text-white font-bold py-3 rounded-xl transition-colors">
+                            View Roster
+                        </button>
+                    </div>
+                `).join('');
+            }
+        };
+
+        async function viewRoster(id, name) {
+            document.getElementById('roster-modal').classList.remove('hidden');
+            document.getElementById('roster-title').innerText = name;
+            const list = document.getElementById('roster-list');
+            list.innerHTML = "<p class='text-gray-500'>Loading students...</p>";
+
+            const res = await fetch(`${API}/attendance/history?section_id=${id}`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const data = await res.json();
+            
+            // Extract unique students
+            const students = [...new Set(data.map(d => d.student_name))];
+
+            if(students.length === 0) list.innerHTML = "<p class='text-gray-500'>No attendance records yet.</p>";
+            else {
+                list.innerHTML = students.map(s => `
+                    <li class="flex items-center gap-4 p-4 bg-[#111418] rounded-xl border border-[#283039]">
+                        <div class="size-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">${s.charAt(0)}</div>
+                        <span class="text-white font-bold">${s}</span>
+                    </li>
+                `).join('');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Admin - Assignments</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "background-dark": "#111418", "surface-dark": "#1c2127" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }
+    </script>
+</head>
+<body class="bg-[#f6f7f8] dark:bg-[#111418] text-slate-900 dark:text-white font-display overflow-hidden flex h-screen">
+    
+    <aside class="w-64 bg-[#111418] border-r border-[#3b4754] flex flex-col p-4">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div class="bg-primary rounded-full size-8"></div>
+            <h1 class="text-lg font-bold text-white">Aivendance</h1>
+        </div>
+        <nav class="flex flex-col gap-2">
+            <a class="flex items-center gap-3 px-3 py-2 text-[#9dabb9] hover:bg-[#283039] rounded-lg" href="#"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+            <a class="flex items-center gap-3 px-3 py-2 text-white bg-[#283039] rounded-lg" href="#"><span class="material-symbols-outlined">school</span>Assignments</a>
+        </nav>
+        <button onclick="localStorage.clear(); window.location.href='/'" class="mt-auto flex items-center gap-3 px-3 py-2 text-red-400 hover:bg-[#283039] rounded-lg"><span class="material-symbols-outlined">logout</span>Logout</button>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-y-auto">
+        <div class="p-8 max-w-6xl mx-auto w-full">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Course Assignments</h1>
+                    <p class="text-[#9dabb9]">Manage courses, instructors, and students.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="document.getElementById('modal-course').classList.remove('hidden')" class="bg-[#283039] hover:bg-[#343e4a] text-white px-4 py-2 rounded-lg font-bold border border-[#3b4754]">+ New Course</button>
+                    <button onclick="document.getElementById('modal-assign').classList.remove('hidden')" class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold shadow-lg">Assign Instructor</button>
+                </div>
+            </div>
+
+            <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-[#111418] text-[#9dabb9] text-xs uppercase">
+                        <tr>
+                            <th class="p-4">Course</th>
+                            <th class="p-4">Schedule</th>
+                            <th class="p-4">Instructor</th>
+                            <th class="p-4">Room</th>
+                        </tr>
+                    </thead>
+                    <tbody id="course-table-body" class="divide-y divide-[#3b4754] text-sm text-white">
+                        <tr><td class="p-4" colspan="4">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-course" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-[#1c2127] p-6 rounded-xl w-96 border border-[#3b4754]">
+            <h2 class="text-white text-xl font-bold mb-4">Create Course</h2>
+            <input id="c-name" placeholder="Course Name" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg">
+            <input id="c-code" placeholder="Course Code (e.g. CS101)" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg">
+            <div class="flex justify-end gap-2">
+                <button onclick="this.closest('.fixed').classList.add('hidden')" class="text-[#9dabb9] px-3">Cancel</button>
+                <button onclick="createCourse()" class="bg-primary text-white px-4 py-2 rounded-lg font-bold">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-assign" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-[#1c2127] p-6 rounded-xl w-96 border border-[#3b4754]">
+            <h2 class="text-white text-xl font-bold mb-4">Assign Instructor</h2>
+            
+            <label class="text-[#9dabb9] text-xs uppercase">Course</label>
+            <select id="a-course" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg"></select>
+            
+            <label class="text-[#9dabb9] text-xs uppercase">Instructor</label>
+            <select id="a-inst" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg"></select>
+            
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <input id="a-room" placeholder="Room" class="bg-[#111418] border-[#3b4754] text-white rounded-lg">
+                <input id="a-time" type="time" class="bg-[#111418] border-[#3b4754] text-white rounded-lg">
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button onclick="this.closest('.fixed').classList.add('hidden')" class="text-[#9dabb9] px-3">Cancel</button>
+                <button onclick="assignInstructor()" class="bg-primary text-white px-4 py-2 rounded-lg font-bold">Assign</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+        const TOKEN = localStorage.getItem('token');
+
+        window.onload = async () => {
+            if(!TOKEN) window.location.href='/';
+            loadData();
+        };
+
+        async function loadData() {
+            // Load Courses Table (Using the Sections endpoint for full details)
+            const res = await fetch(`${API}/classes/sections/all`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const sections = await res.json();
+            
+            const tbody = document.getElementById('course-table-body');
+            tbody.innerHTML = sections.length ? sections.map(s => `
+                <tr class="hover:bg-[#283039]">
+                    <td class="p-4">
+                        <div class="font-bold">${s.code}</div>
+                        <div class="text-[#9dabb9] text-xs">${s.name}</div>
+                    </td>
+                    <td class="p-4 text-sm">${s.days} ${s.lecture_time}</td>
+                    <td class="p-4 text-sm">${s.instructor}</td>
+                    <td class="p-4 text-sm text-[#9dabb9]">${s.room_num || 'N/A'}</td>
+                </tr>
+            `).join('') : '<tr><td class="p-4 text-center text-[#9dabb9]" colspan="4">No classes scheduled.</td></tr>';
+
+            // Populate Dropdowns for Modal
+            // 1. Instructors
+            const iRes = await fetch(`${API}/auth/instructors`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const insts = await iRes.json();
+            document.getElementById('a-inst').innerHTML = insts.map(i => `<option value="${i.id}">${i.full_name}</option>`).join('');
+
+            // 2. Courses (Raw List)
+            const cRes = await fetch(`${API}/classes/`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const courses = await cRes.json();
+            document.getElementById('a-course').innerHTML = courses.map(c => `<option value="${c.id}">${c.code} - ${c.name}</option>`).join('');
+        }
+
+        async function createCourse() {
+            const body = { name: document.getElementById('c-name').value, code: document.getElementById('c-code').value, status: 'active' };
+            await fetch(`${API}/classes/`, { method:'POST', headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${TOKEN}`}, body: JSON.stringify(body) });
+            alert("Course Created!"); loadData();
+        }
+
+        async function assignInstructor() {
+            const body = {
+                course_id: document.getElementById('a-course').value,
+                instructor_id: document.getElementById('a-inst').value,
+                room_num: document.getElementById('a-room').value,
+                lecture_time: document.getElementById('a-time').value + ":00",
+                days: "Mon/Wed"
+            };
+            await fetch(`${API}/classes/sections`, { method:'POST', headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${TOKEN}`}, body: JSON.stringify(body) });
+            alert("Assigned!"); location.reload();
+        }
+    </script>
+</body>
+</html>

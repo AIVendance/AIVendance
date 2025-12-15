@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Student Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script>
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "bg-dark": "#101922" }, fontFamily: { "display": ["Inter", "sans-serif"] } } } }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-bg-dark text-slate-900 dark:text-white font-display h-screen flex">
+    
+    <aside class="w-64 bg-white dark:bg-[#1c242e] border-r border-gray-200 dark:border-gray-800 p-6 flex flex-col hidden md:flex">
+        <div class="flex items-center gap-3 mb-10 text-primary font-black text-xl">
+            <span class="material-symbols-outlined">school</span> Aivendance
+        </div>
+        <nav class="space-y-2">
+            <a onclick="showTab('dash')" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-bold cursor-pointer">
+                <span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+            <a onclick="showTab('face')" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 cursor-pointer">
+                <span class="material-symbols-outlined">face</span> Face Enrollment
+            </a>
+        </nav>
+        <button onclick="localStorage.clear(); window.location.href='/'" class="mt-auto flex items-center gap-3 text-red-500 font-bold"><span class="material-symbols-outlined">logout</span> Log Out</button>
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        
+        <div id="tab-dash">
+            <h1 class="text-3xl font-black mb-6">My Schedule</h1>
+            <div id="schedule-container" class="grid gap-4">
+                <p class="text-gray-500">Loading schedule...</p>
+            </div>
+        </div>
+
+        <div id="tab-face" class="hidden">
+            <h1 class="text-3xl font-black mb-2">Face Enrollment</h1>
+            <p class="text-gray-500 mb-6">We need 10 photos to recognize you.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-black rounded-2xl overflow-hidden aspect-video relative border border-gray-700">
+                    <video id="video-feed" autoplay playsinline class="w-full h-full object-cover"></video>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                        <button onclick="startCamera()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-sm">Start Camera</button>
+                        <button onclick="capture()" class="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-blue-500/50 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">camera_alt</span> Snap
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-4">Captured Photos (<span id="count">0</span>/10)</h3>
+                    <div id="gallery" class="grid grid-cols-4 gap-2 mb-6"></div>
+                    <button onclick="uploadPhotos()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all">
+                        Upload & Enroll
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+        const TOKEN = localStorage.getItem('token');
+        let CAPTURES = [];
+
+        window.onload = () => {
+            if(!TOKEN) window.location.href='/';
+            loadSchedule();
+        };
+
+        function showTab(id) {
+            document.getElementById('tab-dash').classList.add('hidden');
+            document.getElementById('tab-face').classList.add('hidden');
+            document.getElementById('tab-'+id).classList.remove('hidden');
+        }
+
+        async function loadSchedule() {
+            const res = await fetch(`${API}/students/my-classes`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+            const data = await res.json();
+            const container = document.getElementById('schedule-container');
+            
+            if(data.length === 0) container.innerHTML = "<p class='text-gray-500'>No classes found.</p>";
+            else {
+                container.innerHTML = data.map(c => `
+                    <div class="bg-white dark:bg-[#1c242e] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">${c.course_name}</h3>
+                            <p class="text-sm text-gray-500">${c.course_code} • ${c.instructor_name}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-primary">${c.lecture_time}</p>
+                            <p class="text-xs text-gray-500 font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">${c.room_num}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Camera Logic
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('video-feed').srcObject = stream;
+            } catch(e) { alert("Camera access denied"); }
+        }
+
+        function capture() {
+            if(CAPTURES.length >= 10) return alert("Max 10 photos.");
+            const video = document.getElementById('video-feed');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            canvas.toBlob(blob => {
+                CAPTURES.push(blob);
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(blob);
+                img.className = "w-full aspect-square object-cover rounded-lg border border-gray-600";
+                document.getElementById('gallery').appendChild(img);
+                document.getElementById('count').innerText = CAPTURES.length;
+            });
+        }
+
+        async function uploadPhotos() {
+            if(CAPTURES.length === 0) return alert("Take photos first.");
+            const fd = new FormData();
+            CAPTURES.forEach((b, i) => fd.append('photos', b, `face_${i}.jpg`));
+            
+            const res = await fetch(`${API}/students/upload-face`, {
+                method: 'POST', 
+                headers: {'Authorization': `Bearer ${TOKEN}`}, 
+                body: fd
+            });
+            
+            if(res.ok) { alert("Enrolled!"); window.location.reload(); }
+            else alert("Error uploading.");
+        }
+    </script>
+</body>
+</html>
