@@ -1,23 +1,55 @@
-from sqlalchemy import text
-from refactored.src.database.connection import engine
+# refactored/src/database/execution.py
+from contextlib import contextmanager
+from .connection import get_db_connection
+from psycopg2.extras import RealDictCursor
 
-async def execute_raw_sql(sql_command: str, parameters: dict = None):
+@contextmanager
+def get_db_cursor(commit=False):
     """
-    Executes a raw SQL command directly against the database (e.g., TRUNCATE).
+    Context manager to yield a database cursor.
+    Handles commit/rollback and closing connection automatically.
     """
-    async with engine.connect() as conn:
-        result = await conn.execute(text(sql_command), parameters)
-        await conn.commit()
-        return result
+    conn = get_db_connection()
+    if conn is None:
+        raise Exception("Failed to connect to the database")
+    
+    # RealDictCursor allows accessing columns by name (row['id'])
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    
+    try:
+        yield cursor
+        if commit:
+            conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"Database Query Error: {e}")
+        raise e
+    finally:
+        cursor.close()
+        conn.close()
 
-async def fetch_one(sql_command: str, parameters: dict = None):
-    """Executes a query and returns a single row."""
-    async with engine.connect() as conn:
-        result = await conn.execute(text(sql_command), parameters)
-        return result.first()
+def execute_query(query, params=None):
+    """
+    Executes a single query that modifies data (INSERT, UPDATE, DELETE).
+    Returns: None
+    """
+    with get_db_cursor(commit=True) as cursor:
+        cursor.execute(query, params)
 
-async def fetch_all(sql_command: str, parameters: dict = None):
-    """Executes a query and returns all matching rows."""
-    async with engine.connect() as conn:
-        result = await conn.execute(text(sql_command), parameters)
-        return result.fetchall()
+def fetch_one(query, params=None):
+    """
+    Fetches a single row.
+    Returns: Dictionary or None
+    """
+    with get_db_cursor(commit=False) as cursor:
+        cursor.execute(query, params)
+        return cursor.fetchone()
+
+def fetch_all(query, params=None):
+    """
+    Fetches all rows.
+    Returns: List of Dictionaries
+    """
+    with get_db_cursor(commit=False) as cursor:
+        cursor.execute(query, params)
+        return cursor.fetchall()
