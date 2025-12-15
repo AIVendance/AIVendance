@@ -3,739 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIVendance | Smart Classroom</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <title>AIVendance System</title>
     <style>
-        :root {
-            --primary: #4f46e5; /* Indigo */
-            --primary-glow: rgba(79, 70, 229, 0.4);
-            --bg-dark: #0f172a;
-            --panel-bg: rgba(30, 41, 59, 0.7);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --glass: 12px;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at top left, #1e1b4b, var(--bg-dark));
-            color: var(--text-main);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-        }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 280px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255,255,255,0.05);
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            z-index: 10;
-        }
-
-        .brand {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #a78bfa, #4f46e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-item {
-            padding: 1rem;
-            border-radius: 12px;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.05);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .nav-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 20px var(--primary-glow);
-        }
-
-        /* --- MAIN CONTENT --- */
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            position: relative;
-            overflow-y: auto;
-        }
-
-        .panel {
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        .panel.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- CARDS & CONTAINERS --- */
-        .glass-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1.5rem;
-            height: 85vh;
-        }
-
-        /* --- VIDEO MONITOR --- */
-        .monitor-frame {
-            background: black;
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            border: 2px solid rgba(255,255,255,0.1);
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Ensures we see the whole frame */
-        }
-
-        canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-        }
-
-        /* --- LIVE TAG --- */
-        .status-pill {
-            position: absolute;
-            top: 20px; left: 20px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            transition: 0.3s;
-        }
-        .status-pill.live { color: var(--success); border-color: var(--success); }
-        .pulse-dot {
-            width: 8px; height: 8px;
-            background: currentColor;
-            border-radius: 50%;
-            box-shadow: 0 0 10px currentColor;
-        }
-        .status-pill.live .pulse-dot { animation: pulse 1.5s infinite; }
-
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
-
-        /* --- ATTENDANCE LIST --- */
-        .list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .student-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            transition: 0.2s;
-            border-left: 4px solid transparent;
-        }
-
-        .student-row:hover { background: rgba(255,255,255,0.08); transform: translateX(4px); }
-        .student-row.Present { border-left-color: var(--success); }
-        .student-row.Late { border-left-color: var(--warning); }
-        .student-row.Wrong { border-left-color: var(--danger); }
-
-        .time-badge {
-            font-size: 0.75rem;
-            background: rgba(0,0,0,0.3);
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: var(--text-muted);
-        }
-
-        /* --- BUTTONS & INPUTS --- */
-        input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: white;
-            font-family: inherit;
-            margin-bottom: 1rem;
-            transition: 0.3s;
-        }
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: #4338ca; box-shadow: 0 4px 15px var(--primary-glow); }
-        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: white; }
-        .btn-secondary { background: #334155; color: #cbd5e1; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* --- TOAST NOTIFICATION --- */
-        .toast-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-        .toast {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            display: flex; align-items: center; gap: 12px;
-            transform: translateX(100%);
-            animation: slideIn 0.3s forwards;
-        }
-        .toast.success { border-left: 4px solid var(--success); }
-        .toast.error { border-left: 4px solid var(--danger); }
+        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; --card-bg: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         
-        @keyframes slideIn { to { transform: translateX(0); } }
-        @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
+        .container { max-width: 1200px; margin: 0 auto; background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .hidden { display: none !important; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        
+        .card { background: #fff; border: 1px solid #e2e8f0; padding: 1.5rem; border-radius: 8px; }
+        .card h3 { margin-top: 0; color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .card h4 { margin: 10px 0 5px; color: #475569; font-size: 0.95rem; }
 
-        /* --- ENROLLMENT GRID --- */
-        .capture-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 15px; }
-        .capture-img { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); }
+        input, select { width: 100%; padding: 8px; margin: 4px 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing:border-box; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; margin-top: 5px; }
+        button:hover { opacity: 0.9; }
+        button.red { background: #dc2626; }
+        button.green { background: #16a34a; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        th, td { text-align: left; padding: 6px; border-bottom: 1px solid #eee; }
+        th { background: #f8fafc; font-weight: 600; }
 
-        /* --- TABS --- */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); cursor: pointer; border-radius: 8px; font-weight: 600; transition:0.3s; }
-        .tab-btn:hover { color: white; background: rgba(255,255,255,0.1); }
-        .tab-btn.active { background: var(--primary); color: white; }
-        .tab-content { display: none; animation: fadeIn 0.3s; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1rem; }
+        .badge { padding: 4px 12px; border-radius: 99px; background: #e0e7ff; color: #3730a3; font-weight: bold; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div class="brand">
-            <i class="fa-solid fa-eye"></i> AIVendance
-        </div>
-        
-        <div class="nav-item active" onclick="switchTab('monitor', this)">
-            <i class="fa-solid fa-desktop"></i> Live Monitor
-        </div>
-        <div class="nav-item" onclick="switchTab('admin', this)">
-            <i class="fa-solid fa-sliders"></i> Class Controls
-        </div>
-        <div class="nav-item" onclick="switchTab('enroll', this)">
-            <i class="fa-solid fa-user-plus"></i> Enroll Student
-        </div>
+    <div id="login-view" class="container" style="max-width: 400px; margin-top: 10vh;">
+        <h2 style="text-align: center;">🔐 AIVendance Login</h2>
+        <form onsubmit="event.preventDefault(); login();">
+            <input type="text" id="login-id" placeholder="User ID / Username">
+            <input type="password" id="login-pass" placeholder="Password">
+            <button type="submit">Sign In</button>
+        </form>
+        <p id="login-msg" style="color:red; text-align:center;"></p>
+    </div>
 
-        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <small style="color:var(--text-muted)">System Status</small>
-            <div style="display:flex; align-items:center; gap:8px; margin-top:5px; color:var(--success); font-weight:600;">
-                <div class="pulse-dot" style="background:var(--success)"></div> Online
+    <div id="dashboard-view" class="container hidden">
+        <div class="nav">
+            <div>
+                <h2 style="margin:0;" id="user-name">Welcome</h2>
+                <span id="user-role" class="badge">ROLE</span>
             </div>
+            <button class="red" style="width:auto; padding:6px 12px;" onclick="location.reload()">Log Out</button>
         </div>
-    </nav>
 
-    <main class="main-content">
-        
-        <section id="monitor" class="panel active">
-            <div class="grid-layout">
-                <div class="monitor-frame">
-                    <video id="vid" autoplay muted></video>
-                    <canvas id="cvs"></canvas>
-                    <div class="status-pill" id="liveLabel">
-                        <div class="pulse-dot"></div> <span id="classStatusText">OFFLINE</span>
-                    </div>
+        <div id="dash-student" class="hidden">
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📅 My Schedule</h3>
+                    <table>
+                        <thead><tr><th>Course</th><th>Instructor</th><th>Room</th><th>Time</th></tr></thead>
+                        <tbody id="s-schedule"><tr><td colspan="4">Loading...</td></tr></tbody>
+                    </table>
                 </div>
-
-                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                    <div class="glass-panel" style="height: 200px;">
-                        <canvas id="statsChart"></canvas>
-                    </div>
-
-                    <div class="glass-panel" style="flex: 1; display: flex; flex-direction: column;">
-                        <div class="list-header">
-                            <h3 style="margin:0">Real-time Log</h3>
-                            <span id="countBadge" style="background:var(--primary); padding:4px 10px; border-radius:8px; font-size:0.8rem">0</span>
-                        </div>
-                        <div id="studentList" style="overflow-y: auto; flex: 1; padding-right: 5px;">
-                            <div style="text-align:center; color:var(--text-muted); margin-top:50px;">
-                                <i class="fa-solid fa-user-group" style="font-size:2rem; margin-bottom:10px;"></i><br>
-                                Waiting for students...
-                            </div>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>📊 My Stats</h3>
+                    <table>
+                        <thead><tr><th>Course</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="s-stats"><tr><td colspan="3">Loading...</td></tr></tbody>
+                    </table>
                 </div>
             </div>
-        </section>
+            <div class="card">
+                <h3>📸 Face Enrollment</h3>
+                <input type="file" id="s-face" multiple onchange="uploadFace(this)">
+                <small>Select photos to enroll/update your face model.</small>
+            </div>
+        </div>
 
-        <section id="admin" class="panel">
-            <h1 style="margin-bottom:20px">Classroom Management</h1>
-            <div class="glass-panel" style="max-width: 600px;">
-                <label style="color:var(--text-muted); display:block; margin-bottom:10px;">Session Configuration</label>
-                <input type="text" id="clsInput" placeholder="Enter Class ID (e.g., CS101)">
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
-                    <button class="btn btn-primary" onclick="manageClass('start')">
-                        <i class="fa-solid fa-play"></i> Start Session
-                    </button>
-                    <button class="btn btn-danger" onclick="manageClass('stop')">
-                        <i class="fa-solid fa-stop"></i> End Session
-                    </button>
+        <div id="dash-instructor" class="hidden">
+            <h3>My Assigned Classes</h3>
+            <div id="i-classes-list"></div>
+            
+            <div id="i-stats-view" class="hidden" style="margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
+                <h3 id="i-course-title">Class Roster</h3>
+                <div id="i-stats-content"></div>
+            </div>
+        </div>
+
+        <div id="dash-admin" class="hidden">
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3>👤 Create Student</h3>
+                    <input type="text" id="cs-name" placeholder="Full Name">
+                    <input type="text" id="cs-id" placeholder="University ID">
+                    <input type="text" id="cs-major" placeholder="Major">
+                    <input type="text" id="cs-pass" placeholder="Password" value="123456">
+                    <button class="green" onclick="createStudent()">Create Student</button>
                 </div>
-                
-                <div id="activeSessionInfo" style="margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid var(--success); display: none;">
-                    <i class="fa-solid fa-check-circle" style="color:var(--success)"></i> 
-                    <strong>Active:</strong> <span id="activeClassName">None</span>
+
+                <div class="card">
+                    <h3>👨‍🏫 Create Instructor</h3>
+                    <input type="text" id="ci-name" placeholder="Full Name">
+                    <input type="text" id="ci-id" placeholder="Username/ID">
+                    <input type="text" id="ci-dept" placeholder="Department">
+                    <input type="text" id="ci-pass" placeholder="Password" value="123456">
+                    <button class="green" onclick="createInstructor()">Create Instructor</button>
                 </div>
             </div>
-        </section>
 
-        <section id="enroll" class="panel">
-            <h1 style="margin-bottom:20px">New Student Registration</h1>
-            <div class="grid-layout">
-                <div class="glass-panel">
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem;">
-                        <input type="text" id="eid" placeholder="Student ID">
-                        <input type="text" id="ename" placeholder="Full Name">
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab-btn active" onclick="switchEnrollTab('cam')">📸 Use Camera</button>
-                        <button class="tab-btn" onclick="switchEnrollTab('upl')">📂 Upload Files</button>
-                    </div>
-
-                    <div id="tab-cam" class="tab-content active">
-                        <div style="background: black; border-radius: 12px; overflow: hidden; height: 350px; position: relative; margin: 1rem 0;">
-                            <video id="evid" autoplay muted style="width:100%; height:100%; object-fit:cover;"></video>
-                            <div style="position:absolute; bottom:15px; left:0; width:100%; text-align:center;">
-                                <button class="btn btn-primary" style="width:auto; display:inline-flex; padding: 8px 20px;" onclick="snap()">
-                                    <i class="fa-solid fa-camera"></i> Capture
-                                </button>
-                            </div>
-                        </div>
-                        <button class="btn" style="background: #334155; color: white;" onclick="startEnrollCam()">
-                            <i class="fa-solid fa-power-off"></i> Enable Camera
-                        </button>
-                    </div>
-
-                    <div id="tab-upl" class="tab-content">
-                        <div style="border: 2px dashed rgba(255,255,255,0.2); padding: 40px; text-align: center; border-radius: 12px; cursor: pointer; margin-bottom: 20px;" 
-                             onclick="document.getElementById('fileInput').click()">
-                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--primary); margin-bottom: 10px;"></i>
-                            <p style="color:var(--text-muted); margin:0;">Click to select photos (JPG/PNG)</p>
-                            <input type="file" id="fileInput" multiple accept="image/*" style="display:none" onchange="handleFileUpload(this)">
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary" id="submitBtn" onclick="submitEnrollment()" disabled style="margin-top: 20px;">
-                        <i class="fa-solid fa-upload"></i> Complete Registration (0/10)
-                    </button>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>1. Create Course</h3>
+                    <input type="text" id="cc-name" placeholder="Course Name (e.g. Intro to AI)">
+                    <input type="text" id="cc-code" placeholder="Course Code (e.g. CS101)">
+                    <button onclick="createCourse()">Save Course</button>
                 </div>
 
-                <div class="glass-panel">
-                    <h3>Captured Images</h3>
-                    <p style="color:var(--text-muted); font-size:0.9rem;">Need at least 3 photos (Max 10)</p>
-                    <div class="capture-grid" id="captureGrid"></div>
+                <div class="card">
+                    <h3>2. Create Section (Assign)</h3>
+                    <label>Course</label><select id="as-course"></select>
+                    <label>Instructor</label><select id="as-inst"></select>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="as-room" placeholder="Room">
+                        <input type="time" id="as-time" value="09:00">
+                    </div>
+                    <button onclick="createSection()">Assign Instructor & Room</button>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <div class="card" style="background: #eff6ff; border-color: #bfdbfe;">
+                <h3>3. Enroll Student into Class</h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Select Student</label>
+                        <select id="en-student"></select>
+                    </div>
+                    <div>
+                        <label>Select Class Section</label>
+                        <select id="en-section"></select>
+                    </div>
+                </div>
+                <button onclick="enrollStudent()">Enroll Student</button>
+            </div>
 
-    <div class="toast-container" id="toastArea"></div>
+        </div>
+    </div>
 
     <script>
         const API = "http://127.0.0.1:8000";
-        let curClass = localStorage.getItem('activeClass') || "";
-        let ws = null;
-        let chart = null;
-        let blobs = [];
-        let studentsMap = new Map();
+        let TOKEN = "";
 
-        // --- INIT ---
-        window.onload = () => {
-            initChart();
-            if(curClass) {
-                updateSessionUI(curClass);
-                switchTab('monitor');
-            }
-        };
-
-        // --- NAVIGATION ---
-        function switchTab(id, btn) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            if(btn) {
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
-
-            // Logic Switch
-            if(id === 'monitor') startMonitor(); else stopMonitor();
-            if(id === 'enroll') startEnrollCam(); else stopEnrollCam();
-        }
-
-        // --- MONITOR LOGIC ---
-        async function startMonitor() {
-            if(!curClass) return;
-            const v = document.getElementById('vid');
-            
-            try {
-                v.srcObject = await navigator.mediaDevices.getUserMedia({video: {width: 1280, height: 720}});
-                if(ws) ws.close();
-                ws = new WebSocket(`ws://127.0.0.1:8000/ws/classroom/${curClass}`);
-                
-                ws.onmessage = (e) => {
-                    const d = JSON.parse(e.data);
-                    if(d.type === "update") {
-                        drawFaces(d.data);
-                        updateTable(d.data);
-                    }
-                };
-
-                if(!window.scanInt) window.scanInt = setInterval(sendFrame, 500); // 2 FPS
-                
-                document.getElementById('classStatusText').innerText = `LIVE: ${curClass}`;
-                document.querySelector('.status-pill').classList.add('live');
-
-            } catch(e) { showToast("Camera Access Denied", "error"); }
-        }
-
-        function stopMonitor() {
-            if(window.scanInt) clearInterval(window.scanInt);
-            const v = document.getElementById('vid');
-            if(v.srcObject) v.srcObject.getTracks().forEach(t => t.stop());
-            
-            // CLEANUP: Clear canvas and face boxes
-            const c = document.getElementById('cvs');
-            const ctx = c.getContext('2d');
-            ctx.clearRect(0, 0, c.width, c.height);
-            
-            // Reset Status Badge
-            document.getElementById('classStatusText').innerText = "OFFLINE";
-            document.querySelector('.status-pill').classList.remove('live');
-        }
-
-        function sendFrame() {
-            const v = document.getElementById('vid');
-            if(!v.srcObject) return;
-            const c = document.createElement('canvas');
-            c.width = v.videoWidth; c.height = v.videoHeight;
-            c.getContext('2d').drawImage(v,0,0);
-            c.toBlob(async b => {
-                const fd = new FormData(); fd.append('image', b, 'f.jpg');
-                if(curClass) await fetch(`${API}/recognize?classroom_id=${curClass}`, {method:'POST', body:fd});
-            }, 'image/jpeg');
-        }
-
-        // --- VISUALIZATION ---
-        function drawFaces(faces) {
-            const v = document.getElementById('vid');
-            const c = document.getElementById('cvs');
-            
-            if(v.videoWidth === 0) return;
-            c.width = v.videoWidth; c.height = v.videoHeight;
-            const ctx = c.getContext('2d');
-            ctx.clearRect(0,0,c.width, c.height);
-
-            faces.forEach(f => {
-                const [x, y, w, h] = f.box;
-                const isKnown = f.student_id !== "Unknown";
-                const color = isKnown ? '#10b981' : '#ef4444';
-
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = color;
-                
-                // Draw bracket corners
-                const len = w * 0.2;
-                ctx.beginPath();
-                ctx.moveTo(x, y+len); ctx.lineTo(x, y); ctx.lineTo(x+len, y);
-                ctx.moveTo(x+w-len, y); ctx.lineTo(x+w, y); ctx.lineTo(x+w, y+len);
-                ctx.moveTo(x, y+h-len); ctx.lineTo(x, y+h); ctx.lineTo(x+len, y+h);
-                ctx.moveTo(x+w-len, y+h); ctx.lineTo(x+w, y+h); ctx.lineTo(x+w, y+h-len);
-                ctx.stroke();
-
-                // Name Tag
-                ctx.fillStyle = color;
-                ctx.font = "bold 16px Inter";
-                const txt = isKnown ? f.student_id : "UNKNOWN";
-                const txtW = ctx.measureText(txt).width;
-                ctx.fillRect(x, y-28, txtW + 20, 24);
-                
-                ctx.fillStyle = "white";
-                ctx.fillText(txt, x+10, y-10);
-            });
-        }
-
-        function updateTable(faces) {
-            const list = document.getElementById('studentList');
-            let hasUpdate = false;
-
-            faces.forEach(f => {
-                if(f.student_id !== "Unknown") {
-                    studentsMap.set(f.student_id, f);
-                    hasUpdate = true;
-                }
-            });
-
-            if(!hasUpdate && studentsMap.size > 0) return;
-
-            list.innerHTML = "";
-            let present=0, late=0, wrong=0;
-
-            studentsMap.forEach(s => {
-                let statusClass = "Present";
-                if(s.status.includes("Late")) { statusClass = "Late"; late++; }
-                else if(s.status.includes("WRONG")) { statusClass = "Wrong"; wrong++; }
-                else present++;
-
-                const div = document.createElement('div');
-                div.className = `student-row ${statusClass}`;
-                div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="background:#334155; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
-                            ${s.student_id.slice(-2)}
-                        </div>
-                        <div>
-                            <div style="font-weight:600">${s.student_id}</div>
-                            <div style="font-size:0.8rem; color:var(--text-muted)">${s.status}</div>
-                        </div>
-                    </div>
-                    <div style="text-align:right">
-                        <div class="time-badge">${s.time}</div>
-                        <div style="font-size:0.75rem; margin-top:4px;">⏱ ${s.duration}</div>
-                    </div>
-                `;
-                list.appendChild(div);
-            });
-
-            document.getElementById('countBadge').innerText = studentsMap.size;
-            chart.data.datasets[0].data = [present, late, wrong];
-            chart.update();
-        }
-
-        // --- ADMIN ---
-        async function manageClass(act) {
-            const id = document.getElementById('clsInput').value;
-            if(!id) return showToast("Please enter a Class ID", "error");
-
-            try {
-                const res = await fetch(`${API}/classroom/${id}/${act}`, {method:'POST'});
-                if(res.ok) {
-                    if(act === 'start') {
-                        curClass = id;
-                        localStorage.setItem('activeClass', id);
-                        updateSessionUI(id);
-                        showToast(`Class ${id} Started!`, "success");
-                        // Auto switch to monitor
-                        document.querySelector('.nav-item').click(); 
-                    } else {
-                        curClass = "";
-                        localStorage.removeItem('activeClass');
-                        updateSessionUI("");
-                        showToast("Class Session Ended", "success");
-                    }
-                }
-            } catch(e) { showToast("Connection Error", "error"); }
-        }
-
-        function updateSessionUI(id) {
-            const info = document.getElementById('activeSessionInfo');
-            if(id) {
-                info.style.display = "block";
-                document.getElementById('activeClassName').innerText = id;
-            } else {
-                info.style.display = "none";
-            }
-        }
-
-        // --- ENROLLMENT LOGIC (Tabs + Upload) ---
-        function switchEnrollTab(t) {
-            document.querySelectorAll('.tab-content').forEach(d => d.style.display="none");
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`tab-${t}`).style.display="block";
-            
-            // Toggle camera based on tab
-            if(t === 'cam') startEnrollCam(); else stopEnrollCam();
-            
-            // Highlight button
-            event.target.classList.add('active');
-        }
-
-        async function startEnrollCam() {
-            try {
-                document.getElementById('evid').srcObject = await navigator.mediaDevices.getUserMedia({video:true});
-                blobs = [];
-                document.getElementById('captureGrid').innerHTML = "";
-            } catch(e){}
-        }
-        
-        function stopEnrollCam() {
-            const v = document.getElementById('evid');
-            if(v.srcObject) v.srcObject.getTracks().forEach(t=>t.stop());
-        }
-        
-        function snap() {
-            if(blobs.length >= 10) return showToast("Max 10 photos!", "error");
-            const v = document.getElementById('evid');
-            const c = document.createElement('canvas'); c.width=v.videoWidth; c.height=v.videoHeight;
-            c.getContext('2d').drawImage(v,0,0);
-            c.toBlob(b => {
-                addFile(b);
-            }, 'image/jpeg');
-        }
-
-        // NEW: Handle File Uploads
-        function handleFileUpload(input) {
-            const files = Array.from(input.files);
-            if(blobs.length + files.length > 10) return showToast("Max 10 photos total", "error");
-            files.forEach(f => addFile(f));
-        }
-
-        function addFile(file) {
-            blobs.push(file);
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.className = "capture-img";
-            document.getElementById('captureGrid').appendChild(img);
-            
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = `<i class="fa-solid fa-upload"></i> Complete Registration (${blobs.length}/10)`;
-            if(blobs.length >= 3) btn.disabled = false;
-        }
-
-        async function submitEnrollment() {
-            const id = document.getElementById('eid').value;
-            const name = document.getElementById('ename').value;
-            if(!id || !name) return showToast("ID and Name required", "error");
-
+        async function login() {
             const fd = new FormData();
-            fd.append('student_id', id);
-            fd.append('full_name', name);
-            blobs.forEach((b,i) => fd.append('files', b, `f${i}.jpg`));
-
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = "Uploading...";
-
+            fd.append('username', document.getElementById('login-id').value);
+            fd.append('password', document.getElementById('login-pass').value);
             try {
-                const r = await fetch(`${API}/enroll`, {method:'POST', body:fd});
-                if(r.ok) {
-                    showToast(`Student ${name} Enrolled Successfully`, "success");
-                    blobs = [];
-                    document.getElementById('captureGrid').innerHTML = "";
-                    document.getElementById('eid').value = "";
-                    document.getElementById('ename').value = "";
-                    btn.innerHTML = `<i class="fa-solid fa-upload"></i> Complete Registration (0/10)`;
-                } else {
-                    showToast("Enrollment Failed", "error");
-                    btn.disabled = false;
-                }
-            } catch(e) { showToast("Server Error", "error"); btn.disabled = false; }
+                const res = await fetch(`${API}/auth/login`, { method:'POST', body: fd });
+                const data = await res.json();
+                if(res.ok){ TOKEN=data.access_token; loadDashboard(data); }
+                else alert(data.detail);
+            } catch(e){ alert("Server Error"); }
         }
 
-        // --- UTILS ---
-        function showToast(msg, type) {
-            const t = document.createElement('div');
-            t.className = `toast ${type}`;
-            t.innerHTML = type === 'success' ? `<i class="fa-solid fa-check"></i> ${msg}` : `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
-            document.getElementById('toastArea').appendChild(t);
-            setTimeout(() => { t.style.animation = "fadeOut 0.3s forwards"; setTimeout(()=>t.remove(), 300); }, 3000);
+        function loadDashboard(user) {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            document.getElementById('user-name').innerText = user.name;
+            document.getElementById('user-role').innerText = user.role.toUpperCase();
+
+            document.getElementById('dash-student').classList.add('hidden');
+            document.getElementById('dash-instructor').classList.add('hidden');
+            document.getElementById('dash-admin').classList.add('hidden');
+
+            if(user.role === 'student') {
+                document.getElementById('dash-student').classList.remove('hidden');
+                loadStudentView();
+            } else if (user.role === 'instructor') {
+                document.getElementById('dash-instructor').classList.remove('hidden');
+                loadInstructorView();
+            } else {
+                document.getElementById('dash-admin').classList.remove('hidden');
+                loadAdminView();
+            }
         }
 
-        function initChart() {
-            const ctx = document.getElementById('statsChart').getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Present', 'Late', 'Wrong Class'],
-                    datasets: [{
-                        data: [0, 0, 0],
-                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#94a3b8', font: {family:'Inter'} } },
-                        title: { display: false }
-                    },
-                    cutout: '70%'
-                }
+        // --- ADMIN FUNCTIONS ---
+        async function loadAdminView() {
+            const h = {'Authorization': `Bearer ${TOKEN}`};
+            
+            // Load Instructors
+            const iRes = await fetch(`${API}/auth/instructors`, {headers:h});
+            const insts = await iRes.json();
+            document.getElementById('as-inst').innerHTML = insts.map(i=>`<option value="${i.id}">${i.full_name}</option>`).join('');
+
+            // Load Courses
+            const cRes = await fetch(`${API}/classes/`, {headers:h});
+            const courses = await cRes.json();
+            document.getElementById('as-course').innerHTML = courses.map(c=>`<option value="${c.id}">${c.code} - ${c.name}</option>`).join('');
+
+            // Load Students (for enrollment)
+            const sRes = await fetch(`${API}/students/`, {headers:h});
+            const students = await sRes.json();
+            document.getElementById('en-student').innerHTML = students.map(s=>`<option value="${s.id}">${s.full_name} (${s.university_id})</option>`).join('');
+
+            // Load Sections (for enrollment)
+            const secRes = await fetch(`${API}/classes/sections/all`, {headers:h});
+            const secs = await secRes.json();
+            document.getElementById('en-section').innerHTML = secs.map(s=>`<option value="${s.id}">${s.code} - ${s.instructor} @ ${s.lecture_time}</option>`).join('');
+        }
+
+        async function createStudent() {
+            const body = {
+                full_name: document.getElementById('cs-name').value,
+                university_id: document.getElementById('cs-id').value,
+                major: document.getElementById('cs-major').value,
+                enrollment_year: new Date().getFullYear(),
+                password: document.getElementById('cs-pass').value
+            };
+            await apiPost(`${API}/students/create`, body);
+            alert("Student Created!"); loadAdminView();
+        }
+
+        async function createInstructor() {
+            const u=document.getElementById('ci-id').value, p=document.getElementById('ci-pass').value;
+            const n=document.getElementById('ci-name').value, d=document.getElementById('ci-dept').value;
+            await fetch(`${API}/auth/register-instructor?username=${u}&password=${p}&full_name=${n}&department=${d}`, 
+                { method:'POST', headers:{'Authorization':`Bearer ${TOKEN}`} });
+            alert("Instructor Created!"); loadAdminView();
+        }
+
+        async function createCourse() {
+            const body = { name: document.getElementById('cc-name').value, code: document.getElementById('cc-code').value, status: 'active' };
+            await apiPost(`${API}/classes/`, body);
+            alert("Course Created!"); loadAdminView();
+        }
+
+        async function createSection() {
+            const body = {
+                course_id: document.getElementById('as-course').value,
+                instructor_id: document.getElementById('as-inst').value,
+                room_num: document.getElementById('as-room').value,
+                lecture_time: document.getElementById('as-time').value + ":00",
+                days: "Mon/Wed"
+            };
+            await apiPost(`${API}/classes/sections`, body);
+            alert("Class Section Assigned!"); loadAdminView();
+        }
+
+        async function enrollStudent() {
+            const body = {
+                student_id: document.getElementById('en-student').value,
+                section_id: document.getElementById('en-section').value
+            };
+            await apiPost(`${API}/enrollment/`, body);
+            alert("Student Enrolled!");
+        }
+
+        // --- INSTRUCTOR FUNCTIONS ---
+        async function loadInstructorView() {
+            const res = await fetch(`${API}/instructor/my-classes`, {headers:{'Authorization':`Bearer ${TOKEN}`}});
+            const classes = await res.json();
+            const list = document.getElementById('i-classes-list');
+            list.innerHTML = classes.map(c => `
+                <div class="card" style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <div><b>${c.course_code}</b>: ${c.course_name}<br>${c.days} @ ${c.lecture_time} (Room ${c.room_num})</div>
+                    <button style="width:auto;" onclick="viewRoster('${c.section_id}', '${c.course_name}')">View Students</button>
+                </div>
+            `).join('');
+        }
+
+        async function viewRoster(secId, name) {
+            document.getElementById('i-stats-view').classList.remove('hidden');
+            document.getElementById('i-course-title').innerText = `Roster: ${name}`;
+            const res = await fetch(`${API}/attendance/history?section_id=${secId}`, {headers:{'Authorization':`Bearer ${TOKEN}`}});
+            const data = await res.json();
+            
+            // Just listing unique students for now
+            const students = [...new Set(data.map(d => d.student_name))];
+            const content = document.getElementById('i-stats-content');
+            
+            if(students.length === 0) content.innerHTML = "<p>No attendance records yet.</p>";
+            else content.innerHTML = `<ul>${students.map(s => `<li>${s}</li>`).join('')}</ul>`;
+        }
+
+        // --- STUDENT FUNCTIONS ---
+        async function loadStudentView() {
+            const h = {'Authorization': `Bearer ${TOKEN}`};
+            
+            const cRes = await fetch(`${API}/students/my-classes`, {headers:h});
+            const classes = await cRes.json();
+            document.getElementById('s-schedule').innerHTML = classes.map(c => `
+                <tr><td>${c.course_name}</td><td>${c.instructor_name}</td><td>${c.room_num}</td><td>${c.lecture_time}</td></tr>
+            `).join('');
+
+            const sRes = await fetch(`${API}/students/my-stats`, {headers:h});
+            const stats = await sRes.json();
+            document.getElementById('s-stats').innerHTML = stats.map(s => `
+                <tr><td>${s.course_code}</td><td>${s.status}</td><td>${s.date}</td></tr>
+            `).join('');
+        }
+
+        async function uploadFace(inp) {
+            const fd = new FormData();
+            for(let f of inp.files) fd.append('photos', f);
+            await fetch(`${API}/students/upload-face`, {method:'POST', headers:{'Authorization':`Bearer ${TOKEN}`}, body:fd});
+            alert("Face Enrolled!");
+        }
+
+        async function apiPost(url, body) {
+            const res = await fetch(url, {
+                method:'POST',
+                headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${TOKEN}`},
+                body: JSON.stringify(body)
             });
+            if(!res.ok) { const d=await res.json(); throw new Error(d.detail); }
+            return res.json();
         }
     </script>
 </body>
