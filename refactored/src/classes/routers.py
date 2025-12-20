@@ -58,7 +58,7 @@ def get_all_sections(user: dict = Depends(get_current_user)):
     Returns a list of all scheduled class sections for the enrollment dropdown.
     """
     query = """
-        SELECT ci.id, c.code, c.name, a.full_name as instructor, ci.days, ci.lecture_time
+        SELECT ci.id, c.code, c.name, a.full_name as instructor, ci.days, ci.lecture_time, ci.room_num
         FROM course_instructors ci
         JOIN courses c ON ci.course_id = c.id
         JOIN admin a ON ci.instructor_id = a.id

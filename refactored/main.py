@@ -39,6 +39,22 @@ async def read_login():
 async def admin_dashboard():
     return FileResponse('frontend/admin.html')
 
+@app.get("/dashboard/admin/students")
+async def admin_students_dashboard():
+    return FileResponse('frontend/admin_students.html')
+
+@app.get("/dashboard/admin/instructors")
+async def admin_instructors_dashboard():
+    return FileResponse('frontend/admin_instructors.html')
+
+@app.get("/dashboard/admin/courses")
+async def admin_courses_dashboard():
+    return FileResponse('frontend/admin_courses.html')
+
+@app.get("/dashboard/admin/enrollment")
+async def admin_enrollment_dashboard():
+    return FileResponse('frontend/admin_enrollment.html')
+
 @app.get("/dashboard/student")
 async def student_dashboard():
     return FileResponse('frontend/student.html')
@@ -47,6 +63,13 @@ async def student_dashboard():
 async def instructor_dashboard():
     return FileResponse('frontend/instructor.html')
 
+@app.get("/test")
+async def test_page():
+    return FileResponse('frontend/test.html')
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    import platform
+    # Disable reloader on Windows to avoid DLL loading issues with cv2
+    use_reload = platform.system() != "Windows"
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=use_reload)

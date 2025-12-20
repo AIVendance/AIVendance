@@ -1,150 +1,359 @@
+<!-- Admin Dashboard Overview -->
 <!DOCTYPE html>
-<html class="dark" lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <title>Admin - Assignments</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script>
-        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "background-dark": "#111418", "surface-dark": "#1c2127" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }
-    </script>
-</head>
-<body class="bg-[#f6f7f8] dark:bg-[#111418] text-slate-900 dark:text-white font-display overflow-hidden flex h-screen">
-    
-    <aside class="w-64 bg-[#111418] border-r border-[#3b4754] flex flex-col p-4">
-        <div class="flex items-center gap-3 mb-8 px-2">
-            <div class="bg-primary rounded-full size-8"></div>
-            <h1 class="text-lg font-bold text-white">Aivendance</h1>
-        </div>
-        <nav class="flex flex-col gap-2">
-            <a class="flex items-center gap-3 px-3 py-2 text-[#9dabb9] hover:bg-[#283039] rounded-lg" href="#"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
-            <a class="flex items-center gap-3 px-3 py-2 text-white bg-[#283039] rounded-lg" href="#"><span class="material-symbols-outlined">school</span>Assignments</a>
-        </nav>
-        <button onclick="localStorage.clear(); window.location.href='/'" class="mt-auto flex items-center gap-3 px-3 py-2 text-red-400 hover:bg-[#283039] rounded-lg"><span class="material-symbols-outlined">logout</span>Logout</button>
-    </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-y-auto">
-        <div class="p-8 max-w-6xl mx-auto w-full">
-            <div class="flex justify-between items-end mb-6">
-                <div>
-                    <h1 class="text-3xl font-bold text-white">Course Assignments</h1>
-                    <p class="text-[#9dabb9]">Manage courses, instructors, and students.</p>
-                </div>
-                <div class="flex gap-3">
-                    <button onclick="document.getElementById('modal-course').classList.remove('hidden')" class="bg-[#283039] hover:bg-[#343e4a] text-white px-4 py-2 rounded-lg font-bold border border-[#3b4754]">+ New Course</button>
-                    <button onclick="document.getElementById('modal-assign').classList.remove('hidden')" class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold shadow-lg">Assign Instructor</button>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Aivendance - Admin Dashboard</title>
+    <!-- Google Fonts: Space Grotesk -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111418",
+                        "surface-dark": "#283039",
+                        "border-dark": "#3b4754",
+                        "text-secondary": "#9dabb9"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for dark mode feeling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111418;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3b4754;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec;
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased overflow-hidden h-screen w-full flex">
+    <!-- Sidebar -->
+    <aside
+        class="w-64 md:w-72 bg-[#111418] border-r border-[#283039] flex-shrink-0 flex flex-col justify-between h-full p-4 overflow-y-auto">
+        <div class="flex flex-col gap-6">
+            <!-- Brand -->
+            <div class="flex gap-3 items-center px-2">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 bg-gradient-to-br from-primary to-purple-600 shadow-lg"
+                    data-alt="Aivendance abstract logo with gradient blue to purple"></div>
+                <div class="flex flex-col">
+                    <h1 class="text-white text-lg font-bold leading-normal tracking-tight">Aivendance</h1>
+                    <p class="text-text-secondary text-xs font-medium leading-normal">Admin Portal</p>
                 </div>
             </div>
-
-            <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-[#111418] text-[#9dabb9] text-xs uppercase">
-                        <tr>
-                            <th class="p-4">Course</th>
-                            <th class="p-4">Schedule</th>
-                            <th class="p-4">Instructor</th>
-                            <th class="p-4">Room</th>
-                        </tr>
-                    </thead>
-                    <tbody id="course-table-body" class="divide-y divide-[#3b4754] text-sm text-white">
-                        <tr><td class="p-4" colspan="4">Loading data...</td></tr>
-                    </tbody>
-                </table>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/20 border border-primary/10 transition-all hover:bg-primary/30 group"
+                    href="/dashboard/admin">
+                    <span
+                        class="material-symbols-outlined text-primary group-hover:text-white transition-colors">dashboard</span>
+                    <p class="text-white text-sm font-medium leading-normal">Dashboard</p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="/dashboard/admin/students">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">group</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Students
+                    </p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="/dashboard/admin/instructors">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">school</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Instructors
+                    </p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="/dashboard/admin/courses">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">book_2</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Courses</p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="/dashboard/admin/enrollment">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">assignment</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Assignments
+                    </p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">bar_chart</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Reports</p>
+                </a>
+                <div class="h-px bg-[#283039] my-2 mx-3"></div>
+                <a class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group"
+                    href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">settings</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Settings
+                    </p>
+                </a>
+            </nav>
+        </div>
+        <!-- Footer / Logout -->
+        <button
+            class="flex w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-[#283039] hover:bg-[#3b4754] text-white text-sm font-bold leading-normal transition-colors border border-transparent hover:border-[#3b4754]"
+            onclick="window.location.href='/'">
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            <span class="truncate">Logout</span>
+        </button>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full relative overflow-y-auto">
+        <!-- Top Header: Search & User -->
+        <header
+            class="sticky top-0 z-20 bg-[#111418]/90 backdrop-blur-md border-b border-[#283039] px-6 py-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <!-- Mobile Title (Hidden on desktop if sidebar is persistent) -->
+            <div class="flex items-center gap-2 md:hidden w-full">
+                <span class="material-symbols-outlined text-white">menu</span>
+                <span class="font-bold text-lg">Aivendance</span>
+            </div>
+            <!-- Search Bar -->
+            <div class="w-full max-w-lg">
+                <label
+                    class="flex w-full items-stretch rounded-lg h-10 bg-[#283039] group focus-within:ring-2 ring-primary/50 transition-shadow">
+                    <div class="text-[#9dabb9] flex items-center justify-center pl-3 rounded-l-lg">
+                        <span class="material-symbols-outlined">search</span>
+                    </div>
+                    <input
+                        class="flex w-full bg-transparent border-none text-white focus:outline-none focus:ring-0 placeholder:text-[#9dabb9] px-3 text-sm font-normal leading-normal h-full"
+                        placeholder="Search students, courses, or instructors..." value="" />
+                </label>
+            </div>
+            <!-- Header Actions -->
+            <div class="flex items-center gap-4 shrink-0">
+                <button
+                    class="relative p-2 rounded-full hover:bg-[#283039] text-[#9dabb9] hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#111418]"></span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-[#283039]">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-white text-sm font-bold leading-none">Admin User</p>
+                        <p class="text-[#9dabb9] text-xs mt-1">System Administrator</p>
+                    </div>
+                    <div class="size-9 rounded-full bg-cover bg-center ring-2 ring-[#283039]"
+                        data-alt="Profile picture of the admin user"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAJjtmMyXau90uU3839D_5GRFaSV4nrLXLmlY0O1dMxtZ-xfKpIuRk_13xHt7XEYrn2W6w9pbiNNUplwJ1CYOLe9eTHH-l22OWRQnNt4dKO_25Il-wPtQqHCaypkQzF3JWFsYQBp4QIhM8D43XzBQsNR-uGlT_cuS6I-qz8U--nziN0f4Ii2oumxRJTDPdyoOmbWrGqkMC3A8y83353N7v9chjCNOAQ_YW-QdpuR10-6a-z0km5mjJMP9BQbmLrCKnL0MvwWA0T9Wc");'>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Dashboard Content -->
+        <div class="flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto flex flex-col gap-8">
+            <!-- Welcome Section -->
+            <div class="flex flex-col gap-1">
+                <h1 class="text-white tracking-tight text-[32px] font-bold leading-tight">Welcome back, Admin</h1>
+                <p class="text-[#9dabb9] text-base">Here's what's happening in your university today.</p>
+            </div>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div
+                    class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">school</span>
+                        </div>
+                        <span class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+1.2%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Total Students</p>
+                        <p class="text-white tracking-tight text-3xl font-bold mt-1">12,450</p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">person_check</span>
+                        </div>
+                        <span class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+0.5%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Active Instructors</p>
+                        <p class="text-white tracking-tight text-3xl font-bold mt-1">450</p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">fact_check</span>
+                        </div>
+                        <span class="text-[#fa6238] text-sm font-bold bg-[#fa6238]/10 px-2 py-1 rounded">-2.1%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Today's Attendance</p>
+                        <p class="text-white tracking-tight text-3xl font-bold mt-1">88%</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Dashboard Area: Chart + Sidebar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Chart Section (2 cols) -->
+                <div class="lg:col-span-2 rounded-xl border border-[#3b4754] bg-[#1a2027] p-6 flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-white text-lg font-bold">Attendance Overview</h2>
+                            <p class="text-[#9dabb9] text-sm">Weekly trends across all departments</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <select
+                                class="bg-[#283039] text-white text-xs rounded-lg border-none focus:ring-1 focus:ring-primary px-3 py-2 cursor-pointer">
+                                <option>This Week</option>
+                                <option>Last Week</option>
+                                <option>This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-end gap-2 mb-4">
+                        <p class="text-white text-4xl font-bold">Avg 85%</p>
+                        <div class="flex items-center gap-1 mb-1.5">
+                            <span class="material-symbols-outlined text-[#0bda5b] text-lg">trending_up</span>
+                            <p class="text-[#0bda5b] text-sm font-bold">+5% vs last week</p>
+                        </div>
+                    </div>
+                    <div class="relative w-full h-[200px] mt-auto">
+                        <!-- Chart SVG -->
+                        <svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 478 150"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <lineargradient gradientunits="userSpaceOnUse" id="paint0_linear" x1="239" x2="239"
+                                    y1="0" y2="150">
+                                    <stop stop-color="#137fec" stop-opacity="0.2"></stop>
+                                    <stop offset="1" stop-color="#137fec" stop-opacity="0"></stop>
+                                </lineargradient>
+                            </defs>
+                            <path
+                                d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V150H0V109Z"
+                                fill="url(#paint0_linear)"></path>
+                            <path
+                                d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25"
+                                stroke="#137fec" stroke-linecap="round" stroke-width="3"></path>
+                        </svg>
+                        <!-- X Axis Labels -->
+                        <div class="flex justify-between mt-4 px-2">
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Mon</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Tue</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Wed</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Thu</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Fri</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Sat</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Sun</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Recent Activity / Alerts (1 col) -->
+                <div class="rounded-xl border border-[#3b4754] bg-[#1a2027] flex flex-col overflow-hidden">
+                    <div class="p-4 border-b border-[#3b4754] bg-[#222932]">
+                        <h2 class="text-white text-base font-bold">Recent Activity</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+                        <div class="flex gap-3 items-start">
+                            <div class="mt-1 size-2 rounded-full bg-red-500 shrink-0"></div>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-white text-sm font-medium">Attendance Missing: CS101</p>
+                                <p class="text-[#9dabb9] text-xs">Instructor Sarah Jenkings hasn't submitted yet.</p>
+                                <p class="text-[#55606d] text-[10px] mt-1">20 min ago</p>
+                            </div>
+                        </div>
+                        <div class="h-px bg-[#3b4754]/50 w-full"></div>
+                        <div class="flex gap-3 items-start">
+                            <div class="mt-1 size-2 rounded-full bg-green-500 shrink-0"></div>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-white text-sm font-medium">New Student Registered</p>
+                                <p class="text-[#9dabb9] text-xs">Michael Chen added to Engineering Dept.</p>
+                                <p class="text-[#55606d] text-[10px] mt-1">1 hour ago</p>
+                            </div>
+                        </div>
+                        <div class="h-px bg-[#3b4754]/50 w-full"></div>
+                        <div class="flex gap-3 items-start">
+                            <div class="mt-1 size-2 rounded-full bg-blue-500 shrink-0"></div>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-white text-sm font-medium">System Update</p>
+                                <p class="text-[#9dabb9] text-xs">Database maintenance completed successfully.</p>
+                                <p class="text-[#55606d] text-[10px] mt-1">4 hours ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full py-3 text-center text-primary text-sm font-bold border-t border-[#3b4754] hover:bg-[#283039] transition-colors">View
+                        All Logs</button>
+                </div>
+            </div>
+            <!-- Quick Actions Grid -->
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Quick Management</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button
+                        class="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer"
+                        onclick="window.location.href='/dashboard/admin/students'">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">person_add</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Add Student</span>
+                    </button>
+                    <button
+                        class="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer"
+                        onclick="window.location.href='/dashboard/admin/courses'">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">post_add</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Create Course</span>
+                    </button>
+                    <button
+                        class="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">calendar_month</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Manage Schedule</span>
+                    </button>
+                    <button
+                        class="group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">download</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Export Reports</span>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
-
-    <div id="modal-course" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-[#1c2127] p-6 rounded-xl w-96 border border-[#3b4754]">
-            <h2 class="text-white text-xl font-bold mb-4">Create Course</h2>
-            <input id="c-name" placeholder="Course Name" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg">
-            <input id="c-code" placeholder="Course Code (e.g. CS101)" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg">
-            <div class="flex justify-end gap-2">
-                <button onclick="this.closest('.fixed').classList.add('hidden')" class="text-[#9dabb9] px-3">Cancel</button>
-                <button onclick="createCourse()" class="bg-primary text-white px-4 py-2 rounded-lg font-bold">Create</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-assign" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-[#1c2127] p-6 rounded-xl w-96 border border-[#3b4754]">
-            <h2 class="text-white text-xl font-bold mb-4">Assign Instructor</h2>
-            
-            <label class="text-[#9dabb9] text-xs uppercase">Course</label>
-            <select id="a-course" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg"></select>
-            
-            <label class="text-[#9dabb9] text-xs uppercase">Instructor</label>
-            <select id="a-inst" class="w-full mb-3 bg-[#111418] border-[#3b4754] text-white rounded-lg"></select>
-            
-            <div class="grid grid-cols-2 gap-2 mb-3">
-                <input id="a-room" placeholder="Room" class="bg-[#111418] border-[#3b4754] text-white rounded-lg">
-                <input id="a-time" type="time" class="bg-[#111418] border-[#3b4754] text-white rounded-lg">
-            </div>
-
-            <div class="flex justify-end gap-2">
-                <button onclick="this.closest('.fixed').classList.add('hidden')" class="text-[#9dabb9] px-3">Cancel</button>
-                <button onclick="assignInstructor()" class="bg-primary text-white px-4 py-2 rounded-lg font-bold">Assign</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const API = "http://127.0.0.1:8000";
-        const TOKEN = localStorage.getItem('token');
-
-        window.onload = async () => {
-            if(!TOKEN) window.location.href='/';
-            loadData();
-        };
-
-        async function loadData() {
-            // Load Courses Table (Using the Sections endpoint for full details)
-            const res = await fetch(`${API}/classes/sections/all`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
-            const sections = await res.json();
-            
-            const tbody = document.getElementById('course-table-body');
-            tbody.innerHTML = sections.length ? sections.map(s => `
-                <tr class="hover:bg-[#283039]">
-                    <td class="p-4">
-                        <div class="font-bold">${s.code}</div>
-                        <div class="text-[#9dabb9] text-xs">${s.name}</div>
-                    </td>
-                    <td class="p-4 text-sm">${s.days} ${s.lecture_time}</td>
-                    <td class="p-4 text-sm">${s.instructor}</td>
-                    <td class="p-4 text-sm text-[#9dabb9]">${s.room_num || 'N/A'}</td>
-                </tr>
-            `).join('') : '<tr><td class="p-4 text-center text-[#9dabb9]" colspan="4">No classes scheduled.</td></tr>';
-
-            // Populate Dropdowns for Modal
-            // 1. Instructors
-            const iRes = await fetch(`${API}/auth/instructors`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
-            const insts = await iRes.json();
-            document.getElementById('a-inst').innerHTML = insts.map(i => `<option value="${i.id}">${i.full_name}</option>`).join('');
-
-            // 2. Courses (Raw List)
-            const cRes = await fetch(`${API}/classes/`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
-            const courses = await cRes.json();
-            document.getElementById('a-course').innerHTML = courses.map(c => `<option value="${c.id}">${c.code} - ${c.name}</option>`).join('');
-        }
-
-        async function createCourse() {
-            const body = { name: document.getElementById('c-name').value, code: document.getElementById('c-code').value, status: 'active' };
-            await fetch(`${API}/classes/`, { method:'POST', headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${TOKEN}`}, body: JSON.stringify(body) });
-            alert("Course Created!"); loadData();
-        }
-
-        async function assignInstructor() {
-            const body = {
-                course_id: document.getElementById('a-course').value,
-                instructor_id: document.getElementById('a-inst').value,
-                room_num: document.getElementById('a-room').value,
-                lecture_time: document.getElementById('a-time').value + ":00",
-                days: "Mon/Wed"
-            };
-            await fetch(`${API}/classes/sections`, { method:'POST', headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${TOKEN}`}, body: JSON.stringify(body) });
-            alert("Assigned!"); location.reload();
-        }
-    </script>
 </body>
+
 </html>

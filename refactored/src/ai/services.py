@@ -1,42 +1,66 @@
-import cv2
 import numpy as np
 import os
 
-# 1. SETUP PATHS
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODELS_DIR = os.path.join(BASE_DIR, "ai_models")
+# Lazy import cv2 to avoid Windows DLL loading issues with multiprocessing
+cv2 = None
+detector = None
+recognizer = None
 
-# Define model paths (Make sure these file names match EXACTLY what you have in your folder!)
-DETECTION_MODEL = os.path.join(MODELS_DIR, "face_detection_yunet.onnx")
-# Update this filename if yours is different (e.g., arcface_int8.onnx)
-RECOGNITION_MODEL = os.path.join(MODELS_DIR, "face_recognition_sface.onnx") 
-
-# 2. INITIALIZE MODELS
-try:
-    # Initialize Detector (YuNet)
-    detector = cv2.FaceDetectorYN.create(
-        DETECTION_MODEL,
-        "",
-        (320, 320), # Default input size
-        0.9,        # Score threshold
-        0.3,        # NMS threshold
-        5000        # Top K
-    )
+def _ensure_cv2():
+    """Lazy load cv2 and initialize models"""
+    global cv2, detector, recognizer
     
-    # Initialize Recognizer (SFace/ArcFace)
-    recognizer = cv2.FaceRecognizerSF.create(
-        RECOGNITION_MODEL,
-        ""
-    )
-    print("✅ AI Models Loaded Successfully")
+    if cv2 is None:
+        try:
+            import cv2
+        except ImportError as e:
+            raise ImportError(f"OpenCV (cv2) not installed or failed to load: {e}")
+    
+    if detector is None or recognizer is None:
+        # 1. SETUP PATHS
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        MODELS_DIR = os.path.join(BASE_DIR, "ai_models")
+        
+        # Define model paths (Make sure these file names match EXACTLY what you have in your folder!)
+        DETECTION_MODEL = os.path.join(MODELS_DIR, "face_detection_yunet.onnx")
+        # Update this filename if yours is different (e.g., arcface_int8.onnx)
+        RECOGNITION_MODEL = os.path.join(MODELS_DIR, "face_recognition_sface.onnx")
+        
+        try:
+            # Initialize Detector (YuNet)
+            detector = cv2.FaceDetectorYN.create(
+                DETECTION_MODEL,
+                "",
+                (320, 320), # Default input size
+                0.9,        # Score threshold
+                0.3,        # NMS threshold
+                5000        # Top K
+            )
+            
+            # Initialize Recognizer (SFace/ArcFace)
+            recognizer = cv2.FaceRecognizerSF.create(
+                RECOGNITION_MODEL,
+                ""
+            )
+            print("✅ AI Models Loaded Successfully")
+        except Exception as e:
+            print(f"❌ Error loading AI models: {e}")
+            print(f"Checked path: {DETECTION_MODEL}")
+            raise
+
+# Initialize models on module import (but cv2 is loaded lazily)
+try:
+    _ensure_cv2()
 except Exception as e:
-    print(f"❌ Error loading AI models: {e}")
-    print(f"Checked path: {DETECTION_MODEL}")
+    print(f"Warning: AI models not initialized: {e}")
 
 def get_face_embedding(image_file_content):
     """
     Takes raw image bytes, detects a face, and returns its 128-D embedding.
     """
+    # Ensure cv2 and models are loaded
+    _ensure_cv2()
+    
     # 1. Convert bytes to OpenCv Image
     nparr = np.frombuffer(image_file_content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

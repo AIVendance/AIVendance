@@ -4,7 +4,7 @@ from authentication.auth_dependence.token import verify_token
 from .services import get_instructor_classes_service
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/admin/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     payload = verify_token(token)

@@ -1,0 +1,287 @@
+<!-- Admin Dashboard - Manage Students -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Aivendance - Student Management</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#1e252b", // Matching component style roughly
+                        "surface-highlight": "#283039" // Matching component style roughly
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased">
+    <div class="flex h-screen w-full flex-col md:flex-row overflow-hidden">
+        <!-- SideNavBar -->
+        <aside
+            class="w-full md:w-72 bg-[#111418] dark:bg-background-dark border-r border-[#283039] flex-shrink-0 flex flex-col h-full overflow-y-auto z-20">
+            <div class="flex h-full flex-col justify-between p-4">
+                <div class="flex flex-col gap-4">
+                    <div class="flex gap-3 items-center px-2 py-4">
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-[#283039]"
+                            data-alt="Aivendance abstract logo with blue gradients"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxOSddz9dW2aQsN7lD1LDjPzQAQjL5M4RLqutjsHEoy8xIHsi3MtyK9fZ66u4WlG3y7IyhWU_my6VVge4yS12p5KNrrg3OTkdBDcERLZgAuYBIZ9dO1Vp6V3UFhhGMYVbFOzaWvhitlajhYySSoCQAqfkdCPiIhYa1Gjoy4O9YKbHC7Fj8cwKadaNq5jOk_grHZYPxBAoKhEI-9G_Q7O_SXHEUPOPfQ4bf5UQUEUA00NOUah0njVQ3C0UwBPWeUDoi60dRe_D9eS8");'>
+                        </div>
+                        <div class="flex flex-col">
+                            <h1 class="text-white text-lg font-bold leading-normal tracking-tight">Aivendance</h1>
+                            <p class="text-[#9dabb9] text-xs font-normal leading-normal">Admin Portal</p>
+                        </div>
+                    </div>
+                    <nav class="flex flex-col gap-2">
+                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#9dabb9] hover:bg-[#283039] hover:text-white transition-colors"
+                            href="/dashboard/admin">
+                            <span class="material-symbols-outlined text-2xl">dashboard</span>
+                            <p class="text-sm font-medium leading-normal">Dashboard</p>
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary border border-primary/10"
+                            href="/dashboard/admin/students">
+                            <span class="material-symbols-outlined text-2xl fill-1">school</span>
+                            <p class="text-sm font-bold leading-normal">Students</p>
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#9dabb9] hover:bg-[#283039] hover:text-white transition-colors"
+                            href="/dashboard/admin/instructors">
+                            <span class="material-symbols-outlined text-2xl">person</span>
+                            <p class="text-sm font-medium leading-normal">Instructors</p>
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#9dabb9] hover:bg-[#283039] hover:text-white transition-colors"
+                            href="/dashboard/admin/courses">
+                            <span class="material-symbols-outlined text-2xl">book</span>
+                            <p class="text-sm font-medium leading-normal">Courses</p>
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#9dabb9] hover:bg-[#283039] hover:text-white transition-colors"
+                            href="/dashboard/admin/enrollment">
+                            <span class="material-symbols-outlined text-2xl">settings</span>
+                            <p class="text-sm font-medium leading-normal">Settings</p>
+                        </a>
+                    </nav>
+                </div>
+                <div class="flex flex-col gap-2 border-t border-[#283039] pt-4">
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#9dabb9] hover:bg-[#283039] hover:text-white transition-colors"
+                        href="/">
+                        <span class="material-symbols-outlined text-2xl">logout</span>
+                        <p class="text-sm font-medium leading-normal">Log Out</p>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full relative overflow-y-auto bg-background-light dark:bg-background-dark">
+            <!-- Top Header (Breadcrumbs + Profile) -->
+            <header
+                class="flex items-center justify-between px-6 py-4 border-b border-[#283039]/50 bg-background-light dark:bg-background-dark sticky top-0 z-10">
+                <div class="flex gap-2">
+                    <a class="text-[#9dabb9] text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="#">Home</a>
+                    <span class="text-[#9dabb9] text-sm font-medium leading-normal">/</span>
+                    <span class="text-slate-900 dark:text-white text-sm font-medium leading-normal">Student
+                        Management</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-[#9dabb9] hover:text-white relative">
+                        <span class="material-symbols-outlined text-2xl">notifications</span>
+                        <span
+                            class="absolute top-0 right-0 size-2 bg-red-500 rounded-full border border-background-dark"></span>
+                    </button>
+                    <div class="size-8 rounded-full bg-cover bg-center border border-[#283039]"
+                        data-alt="User profile picture of admin"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDi8VBY_qalIRaMdKNid-FB_xFO6Ga2ym8nFwakarI_O5UDFTbL4sFFP3HJ8JVp98vnXzELK_TD3ROGNdEfUkTZ1jtwUy8hZzIQs0mB2GNiwDOEUHClZFMgzOMRtl0UvILVVWjhOwtNh_Fl68xwBj8Mu-D1cGXbBY7ltI6RjMILXC36WAWlM8VQ27WvPz2QJ2SHSf_S5p_C6KBYMQm8CrDYuZOhD4suEuW0OKajs9WVvSD4JfHbrLzj7o2sQ-0Tm82KPSW1ZPmdzdM');">
+                    </div>
+                </div>
+            </header>
+            <div class="flex flex-col w-full max-w-[1200px] mx-auto p-6 gap-6">
+                <!-- Page Heading & Actions -->
+                <div class="flex flex-wrap justify-between gap-4 items-end">
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold tracking-tight">Student
+                            Management</h2>
+                        <p class="text-[#9dabb9] text-base font-normal">Manage student accounts, enrollment status, and
+                            records.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-[#283039] text-white text-sm font-bold hover:bg-[#343e4a] transition-colors border border-white/5">
+                            <span class="material-symbols-outlined text-lg">download</span>
+                            <span class="hidden sm:inline">Export</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/30 hover:bg-blue-600 transition-colors">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            <span>Add Student</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">Total Students</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">group</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p class="text-white text-3xl font-bold">2,450</p>
+                            <div
+                                class="flex items-center text-[#0bda5b] text-xs font-bold bg-[#0bda5b]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span>
+                                5.2%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">Active Now</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">wifi</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p class="text-white text-3xl font-bold">1,890</p>
+                            <div
+                                class="flex items-center text-[#0bda5b] text-xs font-bold bg-[#0bda5b]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span>
+                                1.2%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">New Enrollments</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">person_add</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p class="text-white text-3xl font-bold">120</p>
+                            <div
+                                class="flex items-center text-[#fa6238] text-xs font-bold bg-[#fa6238]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_down</span>
+                                0.5%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filters & Search Toolbar -->
+                <div class="flex flex-col md:flex-row gap-3 p-4 rounded-xl bg-[#1e252b] border border-[#283039]">
+                    <div class="relative flex-1">
+                        <span
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined text-xl">search</span>
+                        <input
+                            class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-10 pr-4 focus:ring-1 focus:ring-primary focus:border-primary placeholder-[#586472]"
+                            placeholder="Search by Name or ID..." type="text" />
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="relative min-w-[140px]">
+                            <select
+                                class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+                                <option value="">All Majors</option>
+                                <option value="cs">Computer Sci</option>
+                                <option value="eng">Engineering</option>
+                                <option value="biz">Business</option>
+                                <option value="arts">Arts</option>
+                            </select>
+                            <span
+                                class="absolute right-2 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined pointer-events-none text-xl">expand_more</span>
+                        </div>
+                        <div class="relative min-w-[140px]">
+                            <select
+                                class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+                                <option value="">Any Year</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                            </select>
+                            <span
+                                class="absolute right-2 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined pointer-events-none text-xl">expand_more</span>
+                        </div>
+                        <button
+                            class="flex items-center justify-center size-10 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] border border-[#283039] transition-colors"
+                            title="More Filters">
+                            <span class="material-symbols-outlined text-xl">tune</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Data Table -->
+                <div class="flex flex-col rounded-xl border border-[#283039] bg-[#1e252b] overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-[#283039] text-[#9dabb9] text-xs uppercase tracking-wider font-semibold border-b border-[#283039]">
+                                    <th class="p-4 w-12">
+                                        <input
+                                            class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4"
+                                            type="checkbox" />
+                                    </th>
+                                    <th class="p-4">Student</th>
+                                    <th class="p-4">Student ID</th>
+                                    <th class="p-4">Major</th>
+                                    <th class="p-4">Year</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#283039] text-sm text-white">
+                                <!-- Rows would go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="flex items-center justify-between p-4 border-t border-[#283039]">
+                        <p class="text-sm text-[#9dabb9]">Showing <span class="text-white font-medium">1-5</span> of
+                            <span class="text-white font-medium">2,450</span> students</p>
+                        <div class="flex gap-2">
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span class="material-symbols-outlined text-lg">chevron_left</span>
+                            </button>
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-primary text-white font-medium text-sm">1</button>
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm">2</button>
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm">3</button>
+                            <span class="flex items-center justify-center size-8 text-[#9dabb9]">...</span>
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm">42</button>
+                            <button
+                                class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a]">
+                                <span class="material-symbols-outlined text-lg">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

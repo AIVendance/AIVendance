@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Face Recognition Test - Aivendance</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "background-dark": "#111418" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }
+    </script>
+</head>
+<body class="bg-[#f6f7f8] dark:bg-[#111418] text-slate-900 dark:text-white font-display h-screen flex flex-col">
+    
+    <header class="bg-[#1c2127] border-b border-[#3b4754] p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="bg-primary rounded-full size-8"></div>
+            <h1 class="text-lg font-bold text-white">Face Recognition Test Portal</h1>
+        </div>
+        <button onclick="localStorage.clear(); window.location.href='/'" class="text-red-400 hover:text-red-300 flex items-center gap-2">
+            <span class="material-symbols-outlined">logout</span> Logout
+        </button>
+    </header>
+
+    <main class="flex-1 p-8 overflow-y-auto max-w-6xl mx-auto w-full">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-white mb-2">Test Face Recognition System</h2>
+            <p class="text-[#9dabb9]">Start a class session and test face recognition in real-time.</p>
+        </div>
+
+        <!-- Class Selection -->
+        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mb-6">
+            <h3 class="text-xl font-bold text-white mb-4">Select Class Section</h3>
+            <div class="flex gap-4 items-end">
+                <div class="flex-1">
+                    <label class="text-[#9dabb9] text-sm mb-2 block">Class Section</label>
+                    <select id="test-section" class="w-full p-3 bg-[#111418] border border-[#3b4754] text-white rounded-lg">
+                        <option value="">Select a class...</option>
+                    </select>
+                </div>
+                <button onclick="startClassSession()" id="start-btn" class="bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold shadow-lg">
+                    Start Class Session
+                </button>
+            </div>
+            <div id="session-status" class="mt-4 hidden">
+                <p class="text-green-400 font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Class session active: <span id="session-section-name"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Camera Feed -->
+        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mb-6">
+            <h3 class="text-xl font-bold text-white mb-4">Camera Feed</h3>
+            <div class="relative bg-black rounded-xl overflow-hidden aspect-video border border-gray-700">
+                <video id="test-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                    <button onclick="startTestCamera()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-sm">Start Camera</button>
+                    <button onclick="captureAndRecognize()" id="recognize-btn" class="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-blue-500/50 flex items-center gap-2" disabled>
+                        <span class="material-symbols-outlined text-sm">face</span> Recognize Face
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recognition Results -->
+        <div id="results-section" class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 hidden">
+            <h3 class="text-xl font-bold text-white mb-4">Recognition Results</h3>
+            <div id="recognition-results" class="space-y-4"></div>
+        </div>
+
+        <!-- Recent Recognitions -->
+        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mt-6">
+            <h3 class="text-xl font-bold text-white mb-4">Recent Recognitions</h3>
+            <div id="recent-recognitions" class="space-y-2">
+                <p class="text-[#9dabb9]">No recognitions yet.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API = "http://127.0.0.1:8000";
+        const TOKEN = localStorage.getItem('token');
+        let stream = null;
+        let currentSectionId = null;
+        let recognitionHistory = [];
+
+        window.onload = async () => {
+            // Check if user is logged in (for test page, we'll allow direct access but check token)
+            if(!TOKEN) {
+                // Try to auto-login with test credentials
+                await attemptTestLogin();
+            }
+            await loadSections();
+        };
+
+        async function attemptTestLogin() {
+            try {
+                const formData = new FormData();
+                formData.append('username', '1');
+                formData.append('password', '1');
+
+                const res = await fetch(`${API}/auth/login`, { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if(res.ok) {
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('role', data.role);
+                    window.location.reload();
+                } else {
+                    alert("Please log in first. Use username '1' and password '1' for testing.");
+                    window.location.href = '/';
+                }
+            } catch(e) {
+                console.error('Login error:', e);
+            }
+        }
+
+        async function loadSections() {
+            try {
+                const res = await fetch(`${API}/classes/sections/all`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+                const sections = await res.json();
+                const select = document.getElementById('test-section');
+                
+                if(sections.length === 0) {
+                    select.innerHTML = '<option value="">No sections available. Create one in admin panel.</option>';
+                } else {
+                    select.innerHTML = '<option value="">Select a class...</option>' + 
+                        sections.map(s => `<option value="${s.id}">${s.code} - ${s.name} (${s.instructor})</option>`).join('');
+                }
+            } catch(e) {
+                console.error('Error loading sections:', e);
+            }
+        }
+
+        function startClassSession() {
+            const sectionId = document.getElementById('test-section').value;
+            if(!sectionId) {
+                alert("Please select a class section first.");
+                return;
+            }
+
+            currentSectionId = sectionId;
+            const sectionName = document.getElementById('test-section').selectedOptions[0].text;
+            
+            document.getElementById('session-status').classList.remove('hidden');
+            document.getElementById('session-section-name').textContent = sectionName;
+            document.getElementById('recognize-btn').disabled = false;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('start-btn').textContent = 'Session Active';
+            document.getElementById('start-btn').classList.remove('bg-primary', 'hover:bg-blue-600');
+            document.getElementById('start-btn').classList.add('bg-green-600');
+        }
+
+        async function startTestCamera() {
+            try {
+                if(stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                }
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    } 
+                });
+                document.getElementById('test-video').srcObject = stream;
+            } catch(e) {
+                console.error('Camera error:', e);
+                if(e.name === 'NotAllowedError') {
+                    alert("Camera access denied. Please allow camera access in your browser settings.");
+                } else if(e.name === 'NotFoundError') {
+                    alert("No camera found. Please connect a camera.");
+                } else {
+                    alert("Error accessing camera: " + e.message);
+                }
+            }
+        }
+
+        async function captureAndRecognize() {
+            if(!currentSectionId) {
+                alert("Please start a class session first.");
+                return;
+            }
+
+            const video = document.getElementById('test-video');
+            if(!video.srcObject) {
+                alert("Please start the camera first.");
+                return;
+            }
+
+            const recognizeBtn = document.getElementById('recognize-btn');
+            const originalText = recognizeBtn.textContent;
+            recognizeBtn.disabled = true;
+            recognizeBtn.textContent = "Recognizing...";
+
+            // Capture frame
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('photo', blob, 'test_face.jpg');
+                formData.append('section_id', currentSectionId);
+
+                try {
+                    const res = await fetch(`${API}/ai/recognize`, {
+                        method: 'POST',
+                        headers: {'Authorization': `Bearer ${TOKEN}`},
+                        body: formData
+                    });
+
+                    const data = await res.json();
+                    displayRecognitionResult(data);
+                } catch(e) {
+                    console.error('Recognition error:', e);
+                    alert("Error recognizing face: " + e.message);
+                } finally {
+                    recognizeBtn.disabled = false;
+                    recognizeBtn.textContent = originalText;
+                }
+            }, 'image/jpeg', 0.95);
+        }
+
+        function displayRecognitionResult(result) {
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.classList.remove('hidden');
+
+            const resultsDiv = document.getElementById('recognition-results');
+            
+            const resultCard = document.createElement('div');
+            resultCard.className = 'bg-[#111418] p-4 rounded-lg border border-[#3b4754]';
+            
+            if(result.student) {
+                resultCard.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="size-12 rounded-full bg-gradient-to-tr from-green-500 to-blue-500 flex items-center justify-center font-bold text-white text-lg">
+                            ${result.student.charAt(0)}
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-white font-bold text-lg">${result.student}</p>
+                            <p class="text-sm text-gray-400">Confidence: ${(result.confidence_score * 100).toFixed(1)}%</p>
+                            ${result.attendance_result ? `
+                                <p class="text-sm text-green-400 mt-1">
+                                    ✓ Attendance marked: ${result.attendance_result.status || 'Present'}
+                                </p>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultCard.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="size-12 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white">person_off</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-white font-bold">No Match Found</p>
+                            <p class="text-sm text-gray-400">${result.message || 'Face detected but no matching student found.'}</p>
+                            ${result.score !== undefined ? `<p class="text-sm text-gray-400">Best match score: ${(result.score * 100).toFixed(1)}%</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.insertBefore(resultCard, resultsDiv.firstChild);
+
+            // Add to history
+            recognitionHistory.unshift({
+                timestamp: new Date().toLocaleTimeString(),
+                result: result
+            });
+            updateRecentRecognitions();
+        }
+
+        function updateRecentRecognitions() {
+            const recentDiv = document.getElementById('recent-recognitions');
+            if(recognitionHistory.length === 0) {
+                recentDiv.innerHTML = '<p class="text-[#9dabb9]">No recognitions yet.</p>';
+                return;
+            }
+
+            recentDiv.innerHTML = recognitionHistory.slice(0, 10).map(item => {
+                const r = item.result;
+                return `
+                    <div class="flex justify-between items-center py-2 px-4 bg-[#111418] rounded-lg border border-[#3b4754]">
+                        <div>
+                            <p class="text-white font-bold">${r.student || 'Unknown'}</p>
+                            <p class="text-xs text-gray-400">${item.timestamp}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded text-xs font-bold ${
+                            r.student ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                        }">
+                            ${r.student ? 'Recognized' : 'No Match'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
+

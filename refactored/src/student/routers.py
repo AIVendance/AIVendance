@@ -67,7 +67,7 @@ def upload_face(photos: List[UploadFile] = File(...), user: dict = Depends(get_c
 @router.get("/", summary="List All Students")
 def list_all_students(user: dict = Depends(get_current_user)):
     if user.get("role") != "admin": raise HTTPException(status_code=403, detail="Admin only")
-    return fetch_all("SELECT id, full_name, university_id, major FROM students")
+    return fetch_all("SELECT id, full_name, university_id, major, enrollment_year FROM students ORDER BY university_id")
 
 # --- 3. ACADEMIC DATA ---
 @router.get("/my-classes", summary="Get Enrolled Classes")

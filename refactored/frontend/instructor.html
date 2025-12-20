@@ -2,7 +2,7 @@
 <html class="dark" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Instructor Portal</title>
+    <title>Instructor Portal - Aivendance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
@@ -12,25 +12,37 @@
     
     <aside class="w-64 bg-[#111418] border-r border-[#283039] p-6 hidden md:block">
         <h1 class="text-white font-bold text-xl mb-8 flex items-center gap-2"><span class="material-symbols-outlined text-primary">school</span> Aivendance</h1>
-        <a class="flex items-center gap-3 text-white font-bold bg-[#283039] p-3 rounded-xl"><span class="material-symbols-outlined">class</span> My Classes</a>
+        <a onclick="showTab('classes')" id="nav-classes" class="flex items-center gap-3 text-white font-bold bg-[#283039] p-3 rounded-xl cursor-pointer"><span class="material-symbols-outlined">class</span> My Classes</a>
         <button onclick="localStorage.clear(); window.location.href='/'" class="mt-10 flex items-center gap-3 text-red-400 font-bold"><span class="material-symbols-outlined">logout</span> Logout</button>
     </aside>
 
     <main class="flex-1 p-10 overflow-y-auto">
         <h1 class="text-4xl font-black mb-8 text-white">My Classes</h1>
         
-        <div id="class-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            <p class="text-gray-500">Loading your schedule...</p>
+        <div id="tab-classes" class="tab-content">
+            <div id="class-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <p class="text-gray-500">Loading your schedule...</p>
+            </div>
         </div>
 
+        <!-- Roster Modal -->
         <div id="roster-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div class="bg-[#1c2127] w-full max-w-2xl p-8 rounded-2xl border border-[#3b4754] h-[80vh] flex flex-col">
+            <div class="bg-[#1c2127] w-full max-w-4xl p-8 rounded-2xl border border-[#3b4754] h-[80vh] flex flex-col">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 id="roster-title" class="text-2xl font-bold text-white">Class Roster</h2>
-                    <button onclick="document.getElementById('roster-modal').classList.add('hidden')" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+                    <h2 id="roster-title" class="text-2xl font-bold text-white">Class Roster & Statistics</h2>
+                    <button onclick="closeRosterModal()" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <div class="flex gap-4 mb-4">
+                    <button onclick="showRosterView('students')" id="roster-btn-students" class="px-4 py-2 bg-[#283039] text-white rounded-lg font-bold">Students</button>
+                    <button onclick="showRosterView('stats')" id="roster-btn-stats" class="px-4 py-2 text-gray-400 hover:text-white rounded-lg">Statistics</button>
                 </div>
                 <div class="flex-1 overflow-y-auto">
-                    <ul id="roster-list" class="space-y-2"></ul>
+                    <div id="roster-students-view">
+                        <ul id="roster-list" class="space-y-2"></ul>
+                    </div>
+                    <div id="roster-stats-view" class="hidden">
+                        <div id="stats-content" class="space-y-4"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,6 +51,8 @@
     <script>
         const API = "http://127.0.0.1:8000";
         const TOKEN = localStorage.getItem('token');
+        let currentSectionId = null;
+        let currentSectionName = null;
 
         window.onload = async () => {
             if(!TOKEN) window.location.href='/';
@@ -47,44 +61,196 @@
             const classes = await res.json();
             
             const grid = document.getElementById('class-grid');
-            if(classes.length === 0) grid.innerHTML = "<p class='text-gray-500'>No classes assigned.</p>";
-            else {
+            if(classes.length === 0) {
+                grid.innerHTML = "<p class='text-gray-500'>No classes assigned.</p>";
+            } else {
                 grid.innerHTML = classes.map(c => `
                     <div class="bg-[#1c242e] border border-[#283039] p-6 rounded-2xl hover:border-primary/50 transition-all group relative">
                         <div class="absolute top-4 right-4 bg-primary/10 text-primary p-2 rounded-lg"><span class="material-symbols-outlined">groups</span></div>
                         <h3 class="text-xl font-bold text-white mb-1">${c.course_code}</h3>
                         <p class="text-gray-400 text-sm mb-4">${c.course_name}</p>
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                            <span class="material-symbols-outlined text-sm">schedule</span> ${c.days || 'N/A'} ${c.lecture_time || 'TBA'}
+                        </div>
                         <div class="flex items-center gap-2 text-sm text-gray-500 mb-6">
-                            <span class="material-symbols-outlined text-sm">schedule</span> ${c.days} ${c.lecture_time}
+                            <span class="material-symbols-outlined text-sm">location_on</span> ${c.room_num || 'TBA'}
                         </div>
                         <button onclick="viewRoster('${c.section_id}', '${c.course_name}')" class="w-full bg-[#283039] hover:bg-primary text-white font-bold py-3 rounded-xl transition-colors">
-                            View Roster
+                            View Roster & Stats
                         </button>
                     </div>
                 `).join('');
             }
         };
 
-        async function viewRoster(id, name) {
+        async function viewRoster(sectionId, courseName) {
+            currentSectionId = sectionId;
+            currentSectionName = courseName;
             document.getElementById('roster-modal').classList.remove('hidden');
-            document.getElementById('roster-title').innerText = name;
+            document.getElementById('roster-title').innerText = courseName;
+            showRosterView('students');
+            await loadRosterData();
+        }
+
+        function closeRosterModal() {
+            document.getElementById('roster-modal').classList.add('hidden');
+            currentSectionId = null;
+            currentSectionName = null;
+        }
+
+        function showRosterView(view) {
+            if(view === 'students') {
+                document.getElementById('roster-students-view').classList.remove('hidden');
+                document.getElementById('roster-stats-view').classList.add('hidden');
+                document.getElementById('roster-btn-students').classList.add('bg-[#283039]', 'text-white', 'font-bold');
+                document.getElementById('roster-btn-students').classList.remove('text-gray-400');
+                document.getElementById('roster-btn-stats').classList.remove('bg-[#283039]', 'text-white', 'font-bold');
+                document.getElementById('roster-btn-stats').classList.add('text-gray-400');
+            } else {
+                document.getElementById('roster-students-view').classList.add('hidden');
+                document.getElementById('roster-stats-view').classList.remove('hidden');
+                document.getElementById('roster-btn-stats').classList.add('bg-[#283039]', 'text-white', 'font-bold');
+                document.getElementById('roster-btn-stats').classList.remove('text-gray-400');
+                document.getElementById('roster-btn-students').classList.remove('bg-[#283039]', 'text-white', 'font-bold');
+                document.getElementById('roster-btn-students').classList.add('text-gray-400');
+                loadStatistics();
+            }
+        }
+
+        async function loadRosterData() {
             const list = document.getElementById('roster-list');
             list.innerHTML = "<p class='text-gray-500'>Loading students...</p>";
 
-            const res = await fetch(`${API}/attendance/history?section_id=${id}`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
-            const data = await res.json();
-            
-            // Extract unique students
-            const students = [...new Set(data.map(d => d.student_name))];
+            try {
+                const res = await fetch(`${API}/attendance/history?section_id=${currentSectionId}`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+                const data = await res.json();
+                
+                // Get unique students with their attendance records
+                const studentMap = new Map();
+                data.forEach(record => {
+                    if(!studentMap.has(record.student_name)) {
+                        studentMap.set(record.student_name, {
+                            name: record.student_name,
+                            records: []
+                        });
+                    }
+                    studentMap.get(record.student_name).records.push(record);
+                });
 
-            if(students.length === 0) list.innerHTML = "<p class='text-gray-500'>No attendance records yet.</p>";
-            else {
-                list.innerHTML = students.map(s => `
-                    <li class="flex items-center gap-4 p-4 bg-[#111418] rounded-xl border border-[#283039]">
-                        <div class="size-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white">${s.charAt(0)}</div>
-                        <span class="text-white font-bold">${s}</span>
-                    </li>
-                `).join('');
+                const students = Array.from(studentMap.values());
+
+                if(students.length === 0) {
+                    list.innerHTML = "<p class='text-gray-500'>No students enrolled yet.</p>";
+                } else {
+                    list.innerHTML = students.map(s => {
+                        const present = s.records.filter(r => r.status === 'Present').length;
+                        const late = s.records.filter(r => r.status === 'Late').length;
+                        const absent = s.records.filter(r => r.status === 'Absent').length;
+                        const total = s.records.length;
+                        const rate = total > 0 ? ((present + late) / total * 100).toFixed(1) : 0;
+                        
+                        return `
+                            <li class="flex items-center justify-between gap-4 p-4 bg-[#111418] rounded-xl border border-[#283039]">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-12 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white text-lg">${s.name.charAt(0)}</div>
+                                    <div>
+                                        <span class="text-white font-bold">${s.name}</span>
+                                        <p class="text-xs text-gray-400">${total} classes • ${rate}% attendance</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 rounded text-xs bg-green-500/20 text-green-400">${present} Present</span>
+                                    <span class="px-2 py-1 rounded text-xs bg-yellow-500/20 text-yellow-400">${late} Late</span>
+                                    <span class="px-2 py-1 rounded text-xs bg-red-500/20 text-red-400">${absent} Absent</span>
+                                </div>
+                            </li>
+                        `;
+                    }).join('');
+                }
+            } catch(e) {
+                console.error('Error loading roster:', e);
+                list.innerHTML = "<p class='text-red-500'>Error loading students.</p>";
+            }
+        }
+
+        async function loadStatistics() {
+            const statsContent = document.getElementById('stats-content');
+            statsContent.innerHTML = "<p class='text-gray-500'>Loading statistics...</p>";
+
+            try {
+                const res = await fetch(`${API}/attendance/history?section_id=${currentSectionId}`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
+                const data = await res.json();
+                
+                if(data.length === 0) {
+                    statsContent.innerHTML = "<p class='text-gray-500'>No attendance records yet.</p>";
+                    return;
+                }
+
+                // Calculate overall statistics
+                const total = data.length;
+                const present = data.filter(r => r.status === 'Present').length;
+                const late = data.filter(r => r.status === 'Late').length;
+                const absent = data.filter(r => r.status === 'Absent').length;
+                const attendanceRate = total > 0 ? ((present + late) / total * 100).toFixed(1) : 0;
+
+                // Get unique students count
+                const uniqueStudents = new Set(data.map(r => r.student_name)).size;
+
+                // Group by date
+                const byDate = {};
+                data.forEach(record => {
+                    const date = record.date;
+                    if(!byDate[date]) {
+                        byDate[date] = { present: 0, late: 0, absent: 0, total: 0 };
+                    }
+                    byDate[date][record.status.toLowerCase()]++;
+                    byDate[date].total++;
+                });
+
+                const dateStats = Object.entries(byDate)
+                    .sort((a, b) => new Date(b[0]) - new Date(a[0]))
+                    .slice(0, 10);
+
+                statsContent.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-[#111418] p-4 rounded-xl border border-[#283039]">
+                            <p class="text-sm text-gray-400 mb-1">Total Students</p>
+                            <p class="text-2xl font-bold text-white">${uniqueStudents}</p>
+                        </div>
+                        <div class="bg-[#111418] p-4 rounded-xl border border-[#283039]">
+                            <p class="text-sm text-gray-400 mb-1">Attendance Rate</p>
+                            <p class="text-2xl font-bold text-primary">${attendanceRate}%</p>
+                        </div>
+                        <div class="bg-[#111418] p-4 rounded-xl border border-[#283039]">
+                            <p class="text-sm text-gray-400 mb-1">Present</p>
+                            <p class="text-2xl font-bold text-green-400">${present}</p>
+                        </div>
+                        <div class="bg-[#111418] p-4 rounded-xl border border-[#283039]">
+                            <p class="text-sm text-gray-400 mb-1">Absent</p>
+                            <p class="text-2xl font-bold text-red-400">${absent}</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#111418] p-4 rounded-xl border border-[#283039]">
+                        <h3 class="font-bold text-white mb-4">Attendance by Date</h3>
+                        <div class="space-y-2">
+                            ${dateStats.map(([date, stats]) => {
+                                const rate = stats.total > 0 ? ((stats.present + stats.late) / stats.total * 100).toFixed(1) : 0;
+                                return `
+                                    <div class="flex justify-between items-center py-2 border-b border-[#283039]">
+                                        <div>
+                                            <p class="text-white font-bold">${date}</p>
+                                            <p class="text-xs text-gray-400">${stats.present} Present, ${stats.late} Late, ${stats.absent} Absent</p>
+                                        </div>
+                                        <span class="px-3 py-1 rounded text-sm font-bold ${rate >= 80 ? 'bg-green-500/20 text-green-400' : rate >= 50 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}">${rate}%</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            } catch(e) {
+                console.error('Error loading statistics:', e);
+                statsContent.innerHTML = "<p class='text-red-500'>Error loading statistics.</p>";
             }
         }
     </script>
