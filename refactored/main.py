@@ -27,45 +27,48 @@ app.include_router(instructor_router, prefix="/instructor", tags=["Instructor"])
 app.include_router(attendance_router, prefix="/attendance", tags=["Attendance"])
 app.include_router(ai_router, prefix="/ai", tags=["AI"])
 
-# 2. Serve Static Files (Make sure your HTML files are in a 'frontend' folder)
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+# 2. Serve Static Files
+frontend_dir = os.path.join(os.path.dirname(__file__), 'frontend')
+app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 # 3. Page Routes
 @app.get("/")
 async def read_login():
-    return FileResponse('frontend/login.html')
+    return FileResponse(os.path.join(frontend_dir, 'login.html'))
 
 @app.get("/dashboard/admin")
 async def admin_dashboard():
-    return FileResponse('frontend/admin.html')
+    return FileResponse(os.path.join(frontend_dir, 'admin.html'))
 
 @app.get("/dashboard/admin/students")
 async def admin_students_dashboard():
-    return FileResponse('frontend/admin_students.html')
+    return FileResponse(os.path.join(frontend_dir, 'admin_students.html'))
 
 @app.get("/dashboard/admin/instructors")
 async def admin_instructors_dashboard():
-    return FileResponse('frontend/admin_instructors.html')
+    return FileResponse(os.path.join(frontend_dir, 'admin_instructors.html'))
 
 @app.get("/dashboard/admin/courses")
 async def admin_courses_dashboard():
-    return FileResponse('frontend/admin_courses.html')
+    return FileResponse(os.path.join(frontend_dir, 'admin_courses.html'))
 
 @app.get("/dashboard/admin/enrollment")
 async def admin_enrollment_dashboard():
-    return FileResponse('frontend/admin_enrollment.html')
+    return FileResponse(os.path.join(frontend_dir, 'admin_enrollment.html'))
 
 @app.get("/dashboard/student")
 async def student_dashboard():
-    return FileResponse('frontend/student.html')
+    return FileResponse(os.path.join(frontend_dir, 'student.html'))
 
 @app.get("/dashboard/instructor")
 async def instructor_dashboard():
-    return FileResponse('frontend/instructor.html')
+    return FileResponse(os.path.join(frontend_dir, 'instructor.html'))
 
-@app.get("/test")
-async def test_page():
-    return FileResponse('frontend/test.html')
+@app.get("/test", tags=["Debug"])
+async def debug_page():
+    return FileResponse(os.path.join(frontend_dir, 'test.html'))
+
+
 
 if __name__ == "__main__":
     import uvicorn

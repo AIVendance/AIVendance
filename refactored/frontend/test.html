@@ -1,308 +1,414 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <title>Face Recognition Test - Aivendance</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Aivendance Diagnostics</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script>
-        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#137fec", "background-dark": "#111418" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111418",
+                        "surface-dark": "#1c2127",
+                        "border-dark": "#283039",
+                        "text-secondary": "#9dabb9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
     </script>
 </head>
-<body class="bg-[#f6f7f8] dark:bg-[#111418] text-slate-900 dark:text-white font-display h-screen flex flex-col">
-    
-    <header class="bg-[#1c2127] border-b border-[#3b4754] p-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="bg-primary rounded-full size-8"></div>
-            <h1 class="text-lg font-bold text-white">Face Recognition Test Portal</h1>
-        </div>
-        <button onclick="localStorage.clear(); window.location.href='/'" class="text-red-400 hover:text-red-300 flex items-center gap-2">
-            <span class="material-symbols-outlined">logout</span> Logout
-        </button>
-    </header>
 
-    <main class="flex-1 p-8 overflow-y-auto max-w-6xl mx-auto w-full">
-        <div class="mb-6">
-            <h2 class="text-2xl font-bold text-white mb-2">Test Face Recognition System</h2>
-            <p class="text-[#9dabb9]">Start a class session and test face recognition in real-time.</p>
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white h-screen flex flex-col overflow-hidden">
+    <!-- Top Navigation -->
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-3 bg-background-dark shrink-0">
+        <div class="flex items-center gap-4 text-white">
+            <div class="size-8 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-3xl">face_3</span>
+            </div>
+            <div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Aivendance</h2>
+                <p class="text-text-secondary text-xs font-medium">System Diagnostics Console</p>
+            </div>
+            <div class="ml-4 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-emerald-500 text-xs font-bold uppercase">System Ready</span>
+            </div>
         </div>
-
-        <!-- Class Selection -->
-        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mb-6">
-            <h3 class="text-xl font-bold text-white mb-4">Select Class Section</h3>
-            <div class="flex gap-4 items-end">
-                <div class="flex-1">
-                    <label class="text-[#9dabb9] text-sm mb-2 block">Class Section</label>
-                    <select id="test-section" class="w-full p-3 bg-[#111418] border border-[#3b4754] text-white rounded-lg">
-                        <option value="">Select a class...</option>
-                    </select>
+        <div class="flex items-center gap-6">
+            <button class="text-text-secondary hover:text-white transition-colors">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <div class="h-6 w-px bg-border-dark"></div>
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold leading-none" id="userNameDisplay">Admin User</p>
+                    <p class="text-xs text-text-secondary mt-1">Level 4 Access</p>
                 </div>
-                <button onclick="startClassSession()" id="start-btn" class="bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold shadow-lg">
-                    Start Class Session
-                </button>
-            </div>
-            <div id="session-status" class="mt-4 hidden">
-                <p class="text-green-400 font-bold flex items-center gap-2">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    Class session active: <span id="session-section-name"></span>
-                </p>
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-border-dark"
+                    data-alt="User profile picture placeholder"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOszH7q9smgf4JH3W6CKbOXLVJZ68VzptoKu2-jmx096_P3IizzjzEpr8XukpOOpT3wJ0kjJXOZu00u6jNffYSoe2NWhVQTs2139sfL6oz75o4RYU7JVz4pB2KQcmeKepe7nAzziG3Gb58GY6068d4PIcaa_gShuPco5Mb4hUgsJGbbUh9lbUnx_PPviz535FA0aHNvh5WETIFek9h3g7U_8SsvdMqe2jM2XCzkkSoU-_GNxEuQ5R6DiBAVs-BkWgnT-qNKeMrMRY");'>
+                </div>
             </div>
         </div>
-
-        <!-- Camera Feed -->
-        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mb-6">
-            <h3 class="text-xl font-bold text-white mb-4">Camera Feed</h3>
-            <div class="relative bg-black rounded-xl overflow-hidden aspect-video border border-gray-700">
-                <video id="test-video" autoplay playsinline class="w-full h-full object-cover"></video>
-                <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                    <button onclick="startTestCamera()" class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-sm">Start Camera</button>
-                    <button onclick="captureAndRecognize()" id="recognize-btn" class="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-blue-500/50 flex items-center gap-2" disabled>
-                        <span class="material-symbols-outlined text-sm">face</span> Recognize Face
+    </header>
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Controls -->
+        <aside
+            class="w-[400px] flex flex-col border-r border-border-dark bg-background-dark overflow-y-auto shrink-0 custom-scrollbar">
+            <div class="p-6 flex flex-col gap-8">
+                <!-- Section 1: Authentication -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined">verified_user</span>
+                        <h3 class="text-white text-sm font-bold uppercase tracking-wider">1. Auth Simulation</h3>
+                    </div>
+                    <div class="p-4 rounded-xl bg-surface-dark border border-border-dark space-y-4">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-secondary text-xs font-bold uppercase">Test User ID</span>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-2.5 text-text-secondary text-[20px]">badge</span>
+                                <input
+                                    class="w-full bg-[#111418] border border-border-dark rounded-lg py-2 pl-10 pr-3 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-gray-600 transition-all"
+                                    type="text" value="user_01_admin" />
+                            </div>
+                        </label>
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-secondary text-xs font-bold uppercase">Password</span>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-2.5 text-text-secondary text-[20px]">key</span>
+                                <input
+                                    class="w-full bg-[#111418] border border-border-dark rounded-lg py-2 pl-10 pr-3 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                                    type="password" value="password_secure_1" />
+                            </div>
+                        </label>
+                        <button
+                            class="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold h-9 rounded-lg border border-white/10 transition-colors">
+                            <span>Verify Credentials</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Section 2: Session Context -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined">class</span>
+                        <h3 class="text-white text-sm font-bold uppercase tracking-wider">2. Session Context</h3>
+                    </div>
+                    <div class="p-4 rounded-xl bg-surface-dark border border-border-dark space-y-4">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-text-secondary text-xs font-bold uppercase">Active Course</span>
+                            <div class="relative">
+                                <select id="courseSelect"
+                                    class="w-full appearance-none bg-[#111418] border border-border-dark rounded-lg py-2.5 pl-3 pr-10 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer">
+                                    <option value="">Loading courses...</option>
+                                </select>
+                                <span
+                                    class="material-symbols-outlined absolute right-3 top-2.5 text-text-secondary pointer-events-none">expand_more</span>
+                            </div>
+                        </label>
+                        <div class="flex items-center justify-between text-xs text-text-secondary px-1">
+                            <span id="ctxRoom">Room: --</span>
+                            <span id="ctxTime">Time: --</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Section 3: Target Dataset -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center justify-between text-primary">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined">groups</span>
+                            <h3 class="text-white text-sm font-bold uppercase tracking-wider">3. Enrolled Students</h3>
+                        </div>
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded" id="studentCount">0
+                            Selected</span>
+                    </div>
+                    <div class="rounded-xl bg-surface-dark border border-border-dark overflow-hidden flex flex-col">
+                        <div class="max-h-60 overflow-y-auto custom-scrollbar divide-y divide-border-dark"
+                            id="studentList">
+                            <!-- Student Items will be injected here -->
+                            <div class="p-4 text-center text-text-secondary text-xs">Select a course to view students
+                            </div>
+                        </div>
+                        <div class="bg-[#181c22] p-2 text-center border-t border-border-dark">
+                            <button class="text-xs text-primary font-medium hover:underline">+ Add Manually</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Viewport -->
+        <main class="flex-1 flex flex-col bg-[#0b0e12] overflow-hidden relative">
+            <!-- Toolbar -->
+            <div
+                class="h-16 border-b border-border-dark flex items-center justify-between px-6 bg-background-dark/50 backdrop-blur-sm z-10">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-white text-xl font-bold tracking-tight">Live Diagnostics Feed</h1>
+                    <span
+                        class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase border border-red-500/20 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">videocam_off</span>
+                        Offline
+                    </span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 mr-4">
+                        <span class="text-xs text-text-secondary font-medium">Debug Mode</span>
+                        <div
+                            class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                                id="toggle" name="toggle" type="checkbox" />
+                            <label
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-700 cursor-pointer"
+                                for="toggle"></label>
+                        </div>
+                    </div>
+                    <button
+                        class="flex items-center gap-2 bg-primary hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-[0_0_20px_rgba(19,127,236,0.3)] transition-all active:scale-95">
+                        <span class="material-symbols-outlined">play_circle</span>
+                        Start Camera
                     </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Recognition Results -->
-        <div id="results-section" class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 hidden">
-            <h3 class="text-xl font-bold text-white mb-4">Recognition Results</h3>
-            <div id="recognition-results" class="space-y-4"></div>
-        </div>
-
-        <!-- Recent Recognitions -->
-        <div class="bg-[#1c2127] rounded-xl border border-[#3b4754] p-6 mt-6">
-            <h3 class="text-xl font-bold text-white mb-4">Recent Recognitions</h3>
-            <div id="recent-recognitions" class="space-y-2">
-                <p class="text-[#9dabb9]">No recognitions yet.</p>
+            <!-- Content Area -->
+            <div class="flex-1 p-6 flex flex-col gap-6 overflow-y-auto">
+                <!-- Video Feed Container -->
+                <div
+                    class="w-full aspect-video bg-black rounded-xl border border-border-dark relative group overflow-hidden shadow-2xl">
+                    <!-- Placeholder State -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-text-secondary z-0">
+                        <div class="bg-surface-dark p-6 rounded-full mb-4 border border-border-dark">
+                            <span class="material-symbols-outlined text-6xl opacity-20">videocam</span>
+                        </div>
+                        <p class="text-lg font-medium">Camera Feed Inactive</p>
+                        <p class="text-sm opacity-60">Initiate system to begin facial recognition</p>
+                    </div>
+                    <!-- Simulated Overlay Elements -->
+                    <div class="hidden absolute top-0 left-0 w-full h-full z-10 pointer-events-none p-4">
+                        <div
+                            class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded text-xs font-mono text-emerald-400 border border-emerald-500/30">
+                            Latency: 24ms | FPS: 60
+                        </div>
+                    </div>
+                </div>
+                <!-- Telemetry Logs -->
+                <div
+                    class="flex-1 bg-surface-dark rounded-xl border border-border-dark overflow-hidden flex flex-col min-h-[200px]">
+                    <div class="px-4 py-3 border-b border-border-dark flex items-center justify-between bg-[#15191f]">
+                        <h3 class="text-white text-sm font-bold flex items-center gap-2">
+                            <span class="material-symbols-outlined text-text-secondary text-lg">terminal</span>
+                            Real-time Recognition Log
+                        </h3>
+                        <div class="flex gap-2">
+                            <button class="p-1 hover:bg-white/5 rounded text-text-secondary hover:text-white">
+                                <span class="material-symbols-outlined text-lg">download</span>
+                            </button>
+                            <button class="p-1 hover:bg-white/5 rounded text-text-secondary hover:text-white">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-4 font-mono text-xs overflow-y-auto custom-scrollbar space-y-2">
+                        <div class="flex gap-4 text-text-secondary border-b border-white/5 pb-1 mb-2">
+                            <span class="w-24">TIMESTAMP</span>
+                            <span class="w-32">EVENT TYPE</span>
+                            <span class="flex-1">DETAILS</span>
+                            <span class="w-24 text-right">STATUS</span>
+                        </div>
+                        <!-- Log items will be added here dynamically later -->
+                        <div class="flex gap-4 hover:bg-white/5 p-1 rounded transition-colors">
+                            <span class="w-24 text-emerald-500">10:42:01.45</span>
+                            <span class="w-32 text-white">SYS_INIT</span>
+                            <span class="flex-1 text-text-secondary">Core recognition engine initialized v2.4.1</span>
+                            <span class="w-24 text-right text-emerald-500">OK</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
+    <style>
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
 
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111418;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #283039;
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3b4754;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #137fec;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #137fec;
+        }
+
+        .toggle-label {
+            width: 40px;
+        }
+
+        .toggle-checkbox {
+            right: 20px;
+            transition: all 0.3s;
+        }
+    </style>
+
+    <!-- Backend Integration Script -->
     <script>
-        const API = "http://127.0.0.1:8000";
-        const TOKEN = localStorage.getItem('token');
-        let stream = null;
-        let currentSectionId = null;
-        let recognitionHistory = [];
+        const API_BASE = "http://localhost:8000";
+        // Simple auth check helper - assumes Admin token is stored
+        // For unified login, we rely on the token stored during login
+        const token = localStorage.getItem("token");
 
-        window.onload = async () => {
-            // Check if user is logged in (for test page, we'll allow direct access but check token)
-            if(!TOKEN) {
-                // Try to auto-login with test credentials
-                await attemptTestLogin();
-            }
-            await loadSections();
-        };
+        // Redirect if not logged in
+        if (!token) {
+            // Optional: Redirect to login if token missing, or show warning
+            console.warn("No auth token found");
+        }
 
-        async function attemptTestLogin() {
-            try {
-                const formData = new FormData();
-                formData.append('username', '1');
-                formData.append('password', '1');
-
-                const res = await fetch(`${API}/auth/login`, { method: 'POST', body: formData });
-                const data = await res.json();
-
-                if(res.ok) {
-                    localStorage.setItem('token', data.access_token);
-                    localStorage.setItem('role', data.role);
-                    window.location.reload();
-                } else {
-                    alert("Please log in first. Use username '1' and password '1' for testing.");
-                    window.location.href = '/';
+        async function fetchWithAuth(endpoint) {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-            } catch(e) {
-                console.error('Login error:', e);
+            });
+            if (response.status === 401) {
+                // Token invalid
+                window.location.href = "/";
             }
+            return response.json();
         }
 
         async function loadSections() {
             try {
-                const res = await fetch(`${API}/classes/sections/all`, { headers: {'Authorization': `Bearer ${TOKEN}`} });
-                const sections = await res.json();
-                const select = document.getElementById('test-section');
-                
-                if(sections.length === 0) {
-                    select.innerHTML = '<option value="">No sections available. Create one in admin panel.</option>';
-                } else {
-                    select.innerHTML = '<option value="">Select a class...</option>' + 
-                        sections.map(s => `<option value="${s.id}">${s.code} - ${s.name} (${s.instructor})</option>`).join('');
+                const sections = await fetchWithAuth("/classes/sections/all");
+                const select = document.getElementById("courseSelect");
+
+                if (sections.length === 0) {
+                    select.innerHTML = '<option value="">No Active Classes Found</option>';
+                    return;
                 }
-            } catch(e) {
-                console.error('Error loading sections:', e);
-            }
-        }
 
-        function startClassSession() {
-            const sectionId = document.getElementById('test-section').value;
-            if(!sectionId) {
-                alert("Please select a class section first.");
-                return;
-            }
+                select.innerHTML = '<option value="">Select a Course...</option>';
 
-            currentSectionId = sectionId;
-            const sectionName = document.getElementById('test-section').selectedOptions[0].text;
-            
-            document.getElementById('session-status').classList.remove('hidden');
-            document.getElementById('session-section-name').textContent = sectionName;
-            document.getElementById('recognize-btn').disabled = false;
-            document.getElementById('start-btn').disabled = true;
-            document.getElementById('start-btn').textContent = 'Session Active';
-            document.getElementById('start-btn').classList.remove('bg-primary', 'hover:bg-blue-600');
-            document.getElementById('start-btn').classList.add('bg-green-600');
-        }
-
-        async function startTestCamera() {
-            try {
-                if(stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    stream = null;
-                }
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { 
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                        facingMode: 'user'
-                    } 
+                sections.forEach(sec => {
+                    const opt = document.createElement("option");
+                    opt.value = sec.id;
+                    opt.textContent = `${sec.code} - ${sec.name} (${sec.lecture_time})`;
+                    opt.dataset.room = sec.room_num;
+                    opt.dataset.time = sec.lecture_time;
+                    select.appendChild(opt);
                 });
-                document.getElementById('test-video').srcObject = stream;
-            } catch(e) {
-                console.error('Camera error:', e);
-                if(e.name === 'NotAllowedError') {
-                    alert("Camera access denied. Please allow camera access in your browser settings.");
-                } else if(e.name === 'NotFoundError') {
-                    alert("No camera found. Please connect a camera.");
-                } else {
-                    alert("Error accessing camera: " + e.message);
+
+                // Add event listener
+                select.addEventListener("change", (e) => {
+                    const selectedOpt = select.options[select.selectedIndex];
+                    if (selectedOpt.value) {
+                        document.getElementById("ctxRoom").textContent = `Room: ${selectedOpt.dataset.room}`;
+                        document.getElementById("ctxTime").textContent = `Time: ${selectedOpt.dataset.time}`;
+                        loadStudents(selectedOpt.value);
+                    } else {
+                        document.getElementById("ctxRoom").textContent = `Room: --`;
+                        document.getElementById("ctxTime").textContent = `Time: --`;
+                        document.getElementById("studentList").innerHTML = '<div class="p-4 text-center text-text-secondary text-xs">Select a course to view students</div>';
+                        document.getElementById("studentCount").textContent = "0 Selected";
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error loading sections:", error);
+                document.getElementById("courseSelect").innerHTML = '<option value="">Error loading courses</option>';
+            }
+        }
+
+        async function loadStudents(sectionId) {
+            const container = document.getElementById("studentList");
+            container.innerHTML = '<div class="p-4 text-center text-text-secondary text-xs">Loading students...</div>';
+
+            try {
+                const students = await fetchWithAuth(`/enrollment/${sectionId}/students`);
+                document.getElementById("studentCount").textContent = `${students.length} Enrolled`;
+
+                container.innerHTML = ""; // Clear loader
+
+                if (students.length === 0) {
+                    container.innerHTML = '<div class="p-4 text-center text-text-secondary text-xs">No students enrolled in this section.</div>';
+                    return;
                 }
+
+                students.forEach(student => {
+                    // Random vivid color for placeholder avatar
+                    const colors = ["bg-emerald-500", "bg-blue-500", "bg-purple-500", "bg-orange-500", "bg-pink-500"];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    const html = `
+                        <label class="flex items-center gap-3 p-3 hover:bg-white/5 cursor-pointer transition-colors">
+                            <input checked="" class="rounded border-border-dark bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                            <div class="size-8 rounded-full ${color} flex items-center justify-center text-white text-xs font-bold">
+                                ${student.full_name ? student.full_name.substring(0, 2).toUpperCase() : '??'}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-white truncate">${student.full_name}</p>
+                                <p class="text-xs text-text-secondary truncate">ID: ${student.university_id}</p>
+                            </div>
+                            <div class="size-2 rounded-full ${student.face_encoding ? 'bg-emerald-500' : 'bg-red-500'}" title="${student.face_encoding ? 'Face Enrolled' : 'No Face Data'}"></div>
+                        </label>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+
+            } catch (error) {
+                console.error("Error loading students:", error);
+                container.innerHTML = '<div class="p-4 text-center text-red-500 text-xs">Error loading student list.</div>';
             }
         }
 
-        async function captureAndRecognize() {
-            if(!currentSectionId) {
-                alert("Please start a class session first.");
-                return;
-            }
+        // Initialize
+        document.addEventListener("DOMContentLoaded", () => {
+            // Mock User Info in Header
+            const userName = localStorage.getItem("user_name") || "Admin User";
+            document.getElementById("userNameDisplay").textContent = userName;
 
-            const video = document.getElementById('test-video');
-            if(!video.srcObject) {
-                alert("Please start the camera first.");
-                return;
-            }
-
-            const recognizeBtn = document.getElementById('recognize-btn');
-            const originalText = recognizeBtn.textContent;
-            recognizeBtn.disabled = true;
-            recognizeBtn.textContent = "Recognizing...";
-
-            // Capture frame
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0);
-            
-            canvas.toBlob(async (blob) => {
-                const formData = new FormData();
-                formData.append('photo', blob, 'test_face.jpg');
-                formData.append('section_id', currentSectionId);
-
-                try {
-                    const res = await fetch(`${API}/ai/recognize`, {
-                        method: 'POST',
-                        headers: {'Authorization': `Bearer ${TOKEN}`},
-                        body: formData
-                    });
-
-                    const data = await res.json();
-                    displayRecognitionResult(data);
-                } catch(e) {
-                    console.error('Recognition error:', e);
-                    alert("Error recognizing face: " + e.message);
-                } finally {
-                    recognizeBtn.disabled = false;
-                    recognizeBtn.textContent = originalText;
-                }
-            }, 'image/jpeg', 0.95);
-        }
-
-        function displayRecognitionResult(result) {
-            const resultsSection = document.getElementById('results-section');
-            resultsSection.classList.remove('hidden');
-
-            const resultsDiv = document.getElementById('recognition-results');
-            
-            const resultCard = document.createElement('div');
-            resultCard.className = 'bg-[#111418] p-4 rounded-lg border border-[#3b4754]';
-            
-            if(result.student) {
-                resultCard.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="size-12 rounded-full bg-gradient-to-tr from-green-500 to-blue-500 flex items-center justify-center font-bold text-white text-lg">
-                            ${result.student.charAt(0)}
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-white font-bold text-lg">${result.student}</p>
-                            <p class="text-sm text-gray-400">Confidence: ${(result.confidence_score * 100).toFixed(1)}%</p>
-                            ${result.attendance_result ? `
-                                <p class="text-sm text-green-400 mt-1">
-                                    ✓ Attendance marked: ${result.attendance_result.status || 'Present'}
-                                </p>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            } else {
-                resultCard.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="size-12 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-white">person_off</span>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-white font-bold">No Match Found</p>
-                            <p class="text-sm text-gray-400">${result.message || 'Face detected but no matching student found.'}</p>
-                            ${result.score !== undefined ? `<p class="text-sm text-gray-400">Best match score: ${(result.score * 100).toFixed(1)}%</p>` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-
-            resultsDiv.insertBefore(resultCard, resultsDiv.firstChild);
-
-            // Add to history
-            recognitionHistory.unshift({
-                timestamp: new Date().toLocaleTimeString(),
-                result: result
-            });
-            updateRecentRecognitions();
-        }
-
-        function updateRecentRecognitions() {
-            const recentDiv = document.getElementById('recent-recognitions');
-            if(recognitionHistory.length === 0) {
-                recentDiv.innerHTML = '<p class="text-[#9dabb9]">No recognitions yet.</p>';
-                return;
-            }
-
-            recentDiv.innerHTML = recognitionHistory.slice(0, 10).map(item => {
-                const r = item.result;
-                return `
-                    <div class="flex justify-between items-center py-2 px-4 bg-[#111418] rounded-lg border border-[#3b4754]">
-                        <div>
-                            <p class="text-white font-bold">${r.student || 'Unknown'}</p>
-                            <p class="text-xs text-gray-400">${item.timestamp}</p>
-                        </div>
-                        <span class="px-3 py-1 rounded text-xs font-bold ${
-                            r.student ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                        }">
-                            ${r.student ? 'Recognized' : 'No Match'}
-                        </span>
-                    </div>
-                `;
-            }).join('');
-        }
+            loadSections();
+        });
     </script>
 </body>
-</html>
 
+</html>

@@ -67,3 +67,22 @@ def enroll_student(
     """, (new_id, student_id, section_id))
 
     return {"message": "Student successfully enrolled!"}
+
+@router.get("/{section_id}/students", summary="Get Students in Section")
+def get_students_for_section(section_id: str, user: dict = Depends(get_current_user)):
+    """
+    Returns list of students enrolled in a specific class section.
+    """
+    # Allow admin or the instructor of that course
+    if user.get("role") not in ["admin", "instructor", "super_admin"]:
+         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    query = """
+        SELECT s.id, s.full_name, s.university_id, s.face_encoding
+        FROM enrollments e
+        JOIN students s ON e.student_id = s.id
+        WHERE e.course_instructors_id = %s
+        ORDER BY s.full_name
+    """
+    return fetch_all(query, (section_id,))
+
