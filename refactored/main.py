@@ -29,13 +29,17 @@ app.include_router(ai_router, prefix="/ai", tags=["AI"])
 
 # 2. Serve Static Files
 frontend_dir = os.path.join(os.path.dirname(__file__), 'frontend')
+if not os.path.exists(frontend_dir):
+    os.makedirs(frontend_dir)
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 # 3. Page Routes
+
 @app.get("/")
 async def read_login():
     return FileResponse(os.path.join(frontend_dir, 'login.html'))
 
+# --- Admin Pages ---
 @app.get("/dashboard/admin")
 async def admin_dashboard():
     return FileResponse(os.path.join(frontend_dir, 'admin.html'))
@@ -56,23 +60,24 @@ async def admin_courses_dashboard():
 async def admin_enrollment_dashboard():
     return FileResponse(os.path.join(frontend_dir, 'admin_enrollment.html'))
 
-@app.get("/dashboard/student")
-async def student_dashboard():
-    return FileResponse(os.path.join(frontend_dir, 'student.html'))
-
+# --- Instructor Pages ---
 @app.get("/dashboard/instructor")
 async def instructor_dashboard():
     return FileResponse(os.path.join(frontend_dir, 'instructor.html'))
 
-@app.get("/test", tags=["Debug"])
+# --- Student Pages ---
+@app.get("/dashboard/student")
+async def student_dashboard():
+    return FileResponse(os.path.join(frontend_dir, 'student.html'))
+
+# --- NEW TESTING ROUTE (Strictly points to AItest.html) ---
+@app.get("/testing", tags=["Debug"])
 async def debug_page():
-    return FileResponse(os.path.join(frontend_dir, 'test.html'))
-
-
+    return FileResponse(os.path.join(frontend_dir, 'AItest.html'))
 
 if __name__ == "__main__":
     import uvicorn
     import platform
-    # Disable reloader on Windows to avoid DLL loading issues with cv2
+    # Disable reloader on Windows to avoid DLL loading issues with cv2 if needed
     use_reload = platform.system() != "Windows"
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=use_reload)

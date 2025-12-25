@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\student\schema.py
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from uuid import UUID

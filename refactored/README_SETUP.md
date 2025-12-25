@@ -2,29 +2,44 @@
 
 ## Quick Start
 
-### 1. Database Setup
+### 1. requirements.txt
+First download the requirements file 
+''' bash 
+pip install -r requirements.txt
+'''
+
+### 2. create the connection to the database 
+'''
+in the pg admin create a server with the name aivendance_db and connect it to 
+the server adress is 127.0.0.1 , the port is 5432 , and the password is optinal 
+but mine is 9548911
+'''
+
+### 3. Database Setup
 First, ensure your PostgreSQL database is running and create the tables:
+this command in the bash runs a python file that creates the tabels from vs code 
 ```bash
 python create_tables.py
 ```
+### 3. basic accounts in the database 
+this step is for creating the 3 basic accounts we are working with 
+which are " 
+studet : 202120473 - password : 9548911
+instructor : 101120568 - password : 321654
+admin  : 100 - password : 987654231
 
-### 2. Create Admin Account (Username: 1, Password: 1)
-Run the script to create the test admin account:
 ```bash
-python create_admin_1.py
+python seed_users.py
 ```
 
-This will create an admin account with:
-- **Username**: `1`
-- **Password**: `1`
-- **Role**: `super_admin`
-
-### 3. Start the Server
+### 4. Start the Server
 ```bash
-python main.py
+uvicorn main:app --reload
 ```
-
 The server will start on `http://127.0.0.1:8000`
+
+
+
 
 ## User Roles
 

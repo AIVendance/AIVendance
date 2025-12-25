@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\student\routers.py
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Body
 from typing import List
 import numpy as np

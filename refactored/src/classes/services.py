@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\classes\services.py
 from uuid import uuid4
 from database.execution import execute_query, fetch_all, fetch_one
 from .schema import CourseCreate, SectionCreate

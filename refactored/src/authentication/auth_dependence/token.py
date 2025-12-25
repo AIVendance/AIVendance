@@ -1,7 +1,8 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\authentication\auth_dependence\token.py
 from datetime import datetime, timedelta
 from typing import Optional, Union, Any
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+import bcrypt
 import sys
 import os
 
@@ -10,15 +11,18 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from utils.config import SecurityConfig
 
 # 1. PASSWORD HASHING SETUP
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Removed CryptContext due to compatibility issues with bcrypt 4.0+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Checks if the typed password matches the stored hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    # Ensure bytes
+    if isinstance(hashed_password, str):
+        hashed_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)
 
 def get_password_hash(password: str) -> str:
     """Converts a plain password into a secure hash."""
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 # 2. TOKEN GENERATION (JWT)
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

@@ -1,4 +1,4 @@
-# src/utils/config.py
+# C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\utils\config.py
 import os
 
 # 1. DATABASE SETTINGS

@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\attendance\schema.py
 from pydantic import BaseModel
 from uuid import UUID
 from datetime import date, datetime

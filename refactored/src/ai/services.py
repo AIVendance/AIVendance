@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\ai\services.py
 import numpy as np
 import os
 

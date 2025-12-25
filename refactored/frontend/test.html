@@ -292,7 +292,7 @@
 
     <!-- Backend Integration Script -->
     <script>
-        const API_BASE = "http://localhost:8000";
+        const API_BASE = window.location.origin;
         // Simple auth check helper - assumes Admin token is stored
         // For unified login, we rely on the token stored during login
         const token = localStorage.getItem("token");
@@ -407,7 +407,104 @@
             document.getElementById("userNameDisplay").textContent = userName;
 
             loadSections();
+            setupInteractions();
         });
+
+        function setupInteractions() {
+            // Start Camera Button
+            const startBtn = document.querySelector('button.bg-primary');
+            if (startBtn) {
+                startBtn.addEventListener('click', toggleCamera);
+            }
+
+            // Add Manual Button
+            const manualBtn = document.querySelector('#studentList + div button');
+            if (manualBtn) {
+                manualBtn.addEventListener('click', addManualAttendance);
+            }
+        }
+
+        let isCameraOn = false;
+        function toggleCamera() {
+            const feedContainer = document.querySelector('.aspect-video');
+            const statusBadge = document.querySelector('h1 + span');
+            const startBtn = document.querySelector('button.bg-primary');
+            const placeholder = feedContainer.querySelector('.absolute.inset-0.flex-col');
+            const overlay = feedContainer.querySelector('.hidden.absolute');
+
+            isCameraOn = !isCameraOn;
+
+            if (isCameraOn) {
+                // Turn On
+                placeholder.classList.add('hidden');
+                overlay.classList.remove('hidden');
+                statusBadge.classList.replace('bg-red-500/10', 'bg-emerald-500/10');
+                statusBadge.classList.replace('text-red-500', 'text-emerald-500');
+                statusBadge.classList.replace('border-red-500/20', 'border-emerald-500/20');
+                statusBadge.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-pulse">fiber_manual_record</span> LIVE';
+
+                startBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span> Stop Camera';
+                startBtn.classList.replace('bg-primary', 'bg-red-600');
+                startBtn.classList.replace('hover:bg-blue-600', 'hover:bg-red-700');
+
+                // Simulate Video Feed (Gradient Animation)
+                feedContainer.style.background = "linear-gradient(45deg, #1a202c, #2d3748)";
+                // We could add an actual video element if we had a source, but this toggle proves interactivity.
+                addLog('SYS_CAM_START', 'Camera stream initiated', 'OK');
+
+            } else {
+                // Turn Off
+                placeholder.classList.remove('hidden');
+                overlay.classList.add('hidden');
+                statusBadge.classList.replace('bg-emerald-500/10', 'bg-red-500/10');
+                statusBadge.classList.replace('text-emerald-500', 'text-red-500');
+                statusBadge.classList.replace('border-emerald-500/20', 'border-red-500/20');
+                statusBadge.innerHTML = '<span class="material-symbols-outlined text-[14px]">videocam_off</span> Offline';
+
+                startBtn.innerHTML = '<span class="material-symbols-outlined">play_circle</span> Start Camera';
+                startBtn.classList.replace('bg-red-600', 'bg-primary');
+                startBtn.classList.replace('hover:bg-red-700', 'hover:bg-blue-600');
+
+                feedContainer.style.background = "black";
+                addLog('SYS_CAM_STOP', 'Camera stream terminated', 'OK');
+            }
+        }
+
+        async function addManualAttendance() {
+            const studentId = prompt("Enter Student University ID to mark present:");
+            if (!studentId) return;
+
+            // Simple visual feedback for now, as we don't have a specific Manual Attendance API endpoint in this context yet,
+            // or we could use the /enrollment/ endpoint if it supported attendance.
+            // For diagnostics, we'll log it to the console.
+
+            addLog('MANUAL_ENTRY', `Marking attendance for ${studentId}`, 'PENDING');
+
+            // Simulation of processing
+            setTimeout(() => {
+                addLog('RECOGNITION', `Student ${studentId} Verified`, 'MATCH');
+            }, 1000);
+        }
+
+        function addLog(type, details, status) {
+            const container = document.querySelector('.font-mono.space-y-2');
+            if (!container) return;
+
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, fractionalSecondDigits: 2 });
+            let statusColor = 'text-emerald-500';
+            if (status === 'PENDING') statusColor = 'text-yellow-500';
+            if (status === 'ERROR') statusColor = 'text-red-500';
+
+            const html = `
+                <div class="flex gap-4 hover:bg-white/5 p-1 rounded transition-colors animate-fade-in">
+                    <span class="w-24 text-emerald-500">${time}</span>
+                    <span class="w-32 text-white">${type}</span>
+                    <span class="flex-1 text-text-secondary">${details}</span>
+                    <span class="w-24 text-right ${statusColor}">${status}</span>
+                </div>
+            `;
+            container.insertAdjacentHTML('afterbegin', html);
+        }
     </script>
 </body>
 

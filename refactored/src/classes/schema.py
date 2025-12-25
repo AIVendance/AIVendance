@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\classes\schema.py
 from pydantic import BaseModel
 from datetime import time
 from typing import Optional

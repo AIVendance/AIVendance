@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\authentication\services\general.py
 from database.execution import fetch_one
 from authentication.auth_dependence.token import verify_password, create_access_token
 
@@ -36,22 +37,37 @@ def authenticate_user(identifier: str, password: str, role: str = None):
         admin = fetch_one(admin_query, (identifier,))
         
         if admin and verify_password(password, admin['password_hash']):
-            # Determine if Super Admin or Instructor
-            # Username "1" or "100" are super_admin, others are instructors
-            real_role = "super_admin" if admin['username'] in ("1", "100") else "instructor"
+            # Determine role logic
+            # If the user selected 'instructor', we trust that flow if checking the same table.
+            # But we should ensure super admins (100) are always 'admin'.
             
-            # Allow login if roles match essentially (Admin vs Instructor distinction is loose here for now)
-            # Both serve as 'admin' role token for now
+            db_role = "admin" # Default token role
+            frontend_role = "instructor" # Default frontend redirect
+            
+            if admin['username'] in ("1", "100", "admin"):
+                frontend_role = "admin"
+            
+            # If the user explicitly requested 'admin' but isn't a super admin, we might want to restrict it?
+            # For now, let's respect the requested role if valid, or default to what the user essentially is.
+            
+            if role == "admin" and frontend_role == "admin":
+                final_role = "admin"
+            else:
+                final_role = "instructor"
+
+            # IMPORTANT: The token role determines permissions. 
+            # Instructors need to be able to access endpoints guarded by `get_current_user` which usually checks for "admin" or "student".
+            # If your routers require role="admin" for instructors, keep db_role="admin".
             
             token_data = {
                 "sub": str(admin['id']), 
-                "role": "admin", # Token role remains 'admin' for backend permission checks
+                "role": db_role, 
                 "name": admin['full_name']
             }
             return {
                 "access_token": create_access_token(token_data), 
                 "token_type": "bearer", 
-                "role": real_role, # Frontend uses this to pick the dashboard
+                "role": final_role, # Frontend uses this to redirect: /dashboard/instructor vs /dashboard/admin
                 "name": admin['full_name'],
                 "id": admin['username']
             }

@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\attendance\services.py
 from uuid import uuid4
 from datetime import datetime, timedelta
 from database.execution import execute_query, fetch_one, fetch_all

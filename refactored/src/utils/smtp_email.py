@@ -1,0 +1,1 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\utils\smtp_email.py

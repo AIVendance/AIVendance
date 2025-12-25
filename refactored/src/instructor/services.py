@@ -1,3 +1,4 @@
+#C:\Users\user\Documents\Graduation project\AIVendance\refactored\src\instructor\services.py
 from database.execution import fetch_all
 
 def get_instructor_classes_service(instructor_id: str):

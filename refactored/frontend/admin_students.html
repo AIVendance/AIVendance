@@ -257,7 +257,8 @@
                     <!-- Pagination -->
                     <div class="flex items-center justify-between p-4 border-t border-[#283039]">
                         <p class="text-sm text-[#9dabb9]">Showing <span class="text-white font-medium">1-5</span> of
-                            <span class="text-white font-medium">2,450</span> students</p>
+                            <span class="text-white font-medium">2,450</span> students
+                        </p>
                         <div class="flex gap-2">
                             <button
                                 class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50 disabled:cursor-not-allowed">
@@ -281,7 +282,130 @@
                 </div>
             </div>
         </main>
+        <!-- Add Student Modal -->
+        <div id="addStudentModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+            <div class="bg-[#1c2127] border border-[#283039] rounded-2xl w-full max-w-md p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Add New Student</h2>
+                <form onsubmit="event.preventDefault(); createStudent();" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                        <input type="text" id="newStudentName" required
+                            class="w-full bg-[#111418] border border-[#283039] rounded-lg p-3 text-white focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">University ID</label>
+                        <input type="text" id="newStudentId" required
+                            class="w-full bg-[#111418] border border-[#283039] rounded-lg p-3 text-white focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Major</label>
+                        <input type="text" id="newStudentMajor" required
+                            class="w-full bg-[#111418] border border-[#283039] rounded-lg p-3 text-white focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Enrollment Year</label>
+                        <input type="number" id="newStudentYear" required
+                            class="w-full bg-[#111418] border border-[#283039] rounded-lg p-3 text-white focus:ring-1 focus:ring-primary"
+                            value="2024">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                        <input type="password" id="newStudentPassword" required
+                            class="w-full bg-[#111418] border border-[#283039] rounded-lg p-3 text-white focus:ring-1 focus:ring-primary">
+                    </div>
+                    <div class="flex gap-4 pt-4">
+                        <button type="button"
+                            onclick="document.getElementById('addStudentModal').classList.add('hidden')"
+                            class="flex-1 py-3 rounded-xl bg-[#283039] text-white font-bold hover:bg-[#343e4a]">Cancel</button>
+                        <button type="submit"
+                            class="flex-1 py-3 rounded-xl bg-primary text-white font-bold hover:bg-blue-600">Create
+                            Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        const API = window.location.origin;
+        const TOKEN = localStorage.getItem('token');
+
+        // Load Students on Init
+        window.onload = loadStudents;
+
+        async function loadStudents() {
+            if (!TOKEN) return window.location.href = '/';
+
+            try {
+                const res = await fetch(`${API}/students/`, { headers: { 'Authorization': `Bearer ${TOKEN}` } });
+                if (res.ok) {
+                    const students = await res.json();
+                    renderTable(students);
+                } else {
+                    console.error("Failed to load students");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderTable(students) {
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = students.map(s => `
+                <tr class="border-b border-[#283039] hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4 w-12"><input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 size-4" type="checkbox" /></td>
+                    <td class="p-4 font-medium text-white">${s.full_name}</td>
+                    <td class="p-4 text-[#9dabb9]">${s.university_id}</td>
+                    <td class="p-4 text-[#9dabb9]">${s.major}</td>
+                    <td class="p-4 text-[#9dabb9]">${s.enrollment_year}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold bg-green-500/10 text-green-500">Active</span></td>
+                    <td class="p-4 text-right">
+                        <button class="text-[#9dabb9] hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function createStudent() {
+            const data = {
+                full_name: document.getElementById('newStudentName').value,
+                university_id: document.getElementById('newStudentId').value,
+                major: document.getElementById('newStudentMajor').value,
+                enrollment_year: parseInt(document.getElementById('newStudentYear').value),
+                password: document.getElementById('newStudentPassword').value
+            };
+
+            try {
+                const res = await fetch(`${API}/students/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    document.getElementById('addStudentModal').classList.add('hidden');
+                    loadStudents(); // Reload table
+                    alert("Student created successfully!");
+                    document.querySelector('form').reset();
+                } else {
+                    const err = await res.json();
+                    alert(`Error: ${err.detail}`);
+                }
+            } catch (e) {
+                alert("An error occurred");
+                console.error(e);
+            }
+        }
+
+        // Open Modal Handler
+        document.querySelector('button.bg-primary').onclick = () => {
+            document.getElementById('addStudentModal').classList.remove('hidden');
+        };
+    </script>
 </body>
 
 </html>
