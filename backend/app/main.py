@@ -1,26 +1,54 @@
 from fastapi import FastAPI
-from app.api.v1 import auth as auth_router
-from app.api.v1 import db_inspect as db_inspect_router
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+from app.api.v1 import auth, student, instructor, admin
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(
-        title="Aivendance API",
-        version="0.1.0",
-        description="Backend API for the AiVendance attendance system (Phase 1: database layer).",
-    )
+app = FastAPI(
+    title="AIVendance API",
+    version="1.0.0",
+)
 
-    # System endpoints
-    @app.get("/health", tags=["system"])
-    def health_check():
-        return {"status": "ok"}
+# Frontend origins you use:
+# - localhost:5173 (Vite or other dev server)
+# - 127.0.0.1:5173
+# - "null" allows file:// HTML opened directly from disk
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "null",
+]
 
-    # Routers (v1)
-    app.include_router(auth_router.router)
-    app.include_router(db_inspect_router.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],   # GET, POST, etc.
+    allow_headers=["*"],   # Content-Type, Authorization, etc.
+)
 
-    return app
+
+# Routers
+app.include_router(auth.router)          # prefix="/auth" already in router
+app.include_router(student.router)       # prefix="/student" in router
+app.include_router(instructor.router)    # prefix="/instructor" in router
+app.include_router(admin.router)         # prefix="/admin" in router
 
 
-app = create_app()
-# ============== End of App Definition ==============
+# Mount static files directory
+static_path = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=static_path), name="static")
+
+
+@app.get("/")
+def root():
+    """Serve the frontend HTML"""
+    static_dir = os.path.join(os.path.dirname(__file__), "static")
+    index_file = os.path.join(static_dir, "index.html")
+    return FileResponse(index_file)
+

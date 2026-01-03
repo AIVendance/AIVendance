@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Unified Login - Aivendance</title>
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Theme Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-white selection:bg-primary/30 selection:text-primary">
+<div class="relative flex min-h-screen w-full flex-col overflow-hidden lg:flex-row">
+  <!-- Left Side: Visual Hero (Visible on Desktop) -->
+  <div class="relative hidden lg:flex lg:w-1/2 lg:flex-col bg-cover bg-center overflow-hidden group" data-alt="Modern university campus building with glass facade and blue sky" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAF4iMPR3UnXzg-DSeGs92Jqwn7WheHIkeMxNDdYMPtHXd4hnbk0XQVhRjpwCMTNKjFyBLKxR6b4JVgWMRPS3nv8RAjS40zJEIHopYHWFo3-l24fwbjY8aESdcoxMJzdeRSXA6AxVx-VXASizP76v6KD73PZkw8Fzjfm_-aye_MjdeQ9RHTkYWezaDT6QP54B5wB0aqyyaWsd4qvbkvhvI7GPbVMOLvRtyO02pUTMFEfYvLlN4HpnD-7ws3LeAArQX-ZS5ES-pZ28");'>
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/80 to-background-dark/95 mix-blend-multiply transition-opacity duration-700"></div>
+    <div class="absolute inset-0 bg-black/20"></div>
+    <!-- Content -->
+    <div class="relative z-10 flex h-full flex-col justify-between p-16">
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="flex size-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 shadow-inner">
+          <span class="material-symbols-outlined text-white" style="font-size: 24px;">school</span>
+        </div>
+        <span class="text-2xl font-bold tracking-tight text-white drop-shadow-md">Aivendance</span>
+      </div>
+      <!-- Hero Text -->
+      <div class="max-w-xl">
+        <h1 class="mb-6 text-5xl font-bold leading-tight tracking-tight text-white drop-shadow-lg">
+          Smart Attendance for <br/>Modern Universities.
+        </h1>
+        <p class="text-lg font-medium leading-relaxed text-blue-50/90 drop-shadow-md">
+          Experience a seamless campus life. One unified portal for students, instructors, and administrators to manage attendance, schedules, and academic progress.
+        </p>
+        <!-- Stats / Social Proof (Decorative) -->
+        <div class="mt-10 flex items-center gap-8 border-t border-white/20 pt-8">
+          <div>
+            <p class="text-3xl font-bold text-white">50k+</p>
+            <p class="text-sm font-medium text-blue-200">Active Students</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-white">99.9%</p>
+            <p class="text-sm font-medium text-blue-200">Uptime</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Right Side: Login Form -->
+  <div class="flex flex-1 flex-col bg-background-light dark:bg-background-dark relative">
+    <!-- Mobile Brand Header -->
+    <div class="flex items-center gap-3 p-6 lg:hidden">
+      <div class="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
+        <span class="material-symbols-outlined" style="font-size: 20px;">school</span>
+      </div>
+      <span class="text-lg font-bold dark:text-white text-slate-900">Aivendance</span>
+    </div>
+    <!-- Scrollable Content Area -->
+    <div class="flex flex-1 flex-col items-center justify-center px-6 py-10 sm:px-12 lg:px-20">
+      <div class="w-full max-w-[440px] space-y-8">
+        <!-- Form Header -->
+        <div class="text-center lg:text-left">
+          <h2 class="text-3xl font-bold tracking-tight dark:text-white text-slate-900">Welcome Back</h2>
+          <p class="mt-2 text-base text-slate-500 dark:text-slate-400">Please select your role and sign in to continue.</p>
+        </div>
+        <!-- Role Selector (Segmented Control) -->
+        <div class="flex w-full rounded-xl bg-slate-200 p-1.5 dark:bg-[#1c2127]">
+          <label class="group flex flex-1 cursor-pointer items-center justify-center">
+            <input checked class="peer sr-only" name="role" type="radio" value="student"/>
+            <div class="flex w-full items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 peer-checked:bg-white peer-checked:text-primary peer-checked:shadow-sm dark:peer-checked:bg-[#283039] dark:peer-checked:text-white dark:peer-checked:shadow-[0_0_4px_rgba(0,0,0,0.2)]">
+              <span class="material-symbols-outlined mr-2 !text-[18px]">backpack</span>
+              Student
+            </div>
+          </label>
+          <label class="group flex flex-1 cursor-pointer items-center justify-center">
+            <input class="peer sr-only" name="role" type="radio" value="instructor"/>
+            <div class="flex w-full items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 peer-checked:bg-white peer-checked:text-primary peer-checked:shadow-sm dark:peer-checked:bg-[#283039] dark:peer-checked:text-white dark:peer-checked:shadow-[0_0_4px_rgba(0,0,0,0.2)]">
+              <span class="material-symbols-outlined mr-2 !text-[18px]">cast_for_education</span>
+              Instructor
+            </div>
+          </label>
+          <label class="group flex flex-1 cursor-pointer items-center justify-center">
+            <input class="peer sr-only" name="role" type="radio" value="admin"/>
+            <div class="flex w-full items-center justify-center rounded-lg py-2.5 text-sm font-semibold transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 peer-checked:bg-white peer-checked:text-primary peer-checked:shadow-sm dark:peer-checked:bg-[#283039] dark:peer-checked:text-white dark:peer-checked:shadow-[0_0_4px_rgba(0,0,0,0.2)]">
+              <span class="material-symbols-outlined mr-2 !text-[18px]">admin_panel_settings</span>
+              Admin
+            </div>
+          </label>
+        </div>
+        <!-- Input Fields -->
+        <form class="space-y-5">
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="username">
+              University ID / Username
+            </label>
+            <div class="relative group">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <span class="material-symbols-outlined text-slate-400 transition-colors group-focus-within:text-primary">person</span>
+              </div>
+              <input class="block w-full rounded-lg border-0 bg-white py-3.5 pl-11 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#1c2127] dark:text-white dark:ring-slate-700 dark:focus:ring-primary sm:text-sm sm:leading-6" id="username" name="username" placeholder="e.g., 20240901" type="text"/>
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="password">
+                Password
+              </label>
+            </div>
+            <div class="relative group">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <span class="material-symbols-outlined text-slate-400 transition-colors group-focus-within:text-primary">lock</span>
+              </div>
+              <input class="block w-full rounded-lg border-0 bg-white py-3.5 pl-11 pr-12 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#1c2127] dark:text-white dark:ring-slate-700 dark:focus:ring-primary sm:text-sm sm:leading-6" id="password" name="password" placeholder="••••••••" type="password"/>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <button class="flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" type="button">
+                  <span class="material-symbols-outlined !text-[20px]">visibility_off</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between pt-1">
+            <div class="flex items-center gap-2">
+              <input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-[#1c2127] dark:ring-offset-[#101922]" id="remember-me" name="remember-me" type="checkbox"/>
+              <label class="block text-sm text-slate-600 dark:text-slate-400" for="remember-me">Remember me</label>
+            </div>
+            <div class="text-sm">
+              <a class="font-semibold text-primary hover:text-blue-500 hover:underline" href="#">Forgot password?</a>
+            </div>
+          </div>
+          <!-- Submit Button -->
+          <button class="group relative flex w-full items-center justify-center overflow-hidden rounded-lg bg-primary px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-600 hover:shadow-blue-500/40 active:scale-[0.98]" type="submit">
+            <span class="mr-2">Sign In to Portal</span>
+            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" style="font-size: 20px;">arrow_forward</span>
+          </button>
+        </form>
+        <!-- Support Section -->
+        <div class="relative">
+          <div aria-hidden="true" class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-200 dark:border-slate-800"></div>
+          </div>
+          <div class="relative flex justify-center">
+            <span class="bg-background-light px-3 text-xs font-medium uppercase tracking-wider text-slate-500 dark:bg-background-dark dark:text-slate-500">Support</span>
+          </div>
+        </div>
+        <div class="text-center">
+          <p class="text-sm text-slate-600 dark:text-slate-400">
+            Having trouble logging in?
+            <button class="ml-1 font-semibold text-primary transition-colors hover:text-blue-400 hover:underline" type="button">
+              Contact IT Support
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Simple Footer -->
+    <div class="py-6 text-center">
+      <p class="text-xs text-slate-400 dark:text-slate-600">
+        © 2025 Aivendance University Systems. <a class="hover:underline" href="#">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000";
+
+  async function login(event) {
+    event.preventDefault();
+
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
+    const roleValue = document.querySelector('input[name="role"]:checked')?.value;
+    const userId = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!roleValue || !userId || !password) {
+      alert("Please select role and enter University ID and password.");
+      return;
+    }
+
+    const body = {
+      role: roleValue,
+      user_id: userId,
+      password: password,
+    };
+
+    try {
+      const res = await fetch(API_BASE + "/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        alert("Login failed: " + JSON.stringify(data));
+        return;
+      }
+
+      const token = data.access_token;
+      const role = data.role;
+      const uid = data.user_id;
+
+      // Store token in localStorage
+      localStorage.setItem('aiv_token', token);
+      localStorage.setItem('aiv_role', role);
+      localStorage.setItem('aiv_user_id', uid);
+
+      alert("Logged in as " + role + " (" + uid + ")");
+
+      // Redirect to appropriate dashboard
+      if (role === 'admin') {
+        window.location.href = '/static/admin-dashboard.html';
+      } else if (role === 'instructor') {
+        window.location.href = '/static/instructor-dashboard.html';
+      } else if (role === 'student') {
+        window.location.href = '/static/student-dashboard.html';
+      }
+    } catch (err) {
+      alert("Network error: " + (err.message || String(err)));
+    }
+  }
+
+  document.querySelector("form").addEventListener("submit", login);
+</script>
+</body>
+</html>

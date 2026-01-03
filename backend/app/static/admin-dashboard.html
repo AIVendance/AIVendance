@@ -1,0 +1,2537 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aivendance - Admin Dashboard</title>
+    <!-- Google Fonts: Space Grotesk -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111418", 
+                        "surface-dark": "#283039",
+                        "border-dark": "#3b4754",
+                        "text-secondary": "#9dabb9"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111418; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b4754; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #137fec; 
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased overflow-hidden h-screen w-full flex">
+    <!-- Sidebar -->
+    <aside class="w-64 md:w-72 bg-[#111418] border-r border-[#283039] flex-shrink-0 flex flex-col justify-between h-full p-4 overflow-y-auto">
+        <div class="flex flex-col gap-6">
+            <!-- Brand -->
+            <div class="flex gap-3 items-center px-2">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 bg-gradient-to-br from-primary to-purple-600 shadow-lg"></div>
+                <div class="flex flex-col">
+                    <h1 class="text-white text-lg font-bold leading-normal tracking-tight">Aivendance</h1>
+                    <p class="text-text-secondary text-xs font-medium leading-normal">Admin Portal</p>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-2">
+                <a class="nav-link active flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/20 border border-primary/10 transition-all hover:bg-primary/30 group" data-page="dashboard" href="#dashboard">
+                    <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors">dashboard</span>
+                    <p class="text-white text-sm font-medium leading-normal">Dashboard</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="students" href="#students">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">group</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Students</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="instructors" href="#instructors">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">school</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Instructors</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="courses" href="#courses">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">book_2</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Courses</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="enrollments" href="#enrollments">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">school</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Enrollments</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="reports" href="#reports">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">bar_chart</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Reports</p>
+                </a>
+                <div class="h-px bg-[#283039] my-2 mx-3"></div>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" data-page="settings" href="#settings">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">settings</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Settings</p>
+                </a>
+            </nav>
+        </div>
+        <!-- Footer / Logout -->
+        <button id="logout-btn" class="flex w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-[#283039] hover:bg-[#3b4754] text-white text-sm font-bold leading-normal transition-colors border border-transparent hover:border-[#3b4754]">
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            <span class="truncate">Logout</span>
+        </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full relative overflow-y-auto">
+        <!-- Top Header: Search & User -->
+        <header class="sticky top-0 z-20 bg-[#111418]/90 backdrop-blur-md border-b border-[#283039] px-6 py-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <!-- Mobile Title -->
+            <div class="flex items-center gap-2 md:hidden w-full">
+                <span class="material-symbols-outlined text-white">menu</span>
+                <span class="font-bold text-lg">Aivendance</span>
+            </div>
+            <!-- Search Bar -->
+            <div class="w-full max-w-lg">
+                <label class="flex w-full items-stretch rounded-lg h-10 bg-[#283039] group focus-within:ring-2 ring-primary/50 transition-shadow">
+                    <div class="text-[#9dabb9] flex items-center justify-center pl-3 rounded-l-lg">
+                        <span class="material-symbols-outlined">search</span>
+                    </div>
+                    <input id="search-input" class="flex w-full bg-transparent border-none text-white focus:outline-none focus:ring-0 placeholder:text-[#9dabb9] px-3 text-sm font-normal leading-normal h-full" placeholder="Search students, courses, or instructors..." value=""/>
+                </label>
+            </div>
+            <!-- Header Actions -->
+            <div class="flex items-center gap-4 shrink-0">
+                <button class="relative p-2 rounded-full hover:bg-[#283039] text-[#9dabb9] hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#111418]"></span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-[#283039]">
+                    <div class="text-right hidden sm:block">
+                        <p id="admin-name" class="text-white text-sm font-bold leading-none">Admin User</p>
+                        <p class="text-[#9dabb9] text-xs mt-1">System Administrator</p>
+                    </div>
+                    <div class="size-9 rounded-full bg-cover bg-center ring-2 ring-[#283039] bg-gradient-to-br from-primary to-purple-600"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-page" class="page-content flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto flex flex-col gap-8 overflow-y-auto">
+            <!-- Welcome Section -->
+            <div class="flex flex-col gap-1">
+                <h1 class="text-white tracking-tight text-[32px] font-bold leading-tight">Welcome back, Admin</h1>
+                <p class="text-[#9dabb9] text-base">Here's what's happening in your university today.</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">school</span>
+                        </div>
+                        <span id="student-change" class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+1.2%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Total Students</p>
+                        <p id="total-students" class="text-white tracking-tight text-3xl font-bold mt-1">0</p>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">person_check</span>
+                        </div>
+                        <span id="instructor-change" class="text-[#0bda5b] text-sm font-bold bg-[#0bda5b]/10 px-2 py-1 rounded">+0.5%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Active Instructors</p>
+                        <p id="active-instructors" class="text-white tracking-tight text-3xl font-bold mt-1">0</p>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between gap-4 rounded-xl p-6 border border-[#3b4754] bg-[#1a2027] hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="p-2 bg-[#283039] rounded-lg text-primary">
+                            <span class="material-symbols-outlined">fact_check</span>
+                        </div>
+                        <span id="attendance-change" class="text-[#fa6238] text-sm font-bold bg-[#fa6238]/10 px-2 py-1 rounded">-2.1%</span>
+                    </div>
+                    <div>
+                        <p class="text-[#9dabb9] text-sm font-medium uppercase tracking-wider">Today's Attendance</p>
+                        <p id="avg-attendance" class="text-white tracking-tight text-3xl font-bold mt-1">88%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Area -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Chart Section -->
+                <div class="lg:col-span-2 rounded-xl border border-[#3b4754] bg-[#1a2027] p-6 flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-white text-lg font-bold">Attendance Overview</h2>
+                            <p class="text-[#9dabb9] text-sm">Weekly trends across all departments</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <select class="bg-[#283039] text-white text-xs rounded-lg border-none focus:ring-1 focus:ring-primary px-3 py-2 cursor-pointer">
+                                <option>This Week</option>
+                                <option>Last Week</option>
+                                <option>This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-end gap-2 mb-4">
+                        <p id="avg-attendance-chart" class="text-white text-4xl font-bold">Avg 85%</p>
+                        <div class="flex items-center gap-1 mb-1.5">
+                            <span class="material-symbols-outlined text-[#0bda5b] text-lg">trending_up</span>
+                            <p class="text-[#0bda5b] text-sm font-bold">+5% vs last week</p>
+                        </div>
+                    </div>
+                    <div class="relative w-full h-[200px] mt-auto">
+                        <svg class="w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 478 150" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear" x1="239" x2="239" y1="0" y2="150">
+                                    <stop stop-color="#137fec" stop-opacity="0.2"></stop>
+                                    <stop offset="1" stop-color="#137fec" stop-opacity="0"></stop>
+                                </linearGradient>
+                            </defs>
+                            <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V150H0V109Z" fill="url(#paint0_linear)"></path>
+                            <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#137fec" stroke-linecap="round" stroke-width="3"></path>
+                        </svg>
+                        <div class="flex justify-between mt-4 px-2">
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Mon</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Tue</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Wed</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Thu</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Fri</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Sat</span>
+                            <span class="text-[#9dabb9] text-xs font-bold uppercase">Sun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="rounded-xl border border-[#3b4754] bg-[#1a2027] flex flex-col overflow-hidden">
+                    <div class="p-4 border-b border-[#3b4754] bg-[#222932]">
+                        <h2 class="text-white text-base font-bold">Recent Activity</h2>
+                    </div>
+                    <div id="activity-feed" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+                        <p class="text-[#9dabb9] text-sm">Loading activity...</p>
+                    </div>
+                    <button class="w-full py-3 text-center text-primary text-sm font-bold border-t border-[#3b4754] hover:bg-[#283039] transition-colors">View All Logs</button>
+                </div>
+            </div>
+
+            <!-- Quick Actions Grid -->
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Quick Management</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="quick-action group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer" data-action="add-student">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">person_add</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Add Student</span>
+                    </button>
+                    <button class="quick-action group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer" data-action="add-instructor">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">person_add</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Add Instructor</span>
+                    </button>
+                    <button class="quick-action group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer" data-action="create-course">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">post_add</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Create Course</span>
+                    </button>
+                    <button class="quick-action group flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-[#3b4754] bg-[#283039] hover:bg-[#3b4754] hover:border-primary/50 transition-all cursor-pointer" data-action="export-reports">
+                        <div class="p-3 rounded-full bg-background-dark group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-primary text-2xl">download</span>
+                        </div>
+                        <span class="text-white text-sm font-medium">Export Reports</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder for other pages -->
+        <div id="students-page" class="page-content hidden flex-1 p-6 md:p-8 overflow-y-auto w-full">
+            <div class="max-w-[1200px] mx-auto flex flex-col gap-6">
+                <!-- Breadcrumbs & Header -->
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <div class="flex gap-2">
+                        <a class="text-[#9dabb9] text-sm font-medium hover:text-primary transition-colors">Home</a>
+                        <span class="text-[#9dabb9] text-sm font-medium">/</span>
+                        <span class="text-white text-sm font-medium">Student Management</span>
+                    </div>
+                </div>
+
+                <!-- Page Heading & Actions -->
+                <div class="flex flex-wrap justify-between gap-4 items-end">
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-white text-3xl md:text-4xl font-bold tracking-tight">Student Management</h2>
+                        <p class="text-[#9dabb9] text-base font-normal">Manage student accounts, enrollment status, and records.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-[#283039] text-white text-sm font-bold hover:bg-[#343e4a] transition-colors border border-white/5">
+                            <span class="material-symbols-outlined text-lg">download</span>
+                            <span class="hidden sm:inline">Export</span>
+                        </button>
+                        <button id="add-student-btn" class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/30 hover:bg-blue-600 transition-colors">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                            <span>Add Student</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">Total Students</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">group</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p id="stat-total-students" class="text-white text-3xl font-bold">0</p>
+                            <div class="flex items-center text-[#0bda5b] text-xs font-bold bg-[#0bda5b]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> 5.2%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">Active Now</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">wifi</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p id="stat-active-students" class="text-white text-3xl font-bold">0</p>
+                            <div class="flex items-center text-[#0bda5b] text-xs font-bold bg-[#0bda5b]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_up</span> 1.2%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#283039] border border-white/5 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#9dabb9] text-sm font-medium">New Enrollments</p>
+                            <span class="material-symbols-outlined text-[#9dabb9]">person_add</span>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p id="stat-new-enrollments" class="text-white text-3xl font-bold">0</p>
+                            <div class="flex items-center text-[#fa6238] text-xs font-bold bg-[#fa6238]/10 px-1.5 py-0.5 rounded mb-1">
+                                <span class="material-symbols-outlined text-sm">trending_down</span> 0.5%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters & Search Toolbar -->
+                <div class="flex flex-col md:flex-row gap-3 p-4 rounded-xl bg-[#1e252b] border border-[#283039]">
+                    <div class="relative flex-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined text-xl">search</span>
+                        <input id="student-search" class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-10 pr-4 focus:ring-1 focus:ring-primary focus:border-primary placeholder-[#586472]" placeholder="Search by Name or ID..." type="text"/>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="relative min-w-[140px]">
+                            <select id="major-filter" class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+                                <option value="">All Majors</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Business">Business</option>
+                                <option value="Arts">Arts</option>
+                            </select>
+                            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined pointer-events-none text-xl">expand_more</span>
+                        </div>
+                        <div class="relative min-w-[140px]">
+                            <select id="year-filter" class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+                                <option value="">Any Year</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                            </select>
+                            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined pointer-events-none text-xl">expand_more</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="flex flex-col rounded-xl border border-[#283039] bg-[#1e252b] overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#283039] text-[#9dabb9] text-xs uppercase tracking-wider font-semibold border-b border-[#283039]">
+                                    <th class="p-4 w-12">
+                                        <input id="select-all" class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                                    </th>
+                                    <th class="p-4">Student</th>
+                                    <th class="p-4">Student ID</th>
+                                    <th class="p-4">Major</th>
+                                    <th class="p-4">Year</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-table-body" class="divide-y divide-[#283039] text-sm text-white">
+                                <tr class="text-center">
+                                    <td colspan="7" class="p-8 text-[#9dabb9]">Loading students...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex items-center justify-between p-4 border-t border-[#283039]">
+                        <p class="text-sm text-[#9dabb9]">Showing <span id="pagination-start" class="text-white font-medium">0</span>-<span id="pagination-end" class="text-white font-medium">0</span> of <span id="pagination-total" class="text-white font-medium">0</span> students</p>
+                        <div class="flex gap-2">
+                            <button id="prev-page" class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span class="material-symbols-outlined text-lg">chevron_left</span>
+                            </button>
+                            <div id="pagination-buttons" class="flex gap-2 items-center"></div>
+                            <button id="next-page" class="flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a]">
+                                <span class="material-symbols-outlined text-lg">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="instructors-page" class="page-content hidden flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto p-6 md:p-8">
+                <div class="max-w-7xl mx-auto flex flex-col gap-8">
+                    <!-- Header -->
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-2 text-sm">
+                            <a class="text-[#9dabb9] hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <span class="text-[#9dabb9]">/</span>
+                            <span class="text-white font-medium">Instructors</span>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Instructors Directory</h2>
+                                <p class="text-[#9dabb9] mt-2 text-base">Manage and view all registered instructors across departments.</p>
+                            </div>
+                            <button id="add-instructor-btn" class="flex items-center justify-center gap-2 bg-primary hover:bg-[#106cc9] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-lg shadow-primary/20 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[20px]">add</span>
+                                <span>Add Instructor</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Total Instructors</span>
+                            <span class="text-3xl font-bold text-white" id="stat-total-instructors">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#0bda5b] font-medium">
+                                <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                <span>+12% from last month</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Active Departments</span>
+                            <span class="text-3xl font-bold text-white" id="stat-active-departments">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#9dabb9] font-medium">
+                                <span>Across 3 campuses</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Newly Registered</span>
+                            <span class="text-3xl font-bold text-white" id="stat-newly-registered">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#9dabb9] font-medium">
+                                <span>This week</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters & Search -->
+                    <div class="bg-[#283039] border border-[#3b4754] p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm sticky top-0 z-10">
+                        <div class="flex flex-1 w-full md:max-w-md relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-[#9dabb9]">search</span>
+                            </div>
+                            <input id="instructor-search" class="w-full pl-10 pr-4 py-2.5 bg-[#111418] border border-[#3b4754] rounded-lg text-sm text-white placeholder-[#9dabb9] focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search by name, ID or email..."/>
+                        </div>
+                        <div class="flex w-full md:w-auto gap-3">
+                            <select id="department-filter" class="flex-1 md:flex-none appearance-none bg-[#111418] border border-[#3b4754] text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+                                <option value="">All Departments</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Robotics">Robotics</option>
+                                <option value="Paleontology">Paleontology</option>
+                                <option value="Art & Design">Art & Design</option>
+                            </select>
+                            <select id="instructor-status-filter" class="flex-1 md:flex-none appearance-none bg-[#111418] border border-[#3b4754] text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+                                <option value="">Status: All</option>
+                                <option value="Active">Active</option>
+                                <option value="On Leave">On Leave</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="bg-[#283039] border border-[#3b4754] rounded-xl overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-[#1a1f28] border-b border-[#3b4754]">
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] w-12">
+                                            <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                                        </th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Instructor</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">ID</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Department</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Status</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="instructors-table-body" class="divide-y divide-[#3b4754]">
+                                    <!-- Rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="flex items-center justify-between p-4 border-t border-[#3b4754] bg-[#1a1f28]">
+                            <span class="text-sm text-[#9dabb9]">
+                                Showing <span class="font-medium text-white" id="instructor-pagination-start">0</span> to <span class="font-medium text-white" id="instructor-pagination-end">0</span> of <span class="font-medium text-white" id="instructor-pagination-total">0</span> results
+                            </span>
+                            <div class="flex gap-2" id="instructor-pagination-buttons">
+                                <!-- Pagination buttons will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-20"></div>
+            </div>
+        </div>
+        <div id="courses-page" class="page-content hidden flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto p-6 md:p-8">
+                <div class="max-w-7xl mx-auto flex flex-col gap-8">
+                    <!-- Header -->
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-2 text-sm">
+                            <a class="text-[#9dabb9] hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <span class="text-[#9dabb9]">/</span>
+                            <span class="text-white font-medium">Courses</span>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Course Management</h2>
+                                <p class="text-[#9dabb9] mt-2 text-base">Create, view, and manage all university courses from a single dashboard.</p>
+                            </div>
+                            <button id="add-course-btn" class="flex items-center justify-center gap-2 bg-primary hover:bg-[#106cc9] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-lg shadow-primary/20 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-[20px]">add</span>
+                                <span>Add New Course</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Total Courses</span>
+                            <span class="text-3xl font-bold text-white" id="stat-total-courses">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#0bda5b] font-medium">
+                                <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                <span>+5% from last month</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Active Classes</span>
+                            <span class="text-3xl font-bold text-white" id="stat-active-classes">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#0bda5b] font-medium">
+                                <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                <span>+12% from last month</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-1 shadow-sm">
+                            <span class="text-[#9dabb9] text-sm font-medium">Assigned Rooms</span>
+                            <span class="text-3xl font-bold text-white" id="stat-assigned-rooms">0</span>
+                            <div class="flex items-center gap-1 mt-2 text-xs text-[#9dabb9] font-medium">
+                                <span>Capacity 85%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters & Search -->
+                    <div class="bg-[#283039] border border-[#3b4754] p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm sticky top-0 z-10">
+                        <div class="flex flex-1 w-full md:max-w-md relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-[#9dabb9]">search</span>
+                            </div>
+                            <input id="course-search" class="w-full pl-10 pr-4 py-2.5 bg-[#111418] border border-[#3b4754] rounded-lg text-sm text-white placeholder-[#9dabb9] focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search by Course ID, Name or Room..."/>
+                        </div>
+                        <div class="flex w-full md:w-auto gap-3">
+                            <select id="course-department-filter" class="flex-1 md:flex-none appearance-none bg-[#111418] border border-[#3b4754] text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+                                <option value="">All Departments</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                            </select>
+                            <select id="course-status-filter" class="flex-1 md:flex-none appearance-none bg-[#111418] border border-[#3b4754] text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+                                <option value="">All Status</option>
+                                <option value="Active">Active</option>
+                                <option value="Archived">Archived</option>
+                                <option value="Draft">Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="bg-[#283039] border border-[#3b4754] rounded-xl overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-[#1a1f28] border-b border-[#3b4754]">
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] w-12">
+                                            <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                                        </th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Course ID</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Course Name</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Room</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Instructor</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Schedule</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Status</th>
+                                        <th class="p-4 py-3 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="courses-table-body" class="divide-y divide-[#3b4754]">
+                                    <!-- Rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="flex items-center justify-between p-4 border-t border-[#3b4754] bg-[#1a1f28]">
+                            <span class="text-sm text-[#9dabb9]">
+                                Showing <span class="font-medium text-white" id="course-pagination-start">0</span> to <span class="font-medium text-white" id="course-pagination-end">0</span> of <span class="font-medium text-white" id="course-pagination-total">0</span> results
+                            </span>
+                            <div class="flex gap-2" id="course-pagination-buttons">
+                                <!-- Pagination buttons will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-20"></div>
+            </div>
+        </div>
+        <div id="enrollments-page" class="page-content hidden flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto p-6 md:p-8">
+                <div class="max-w-7xl mx-auto flex flex-col gap-8">
+                    <!-- Header -->
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-2 text-sm">
+                            <a class="text-[#9dabb9] hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <span class="text-[#9dabb9]">/</span>
+                            <span class="text-white font-medium">Enrollments & Assignments</span>
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Course Management & Enrollment</h2>
+                                <p class="text-[#9dabb9] mt-2 text-base">Manage instructor assignments and student course enrollments for the upcoming term.</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="flex items-center justify-center gap-2 bg-[#283039] hover:bg-[#343e4a] text-white px-4 py-2.5 rounded-lg font-medium transition-colors border border-[#3b4754]">
+                                    <span class="material-symbols-outlined text-[20px]">download</span>
+                                    <span>Template</span>
+                                </button>
+                                <button class="flex items-center justify-center gap-2 bg-primary hover:bg-[#106cc9] text-white px-4 py-2.5 rounded-lg font-medium transition-colors shadow-lg shadow-primary/20">
+                                    <span class="material-symbols-outlined text-[20px]">upload_file</span>
+                                    <span>Import CSV</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="flex gap-8 border-b border-[#3b4754] overflow-x-auto">
+                        <button class="enrollment-tab active pb-4 px-2 text-white font-bold text-sm border-b-2 border-primary transition-colors whitespace-nowrap" data-tab="assign">
+                            Assign Instructors
+                        </button>
+                        <button class="enrollment-tab pb-4 px-2 text-[#9dabb9] hover:text-white font-bold text-sm border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="enroll">
+                            Enroll Students
+                        </button>
+                        <button class="enrollment-tab pb-4 px-2 text-[#9dabb9] hover:text-white font-bold text-sm border-b-2 border-transparent transition-colors whitespace-nowrap" data-tab="waitlist">
+                            Waitlists
+                        </button>
+                    </div>
+
+                    <!-- Filters & Controls -->
+                    <div class="bg-[#283039] border border-[#3b4754] p-4 rounded-xl flex flex-col md:flex-row gap-4 items-end">
+                        <div class="flex-1">
+                            <label class="text-white text-sm font-medium mb-2 block">Academic Term</label>
+                            <select id="enrollment-term-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-8 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                                <option value="">Fall 2023</option>
+                                <option value="">Spring 2024</option>
+                                <option value="">Summer 2024</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-white text-sm font-medium mb-2 block">Department</label>
+                            <select id="enrollment-dept-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-8 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                                <option value="">All Departments</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Mathematics">Mathematics</option>
+                            </select>
+                        </div>
+                        <div class="flex-[2]">
+                            <label class="text-white text-sm font-medium mb-2 block">Search Course or Instructor</label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb9]">search</span>
+                                <input id="enrollment-search" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-10 pr-4 rounded-lg focus:ring-2 focus:ring-primary outline-none placeholder-[#9dabb9]" placeholder="e.g. CS101 or Prof. Smith"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Assign Instructors -->
+                    <div id="assign-tab" class="enrollment-tab-content">
+                        <div class="bg-[#283039] border border-[#3b4754] rounded-xl overflow-hidden shadow-sm">
+                            <div class="p-4 border-b border-[#3b4754] bg-[#1a1f28] flex justify-between items-center">
+                                <h3 class="text-white text-lg font-bold">Unassigned Courses</h3>
+                                <span class="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold border border-red-500/20" id="pending-count">0 Pending</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1a1f28] border-b border-[#3b4754]">
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Course Info</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Schedule</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Enrolled</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Current Instructor</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Status</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="enrollment-table-body" class="divide-y divide-[#3b4754]">
+                                        <!-- Rows populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="p-4 border-t border-[#3b4754] bg-[#1a1f28] flex justify-between items-center">
+                                <span class="text-[#9dabb9] text-sm">
+                                    Showing <span class="text-white font-medium" id="enrollment-pagination-start">0</span>-<span class="text-white font-medium" id="enrollment-pagination-end">0</span> of <span class="text-white font-medium" id="enrollment-pagination-total">0</span>
+                                </span>
+                                <div class="flex gap-2" id="enrollment-pagination-buttons"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Enroll Students -->
+                    <div id="enroll-tab" class="enrollment-tab-content hidden">
+                        <div class="bg-[#283039] border border-[#3b4754] rounded-xl overflow-hidden shadow-sm">
+                            <div class="p-4 border-b border-[#3b4754] bg-[#1a1f28] flex justify-between items-center">
+                                <h3 class="text-white text-lg font-bold">Enroll Students in Courses</h3>
+                                <button id="bulk-enroll-btn" class="flex items-center justify-center gap-2 bg-primary hover:bg-[#106cc9] text-white px-4 py-2.5 rounded-lg font-medium transition-colors shadow-lg shadow-primary/20">
+                                    <span class="material-symbols-outlined text-[20px]">person_add</span>
+                                    <span>Bulk Enroll</span>
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1a1f28] border-b border-[#3b4754]">
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Course Info</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Schedule</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Capacity</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Instructor</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Enrolled</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="enrollment-students-table" class="divide-y divide-[#3b4754]">
+                                        <!-- Rows populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Waitlists -->
+                    <div id="waitlist-tab" class="enrollment-tab-content hidden">
+                        <div class="bg-[#283039] border border-[#3b4754] rounded-xl overflow-hidden shadow-sm">
+                            <div class="p-4 border-b border-[#3b4754] bg-[#1a1f28] flex justify-between items-center">
+                                <h3 class="text-white text-lg font-bold">Course Waitlists</h3>
+                                <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-bold border border-yellow-500/20" id="waitlist-count">0 Waiting</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1a1f28] border-b border-[#3b4754]">
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Course</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Student Name</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Position</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9]">Request Date</th>
+                                            <th class="p-4 text-xs font-semibold uppercase tracking-wider text-[#9dabb9] text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="enrollment-waitlist-table" class="divide-y divide-[#3b4754]">
+                                        <!-- Rows populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Enrollment Progress -->
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-4">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-white font-bold">Enrollment Progress</h3>
+                                <span class="material-symbols-outlined text-[#9dabb9]">show_chart</span>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-1">
+                                    <p class="text-[#9dabb9] text-xs uppercase">Total Students</p>
+                                    <p class="text-white text-2xl font-bold" id="stat-enrolled-total">0</p>
+                                </div>
+                                <div class="w-px bg-[#3b4754]"></div>
+                                <div class="flex-1">
+                                    <p class="text-[#9dabb9] text-xs uppercase">Pending Approval</p>
+                                    <p class="text-yellow-400 text-2xl font-bold" id="stat-pending-approval">0</p>
+                                </div>
+                            </div>
+                            <div class="w-full h-2 bg-[#111418] rounded-full overflow-hidden">
+                                <div class="h-full bg-primary w-[85%]"></div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Actions -->
+                        <div class="bg-[#283039] border border-[#3b4754] p-6 rounded-xl flex flex-col gap-4">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-white font-bold">Recent Actions</h3>
+                                <button class="text-primary text-xs font-bold hover:underline">View All</button>
+                            </div>
+                            <div class="flex flex-col gap-3" id="recent-actions">
+                                <div class="flex items-start gap-3">
+                                    <div class="size-2 rounded-full bg-green-500 mt-1.5 shrink-0"></div>
+                                    <div class="flex flex-col">
+                                        <p class="text-white text-sm">System initialized</p>
+                                        <p class="text-[#586370] text-xs">Just now</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-20"></div>
+            </div>
+        </div>
+        <div id="reports-page" class="page-content hidden flex-1 p-6 md:p-8">
+            <h1 class="text-white text-3xl font-bold">Reports</h1>
+            <p class="text-[#9dabb9]">Coming soon...</p>
+        </div>
+        <div id="settings-page" class="page-content hidden flex-1 p-6 md:p-8">
+            <h1 class="text-white text-3xl font-bold">Settings</h1>
+            <p class="text-[#9dabb9]">Coming soon...</p>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = "http://127.0.0.1:8000";
+        let currentAdmin = null;
+        let authToken = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            authToken = localStorage.getItem('aiv_token');
+            if (!authToken) {
+                window.location.href = '/';
+                return;
+            }
+
+            loadAdminData();
+            setupNavigation();
+            setupLogout();
+            setupQuickActions();
+            setupStudentPageListeners();
+            setupInstructorPageListeners();
+            setupCoursePageListeners();
+            setupEnrollmentPageListeners();
+        });
+
+        // Load admin data from API
+        async function loadAdminData() {
+            try {
+                // Fetch admin profile
+                const profileRes = await fetch(`${API_BASE}/admin/profile`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!profileRes.ok) throw new Error('Failed to load profile');
+                const profile = await profileRes.json();
+                currentAdmin = profile;
+                document.getElementById('admin-name').textContent = profile.full_name;
+
+                // Fetch dashboard statistics
+                const dashRes = await fetch(`${API_BASE}/admin/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!dashRes.ok) throw new Error('Failed to load dashboard');
+                const dashboard = await dashRes.json();
+                updateDashboardStats(dashboard);
+
+                // Load recent activity (simulated for now)
+                loadRecentActivity();
+
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+                alert('Failed to load dashboard data: ' + error.message);
+            }
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats(data) {
+            const stats = data.system_statistics;
+            document.getElementById('total-students').textContent = stats.students.toLocaleString();
+            document.getElementById('active-instructors').textContent = stats.instructors.toLocaleString();
+            document.getElementById('avg-attendance').textContent = '88%'; // This would come from attendance calculation
+            document.getElementById('avg-attendance-chart').textContent = 'Avg 85%';
+        }
+
+        // Load recent activity
+        function loadRecentActivity() {
+            const activities = [
+                {
+                    type: 'error',
+                    title: 'Attendance Missing: CS101',
+                    description: 'Instructor Sarah Jenkings hasn\'t submitted yet.',
+                    time: '20 min ago'
+                },
+                {
+                    type: 'success',
+                    title: 'New Student Registered',
+                    description: 'Michael Chen added to Engineering Dept.',
+                    time: '1 hour ago'
+                },
+                {
+                    type: 'info',
+                    title: 'System Update',
+                    description: 'Database maintenance completed successfully.',
+                    time: '4 hours ago'
+                }
+            ];
+
+            const feed = document.getElementById('activity-feed');
+            feed.innerHTML = activities.map(activity => {
+                const colorMap = { error: 'red', success: 'green', info: 'blue' };
+                return `
+                    <div class="flex gap-3 items-start">
+                        <div class="mt-1 size-2 rounded-full bg-${colorMap[activity.type]}-500 shrink-0"></div>
+                        <div class="flex flex-col gap-1">
+                            <p class="text-white text-sm font-medium">${activity.title}</p>
+                            <p class="text-[#9dabb9] text-xs">${activity.description}</p>
+                            <p class="text-[#55606d] text-[10px] mt-1">${activity.time}</p>
+                        </div>
+                    </div>
+                    <div class="h-px bg-[#3b4754]/50 w-full"></div>
+                `;
+            }).join('');
+        }
+
+        // Setup navigation
+        function setupNavigation() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    
+                    // Hide all pages
+                    document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+                    
+                    // Show selected page
+                    document.getElementById(`${page}-page`).classList.remove('hidden');
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.nav-link').forEach(l => {
+                        l.classList.remove('active', 'bg-primary/20', 'border-primary/10');
+                        l.classList.add('text-text-secondary', 'hover:text-white');
+                    });
+                    link.classList.add('active', 'bg-primary/20', 'border-primary/10');
+
+                    // Load page-specific data
+                    if (page === 'students' && allStudents.length === 0) {
+                        loadStudents();
+                    } else if (page === 'instructors' && allInstructors.length === 0) {
+                        loadInstructors();
+                    } else if (page === 'courses' && allCourses.length === 0) {
+                        loadCourses();
+                    } else if (page === 'enrollments' && allEnrollments.length === 0) {
+                        loadEnrollments();
+                    }
+                });
+            });
+        }
+
+        // Setup logout
+        function setupLogout() {
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('aiv_token');
+                window.location.href = '/';
+            });
+        }
+
+        // ==================== MODALS & ADD/DELETE FUNCTIONALITY ====================
+        // Add Student Modal
+        function showAddStudentModal() {
+            const modal = document.createElement('div');
+            modal.id = 'add-student-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white text-xl font-bold">Add New Student</h3>
+                        <button onclick="document.getElementById('add-student-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <form id="add-student-form" class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Full Name</label>
+                            <input type="text" id="student-name" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">University ID</label>
+                            <input type="text" id="student-id" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Email</label>
+                            <input type="email" id="student-email" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Password</label>
+                            <input type="password" id="student-password" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Major</label>
+                            <input type="text" id="student-major" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="flex-1 bg-primary hover:bg-[#106cc9] text-white py-2 rounded-lg font-bold transition-colors">Add Student</button>
+                            <button type="button" onclick="document.getElementById('add-student-modal').remove()" class="flex-1 bg-[#3b4754] hover:bg-[#4b5663] text-white py-2 rounded-lg font-bold transition-colors">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('add-student-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await createStudent({
+                    full_name: document.getElementById('student-name').value,
+                    university_id: document.getElementById('student-id').value,
+                    email: document.getElementById('student-email').value,
+                    password: document.getElementById('student-password').value,
+                    major: document.getElementById('student-major').value,
+                });
+                modal.remove();
+            });
+        }
+
+        // Add Instructor Modal
+        function showAddInstructorModal() {
+            const modal = document.createElement('div');
+            modal.id = 'add-instructor-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white text-xl font-bold">Add New Instructor</h3>
+                        <button onclick="document.getElementById('add-instructor-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <form id="add-instructor-form" class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Full Name</label>
+                            <input type="text" id="instructor-name" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Username</label>
+                            <input type="text" id="instructor-username" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Email</label>
+                            <input type="email" id="instructor-email" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Password</label>
+                            <input type="password" id="instructor-password" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Department</label>
+                            <input type="text" id="instructor-department" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="flex-1 bg-primary hover:bg-[#106cc9] text-white py-2 rounded-lg font-bold transition-colors">Add Instructor</button>
+                            <button type="button" onclick="document.getElementById('add-instructor-modal').remove()" class="flex-1 bg-[#3b4754] hover:bg-[#4b5663] text-white py-2 rounded-lg font-bold transition-colors">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('add-instructor-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await createInstructor({
+                    full_name: document.getElementById('instructor-name').value,
+                    username: document.getElementById('instructor-username').value,
+                    email: document.getElementById('instructor-email').value,
+                    password: document.getElementById('instructor-password').value,
+                    department: document.getElementById('instructor-department').value,
+                });
+                modal.remove();
+            });
+        }
+
+        // Add Course Modal
+        function showAddCourseModal() {
+            const modal = document.createElement('div');
+            modal.id = 'add-course-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white text-xl font-bold">Create New Course</h3>
+                        <button onclick="document.getElementById('add-course-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <form id="add-course-form" class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Course Code</label>
+                            <input type="text" id="course-code" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Course Name</label>
+                            <input type="text" id="course-name" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="flex-1 bg-primary hover:bg-[#106cc9] text-white py-2 rounded-lg font-bold transition-colors">Create Course</button>
+                            <button type="button" onclick="document.getElementById('add-course-modal').remove()" class="flex-1 bg-[#3b4754] hover:bg-[#4b5663] text-white py-2 rounded-lg font-bold transition-colors">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('add-course-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await createCourse({
+                    code: document.getElementById('course-code').value,
+                    name: document.getElementById('course-name').value,
+                });
+                modal.remove();
+            });
+        }
+
+        // API Functions
+        async function createStudent(data) {
+            try {
+                const res = await fetch(`${API_BASE}/admin/students`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error('Failed to create student');
+                alert('Student added successfully!');
+                loadStudents();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding student: ' + error.message);
+            }
+        }
+
+        async function createInstructor(data) {
+            try {
+                const res = await fetch(`${API_BASE}/admin/instructors`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error('Failed to create instructor');
+                alert('Instructor added successfully!');
+                loadInstructors();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding instructor: ' + error.message);
+            }
+        }
+
+        async function createCourse(data) {
+            try {
+                const res = await fetch(`${API_BASE}/admin/courses`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error('Failed to create course');
+                alert('Course created successfully!');
+                loadCourses();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error creating course: ' + error.message);
+            }
+        }
+
+        async function deleteRecord(type, id) {
+            if (!confirm('Are you sure you want to delete this record?')) return;
+            try {
+                const endpoints = {
+                    'student': `/admin/students/${id}`,
+                    'instructor': `/admin/instructors/${id}`,
+                    'course': `/admin/courses/${id}`
+                };
+                const res = await fetch(`${API_BASE}${endpoints[type]}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) throw new Error('Failed to delete');
+                alert('Record deleted successfully!');
+                if (type === 'student') loadStudents();
+                else if (type === 'instructor') loadInstructors();
+                else if (type === 'course') loadCourses();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting record: ' + error.message);
+            }
+        }
+
+        // Assign Instructor Modal
+        // Enroll Student Modal
+        function enrollStudent(courseId) {
+            const course = allEnrollments.find(c => c.id === courseId);
+            if (!course) return;
+
+            // Load students if not already loaded
+            if (allStudents.length === 0) {
+                fetch(`${API_BASE}/admin/students`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                })
+                .then(res => res.json())
+                .then(students => {
+                    allStudents = students;
+                    showEnrollModal(course);
+                })
+                .catch(error => {
+                    console.error('Error loading students:', error);
+                    alert('Failed to load students');
+                });
+            } else {
+                showEnrollModal(course);
+            }
+        }
+
+        function showEnrollModal(course) {
+            const modal = document.createElement('div');
+            modal.id = 'enroll-student-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4 sticky top-0">
+                        <h3 class="text-white text-xl font-bold">Enroll Student</h3>
+                        <button onclick="document.getElementById('enroll-student-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="mb-4 p-3 bg-[#1f2a31] rounded-lg border border-[#3b4754]">
+                        <p class="text-white text-sm"><strong>${course.course_code}</strong> - ${course.course_name}</p>
+                        <p class="text-[#9dabb9] text-xs mt-1">Capacity: ${course.capacity || 50} | Enrolled: ${course.enrolled_count || 0}</p>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="student-search" placeholder="Search students by name or ID..." class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" oninput="window.currentModalSearch && window.currentModalSearch(this.value)"/>
+                    </div>
+                    <div id="student-list" class="space-y-2 max-h-96 overflow-y-auto">
+                        <!-- Students will be populated here -->
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Use setTimeout to ensure DOM is fully ready
+            setTimeout(() => {
+                const studentList = document.getElementById('student-list');
+                const searchInput = document.getElementById('student-search');
+                
+                if (!studentList || !searchInput) {
+                    console.error('Elements not found:', { studentList, searchInput });
+                    return;
+                }
+                
+                console.log('Total students available:', allStudents.length);
+                console.log('First student sample:', allStudents[0]);
+                
+                let allStudentsList = [...allStudents]; // Create a copy
+                
+                function renderStudents(filter = '') {
+                    console.log('Rendering with filter value:', `"${filter}"`, 'Length:', filter.length);
+                    studentList.innerHTML = '';
+                    
+                    let filtered = allStudentsList;
+                    if (filter && filter.trim()) {
+                        const lowerFilter = filter.toLowerCase();
+                        console.log('Searching for:', lowerFilter);
+                        
+                        filtered = allStudentsList.filter(s => {
+                            const nameMatch = s.full_name && s.full_name.toLowerCase().includes(lowerFilter);
+                            const idMatch = s.university_id && String(s.university_id).toLowerCase().includes(lowerFilter);
+                            console.log(`Student: ${s.full_name} (${s.university_id}) - Name match: ${nameMatch}, ID match: ${idMatch}`);
+                            return nameMatch || idMatch;
+                        });
+                    }
+                    
+                    console.log('Final filtered results:', filtered.length);
+                    
+                    if (filtered.length === 0) {
+                        studentList.innerHTML = '<p class="text-[#9dabb9] text-center py-4">No students found</p>';
+                        return;
+                    }
+                    
+                    filtered.forEach(student => {
+                        const item = document.createElement('div');
+                        item.className = 'p-3 bg-[#1f2a31] rounded-lg border border-[#3b4754] hover:border-primary cursor-pointer transition-colors';
+                        item.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-white font-medium">${student.full_name}</p>
+                                    <p class="text-[#9dabb9] text-xs">${student.university_id} • ${student.major || 'N/A'}</p>
+                                </div>
+                                <button onclick="enrollStudentInCourse('${course.id}', '${student.id}')" class="bg-primary hover:bg-[#106cc9] text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors">
+                                    Enroll
+                                </button>
+                            </div>
+                        `;
+                        studentList.appendChild(item);
+                    });
+                }
+                
+                // Initial render
+                renderStudents();
+                
+                // Store search function globally so inline handler can call it
+                window.currentModalSearch = (value) => {
+                    console.log('Search called with:', value);
+                    renderStudents(value);
+                };
+                
+                // Also attach traditional listeners as backup
+                searchInput.addEventListener('input', function(e) {
+                    console.log('addEventListener input fired:', this.value);
+                    renderStudents(this.value);
+                });
+                
+                // Attach to keyup as well for extra reliability
+                searchInput.addEventListener('keyup', function(e) {
+                    console.log('addEventListener keyup fired:', this.value);
+                    renderStudents(this.value);
+                });
+                
+                console.log('Search listener attached successfully');
+            }, 100);
+        }
+
+        async function enrollStudentInCourse(courseId, studentId) {
+            try {
+                const res = await fetch(`${API_BASE}/admin/enroll-student`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        course_id: courseId,
+                        student_id: studentId
+                    })
+                });
+                
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.detail || 'Failed to enroll student');
+                }
+                
+                alert('Student enrolled successfully!');
+                document.getElementById('enroll-student-modal').remove();
+                // Reload enrollments and refresh the current tab view
+                await loadEnrollments();
+                // Refresh the current tab based on which one is active
+                const activeTab = document.querySelector('.enrollment-tab-content:not(.hidden)');
+                if (activeTab && activeTab.id === 'assign-tab') {
+                    renderEnrollmentTable();
+                } else if (activeTab && activeTab.id === 'enroll-tab') {
+                    renderEnrollStudentsTable();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function setupQuickActions() {
+            document.querySelectorAll('.quick-action').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.getAttribute('data-action');
+                    handleQuickAction(action);
+                });
+            });
+        }
+
+        // Handle quick actions
+        function handleQuickAction(action) {
+            switch(action) {
+                case 'add-student':
+                    showAddStudentModal();
+                    break;
+                case 'add-instructor':
+                    showAddInstructorModal();
+                    break;
+                case 'create-course':
+                    showAddCourseModal();
+                    break;
+                case 'export-reports':
+                    alert('Export functionality coming soon');
+                    break;
+            }
+        }
+
+        // ===== STUDENT MANAGEMENT PAGE =====
+        let allStudents = [];
+        let filteredStudents = [];
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        // Load students from API
+        async function loadStudents() {
+            try {
+                const res = await fetch(`${API_BASE}/admin/students`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) throw new Error('Failed to load students');
+                allStudents = await res.json();
+                filteredStudents = allStudents;
+                updateStudentStats();
+                renderStudentTable();
+            } catch (error) {
+                console.error('Error loading students:', error);
+                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">Failed to load students</td></tr>`;
+            }
+        }
+
+        // Update student statistics
+        function updateStudentStats() {
+            const totalStudents = allStudents.length;
+            const activeStudents = allStudents.filter(s => s.is_active).length;
+            document.getElementById('stat-total-students').textContent = totalStudents.toLocaleString();
+            document.getElementById('stat-active-students').textContent = activeStudents.toLocaleString();
+        }
+
+        // Render student table with pagination
+        function renderStudentTable() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedStudents = filteredStudents.slice(start, end);
+
+            if (paginatedStudents.length === 0) {
+                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="7" class="p-8 text-center text-[#9dabb9]">No students found</td></tr>`;
+                return;
+            }
+
+            const rows = paginatedStudents.map(student => `
+                <tr class="group hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4">
+                        <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="size-10 rounded-full bg-gradient-to-br from-primary to-purple-600"></div>
+                            <div class="flex flex-col">
+                                <p class="font-medium text-white">${student.full_name}</p>
+                                <p class="text-xs text-[#9dabb9]">${student.email || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 font-mono text-[#9dabb9]">${student.university_id}</td>
+                    <td class="p-4">${student.major || 'N/A'}</td>
+                    <td class="p-4">${student.enrollment_year || 'N/A'}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${student.is_active ? 'bg-[#0bda5b]/10 text-[#0bda5b] border border-[#0bda5b]/20' : 'bg-[#9dabb9]/10 text-[#9dabb9] border border-[#9dabb9]/20'}">
+                            <span class="size-1.5 rounded-full ${student.is_active ? 'bg-[#0bda5b]' : 'bg-[#9dabb9]'}"></span>
+                            ${student.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-white transition-colors" title="Edit" onclick="editStudent('${student.id}')">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-red-400 transition-colors" title="Delete" onclick="deleteStudent('${student.id}')">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('students-table-body').innerHTML = rows;
+
+            // Update pagination info
+            document.getElementById('pagination-start').textContent = start + 1;
+            document.getElementById('pagination-end').textContent = Math.min(end, filteredStudents.length);
+            document.getElementById('pagination-total').textContent = filteredStudents.length;
+
+            renderPaginationButtons();
+        }
+
+        // Render pagination buttons
+        function renderPaginationButtons() {
+            const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+            const container = document.getElementById('pagination-buttons');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= Math.min(totalPages, 3); i++) {
+                const btn = document.createElement('button');
+                btn.className = `flex items-center justify-center size-8 rounded-lg ${i === currentPage ? 'bg-primary text-white' : 'bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a]'} font-medium text-sm`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentPage = i;
+                    renderStudentTable();
+                };
+                container.appendChild(btn);
+            }
+
+            if (totalPages > 3) {
+                const dots = document.createElement('span');
+                dots.className = 'flex items-center justify-center size-8 text-[#9dabb9]';
+                dots.textContent = '...';
+                container.appendChild(dots);
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => {
+                    currentPage = totalPages;
+                    renderStudentTable();
+                };
+                container.appendChild(lastBtn);
+            }
+        }
+
+        // Search and filter functionality
+        function applyFilters() {
+            const searchTerm = document.getElementById('student-search').value.toLowerCase();
+            const majorFilter = document.getElementById('major-filter').value;
+            const yearFilter = document.getElementById('year-filter').value;
+
+            filteredStudents = allStudents.filter(student => {
+                const matchesSearch = student.full_name.toLowerCase().includes(searchTerm) || 
+                                    student.university_id.toLowerCase().includes(searchTerm);
+                const matchesMajor = !majorFilter || student.major === majorFilter;
+                const matchesYear = !yearFilter || student.enrollment_year === parseInt(yearFilter);
+                return matchesSearch && matchesMajor && matchesYear;
+            });
+
+            currentPage = 1;
+            renderStudentTable();
+        }
+
+        // Student actions
+        function editStudent(studentId) {
+            alert('Edit functionality coming soon for student: ' + studentId);
+        }
+
+        function deleteStudent(studentId) {
+            deleteRecord('student', studentId);
+        }
+
+        // ==================== INSTRUCTOR PAGE FUNCTIONS ====================
+        let allInstructors = [];
+        let filteredInstructors = [];
+        let currentInstructorPage = 1;
+        const instructorItemsPerPage = 5;
+
+        async function loadInstructors() {
+            try {
+                const res = await fetch(`${API_BASE}/admin/instructors`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) throw new Error('Failed to load instructors');
+                allInstructors = await res.json();
+                filteredInstructors = allInstructors;
+                updateInstructorStats();
+                renderInstructorTable();
+            } catch (error) {
+                console.error('Error loading instructors:', error);
+                document.getElementById('instructors-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to load instructors</td></tr>`;
+            }
+        }
+
+        function updateInstructorStats() {
+            const totalInstructors = allInstructors.length;
+            const activeDepts = new Set(allInstructors.map(i => i.department)).size;
+            const newCount = allInstructors.filter(i => {
+                // Assuming newly registered means within the last 7 days
+                return i.created_at || false;
+            }).length;
+
+            document.getElementById('stat-total-instructors').textContent = totalInstructors.toLocaleString();
+            document.getElementById('stat-active-departments').textContent = activeDepts.toLocaleString();
+            document.getElementById('stat-newly-registered').textContent = Math.min(newCount, 12); // Showing 12 as placeholder
+        }
+
+        function renderInstructorTable() {
+            const start = (currentInstructorPage - 1) * instructorItemsPerPage;
+            const end = start + instructorItemsPerPage;
+            const paginatedInstructors = filteredInstructors.slice(start, end);
+
+            if (paginatedInstructors.length === 0) {
+                document.getElementById('instructors-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#9dabb9]">No instructors found</td></tr>`;
+                return;
+            }
+
+            const rows = paginatedInstructors.map(instructor => {
+                const status = instructor.is_active ? 'Active' : (instructor.status || 'Inactive');
+                const statusColor = status === 'Active' ? 'bg-[#0bda5b]/10 text-[#0bda5b]' : status === 'On Leave' ? 'bg-[#ffa500]/10 text-[#ffa500]' : 'bg-[#9dabb9]/10 text-[#9dabb9]';
+                const statusDotColor = status === 'Active' ? 'bg-[#0bda5b]' : status === 'On Leave' ? 'bg-[#ffa500]' : 'bg-[#9dabb9]';
+
+                return `
+                <tr class="group hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4">
+                        <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="size-10 rounded-full bg-gradient-to-br from-primary to-purple-600"></div>
+                            <div class="flex flex-col">
+                                <p class="font-medium text-white">${instructor.full_name}</p>
+                                <p class="text-xs text-[#9dabb9]">${instructor.email || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 font-mono text-[#9dabb9]">${instructor.university_id || 'N/A'}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100/10 text-blue-400 border border-blue-400/20">
+                            ${instructor.department || 'N/A'}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusColor} border border-current/20">
+                            <span class="size-1.5 rounded-full ${statusDotColor}"></span>
+                            ${status}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-white transition-colors" title="Edit" onclick="editInstructor('${instructor.id}')">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-red-400 transition-colors" title="Delete" onclick="deleteInstructor('${instructor.id}')">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            document.getElementById('instructors-table-body').innerHTML = rows;
+
+            // Update pagination info
+            document.getElementById('instructor-pagination-start').textContent = start + 1;
+            document.getElementById('instructor-pagination-end').textContent = Math.min(end, filteredInstructors.length);
+            document.getElementById('instructor-pagination-total').textContent = filteredInstructors.length;
+
+            renderInstructorPaginationButtons();
+        }
+
+        function renderInstructorPaginationButtons() {
+            const totalPages = Math.ceil(filteredInstructors.length / instructorItemsPerPage);
+            const container = document.getElementById('instructor-pagination-buttons');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= Math.min(totalPages, 3); i++) {
+                const btn = document.createElement('button');
+                btn.className = `flex items-center justify-center size-8 rounded-lg ${i === currentInstructorPage ? 'bg-primary text-white' : 'bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a]'} font-medium text-sm`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentInstructorPage = i;
+                    renderInstructorTable();
+                };
+                container.appendChild(btn);
+            }
+
+            if (totalPages > 3) {
+                const dots = document.createElement('span');
+                dots.className = 'flex items-center justify-center size-8 text-[#9dabb9]';
+                dots.textContent = '...';
+                container.appendChild(dots);
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => {
+                    currentInstructorPage = totalPages;
+                    renderInstructorTable();
+                };
+                container.appendChild(lastBtn);
+            }
+
+            // Add prev/next buttons
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'px-3 py-1.5 text-sm rounded-md bg-[#283039] border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50';
+            prevBtn.textContent = 'Previous';
+            prevBtn.disabled = currentInstructorPage === 1;
+            prevBtn.onclick = () => {
+                if (currentInstructorPage > 1) {
+                    currentInstructorPage--;
+                    renderInstructorTable();
+                }
+            };
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'px-3 py-1.5 text-sm rounded-md bg-[#283039] border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50';
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = currentInstructorPage >= totalPages;
+            nextBtn.onclick = () => {
+                if (currentInstructorPage < totalPages) {
+                    currentInstructorPage++;
+                    renderInstructorTable();
+                }
+            };
+
+            container.appendChild(prevBtn);
+            container.appendChild(nextBtn);
+        }
+
+        function applyInstructorFilters() {
+            const searchTerm = document.getElementById('instructor-search').value.toLowerCase();
+            const deptFilter = document.getElementById('department-filter').value;
+            const statusFilter = document.getElementById('instructor-status-filter').value;
+
+            filteredInstructors = allInstructors.filter(instructor => {
+                const matchesSearch = instructor.full_name.toLowerCase().includes(searchTerm) || 
+                                    (instructor.university_id && instructor.university_id.toLowerCase().includes(searchTerm)) ||
+                                    (instructor.email && instructor.email.toLowerCase().includes(searchTerm));
+                const matchesDept = !deptFilter || instructor.department === deptFilter;
+                const matchesStatus = !statusFilter || (statusFilter === 'Active' ? instructor.is_active : instructor.status === statusFilter);
+                return matchesSearch && matchesDept && matchesStatus;
+            });
+
+            currentInstructorPage = 1;
+            renderInstructorTable();
+        }
+
+        function editInstructor(instructorId) {
+            alert('Edit functionality coming soon for instructor: ' + instructorId);
+        }
+
+        function deleteInstructor(instructorId) {
+            deleteRecord('instructor', instructorId);
+        }
+
+        // ==================== COURSES PAGE FUNCTIONS ====================
+        let allCourses = [];
+        let filteredCourses = [];
+        let currentCoursePage = 1;
+        const courseItemsPerPage = 5;
+
+        async function loadCourses() {
+            try {
+                const res = await fetch(`${API_BASE}/admin/courses`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) throw new Error('Failed to load courses');
+                allCourses = await res.json();
+                filteredCourses = allCourses;
+                updateCourseStats();
+                renderCourseTable();
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                document.getElementById('courses-table-body').innerHTML = `<tr><td colspan="8" class="p-8 text-center text-red-400">Failed to load courses</td></tr>`;
+            }
+        }
+
+        function updateCourseStats() {
+            const totalCourses = allCourses.length;
+            const activeCourses = allCourses.filter(c => c.status === 'Active' || c.is_active).length;
+            const uniqueRooms = new Set(allCourses.map(c => c.room)).size;
+
+            document.getElementById('stat-total-courses').textContent = totalCourses.toLocaleString();
+            document.getElementById('stat-active-classes').textContent = activeCourses.toLocaleString();
+            document.getElementById('stat-assigned-rooms').textContent = uniqueRooms.toLocaleString();
+        }
+
+        function renderCourseTable() {
+            const start = (currentCoursePage - 1) * courseItemsPerPage;
+            const end = start + courseItemsPerPage;
+            const paginatedCourses = filteredCourses.slice(start, end);
+
+            if (paginatedCourses.length === 0) {
+                document.getElementById('courses-table-body').innerHTML = `<tr><td colspan="8" class="p-8 text-center text-[#9dabb9]">No courses found</td></tr>`;
+                return;
+            }
+
+            const rows = paginatedCourses.map(course => {
+                const status = course.status || 'Active';
+                const statusColor = status === 'Active' ? 'bg-[#0bda5b]/10 text-[#0bda5b]' : status === 'Draft' ? 'bg-[#ffa500]/10 text-[#ffa500]' : 'bg-[#9dabb9]/10 text-[#9dabb9]';
+                const statusDotColor = status === 'Active' ? 'bg-[#0bda5b]' : status === 'Draft' ? 'bg-[#ffa500]' : 'bg-[#9dabb9]';
+
+                return `
+                <tr class="group hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4">
+                        <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
+                    </td>
+                    <td class="p-4 font-mono text-white font-semibold">${course.course_code || 'N/A'}</td>
+                    <td class="p-4 text-white">${course.course_name || 'N/A'}</td>
+                    <td class="p-4 text-[#9dabb9]">${course.room || 'N/A'}</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="size-8 rounded-full bg-gradient-to-br from-primary to-purple-600"></div>
+                            <div class="flex flex-col">
+                                <p class="font-medium text-white text-sm">${course.instructor_name || 'Unassigned'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-[#9dabb9] text-sm">${course.lecture_time || 'TBA'} ${course.days || ''}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusColor} border border-current/20">
+                            <span class="size-1.5 rounded-full ${statusDotColor}"></span>
+                            ${status}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-white transition-colors" title="Assign Schedule & Room" onclick="showAssignScheduleModal('${course.id}', '${course.course_code}', '${course.course_name}')">
+                                <span class="material-symbols-outlined text-lg">schedule</span>
+                            </button>
+                            <button class="p-1.5 rounded-md text-[#9dabb9] hover:bg-[#343e4a] hover:text-red-400 transition-colors" title="Delete" onclick="deleteCourse('${course.id}')">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            document.getElementById('courses-table-body').innerHTML = rows;
+
+            // Update pagination info
+            document.getElementById('course-pagination-start').textContent = start + 1;
+            document.getElementById('course-pagination-end').textContent = Math.min(end, filteredCourses.length);
+            document.getElementById('course-pagination-total').textContent = filteredCourses.length;
+
+            renderCoursePaginationButtons();
+        }
+
+        function renderCoursePaginationButtons() {
+            const totalPages = Math.ceil(filteredCourses.length / courseItemsPerPage);
+            const container = document.getElementById('course-pagination-buttons');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= Math.min(totalPages, 3); i++) {
+                const btn = document.createElement('button');
+                btn.className = `flex items-center justify-center size-8 rounded-lg ${i === currentCoursePage ? 'bg-primary text-white' : 'bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a]'} font-medium text-sm`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentCoursePage = i;
+                    renderCourseTable();
+                };
+                container.appendChild(btn);
+            }
+
+            if (totalPages > 3) {
+                const dots = document.createElement('span');
+                dots.className = 'flex items-center justify-center size-8 text-[#9dabb9]';
+                dots.textContent = '...';
+                container.appendChild(dots);
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'flex items-center justify-center size-8 rounded-lg bg-[#283039] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] font-medium text-sm';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => {
+                    currentCoursePage = totalPages;
+                    renderCourseTable();
+                };
+                container.appendChild(lastBtn);
+            }
+
+            // Add prev/next buttons
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'px-3 py-1.5 text-sm rounded-md bg-[#283039] border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50';
+            prevBtn.textContent = 'Previous';
+            prevBtn.disabled = currentCoursePage === 1;
+            prevBtn.onclick = () => {
+                if (currentCoursePage > 1) {
+                    currentCoursePage--;
+                    renderCourseTable();
+                }
+            };
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'px-3 py-1.5 text-sm rounded-md bg-[#283039] border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#343e4a] disabled:opacity-50';
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = currentCoursePage >= totalPages;
+            nextBtn.onclick = () => {
+                if (currentCoursePage < totalPages) {
+                    currentCoursePage++;
+                    renderCourseTable();
+                }
+            };
+
+            container.appendChild(prevBtn);
+            container.appendChild(nextBtn);
+        }
+
+        function applyCourseFilters() {
+            const searchTerm = document.getElementById('course-search').value.toLowerCase();
+            const deptFilter = document.getElementById('course-department-filter').value;
+            const statusFilter = document.getElementById('course-status-filter').value;
+
+            filteredCourses = allCourses.filter(course => {
+                const matchesSearch = (course.course_code && course.course_code.toLowerCase().includes(searchTerm)) || 
+                                    (course.course_name && course.course_name.toLowerCase().includes(searchTerm)) ||
+                                    (course.room && course.room.toLowerCase().includes(searchTerm));
+                const matchesDept = !deptFilter || (course.department && course.department === deptFilter);
+                const matchesStatus = !statusFilter || (course.status || 'Active') === statusFilter;
+                return matchesSearch && matchesDept && matchesStatus;
+            });
+
+            currentCoursePage = 1;
+            renderCourseTable();
+        }
+
+        function editCourse(courseId) {
+            alert('Edit functionality coming soon for course: ' + courseId);
+        }
+
+        function showAssignScheduleModal(courseId, courseCode, courseName) {
+            const modal = document.createElement('div');
+            modal.id = 'assign-schedule-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white text-xl font-bold">Assign Schedule & Room</h3>
+                        <button onclick="document.getElementById('assign-schedule-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="mb-4 p-3 bg-[#1f2a31] rounded-lg border border-[#3b4754]">
+                        <p class="text-[#9dabb9] text-sm"><strong>${courseCode}</strong> - ${courseName}</p>
+                    </div>
+                    <form id="assign-schedule-form" class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Classroom/Room Number</label>
+                            <input type="text" id="room-number" placeholder="e.g., A101, Lab 5" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Days</label>
+                            <div class="flex gap-2">
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-sun" value="Sun" class="w-4 h-4 rounded"/> Sun
+                                </label>
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-mon" value="Mon" class="w-4 h-4 rounded"/> Mon
+                                </label>
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-tue" value="Tue" class="w-4 h-4 rounded"/> Tue
+                                </label>
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-wed" value="Wed" class="w-4 h-4 rounded"/> Wed
+                                </label>
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-thu" value="Thu" class="w-4 h-4 rounded"/> Thu
+                                </label>
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-fri" value="Fri" class="w-4 h-4 rounded"/> Fri
+                                </label>
+                                <label class="flex items-center gap-2 text-white text-sm">
+                                    <input type="checkbox" id="day-sat" value="Sat" class="w-4 h-4 rounded"/> Sat
+                                </label>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-white text-sm font-medium mb-1 block">Start Time</label>
+                                <input type="time" id="start-time" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                            </div>
+                            <div>
+                                <label class="text-white text-sm font-medium mb-1 block">End Time</label>
+                                <input type="time" id="end-time" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button type="button" onclick="document.getElementById('assign-schedule-modal').remove()" class="flex-1 px-4 py-2 bg-[#3b4754] text-white rounded-lg hover:bg-[#4b5764] transition-colors">Cancel</button>
+                            <button type="submit" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">Assign Schedule</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('assign-schedule-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                assignSchedule(courseId);
+            });
+        }
+
+        async function assignSchedule(courseId) {
+            const roomNumber = document.getElementById('room-number').value;
+            const startTime = document.getElementById('start-time').value;
+            const endTime = document.getElementById('end-time').value;
+            
+            // Get selected days
+            const days = [];
+            ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].forEach(day => {
+                if (document.getElementById(`day-${day}`).checked) {
+                    days.push(document.getElementById(`day-${day}`).value);
+                }
+            });
+            
+            if (days.length === 0) {
+                alert('Please select at least one day');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/courses/${courseId}/schedule`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        room_num: roomNumber,
+                        days: days.join(', '),
+                        start_time: startTime,
+                        end_time: endTime
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to assign schedule');
+                }
+                
+                document.getElementById('assign-schedule-modal').remove();
+                alert('Schedule assigned successfully!');
+                loadCourses(); // Reload courses to see the update
+            } catch (error) {
+                console.error('Error assigning schedule:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function deleteCourse(courseId) {
+            deleteRecord('course', courseId);
+        }
+
+        // ==================== ENROLLMENTS PAGE FUNCTIONS ====================
+        let allEnrollments = [];
+        let filteredEnrollments = [];
+        let currentEnrollmentPage = 1;
+        const enrollmentItemsPerPage = 5;
+
+        async function loadEnrollments() {
+            try {
+                const res = await fetch(`${API_BASE}/admin/courses`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (!res.ok) throw new Error('Failed to load enrollments');
+                allEnrollments = await res.json();
+                filteredEnrollments = allEnrollments;
+                updateEnrollmentStats();
+                renderEnrollmentTable();
+            } catch (error) {
+                console.error('Error loading enrollments:', error);
+                document.getElementById('enrollment-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to load enrollment data</td></tr>`;
+            }
+        }
+
+        function updateEnrollmentStats() {
+            const totalEnrolled = allEnrollments.reduce((sum, c) => sum + (c.enrolled_count || 0), 0);
+            const pendingCount = allEnrollments.filter(c => !c.instructor_id || c.instructor_id === null).length;
+            
+            document.getElementById('stat-enrolled-total').textContent = totalEnrolled.toLocaleString();
+            document.getElementById('stat-pending-approval').textContent = pendingCount.toLocaleString();
+            document.getElementById('pending-count').textContent = `${pendingCount} Pending Assignments`;
+        }
+
+        function renderEnrollmentTable() {
+            const start = (currentEnrollmentPage - 1) * enrollmentItemsPerPage;
+            const end = start + enrollmentItemsPerPage;
+            const paginatedEnrollments = filteredEnrollments.slice(start, end);
+
+            if (paginatedEnrollments.length === 0) {
+                document.getElementById('enrollment-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#9dabb9]">No enrollments found</td></tr>`;
+                return;
+            }
+
+            const rows = paginatedEnrollments.map(enrollment => {
+                const enrolled = enrollment.enrolled_count || 0;
+                const capacity = enrollment.capacity || 50;
+                const percentage = Math.round((enrolled / capacity) * 100);
+                const isAssigned = enrollment.instructor_id && enrollment.instructor_id !== null;
+                const statusColor = isAssigned ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20';
+                const statusDot = isAssigned ? 'bg-green-500' : 'bg-red-500';
+                const statusText = isAssigned ? 'Assigned' : 'Unassigned';
+                const progressColor = percentage >= 80 ? 'bg-green-500' : percentage >= 50 ? 'bg-yellow-500' : 'bg-blue-500';
+
+                return `
+                <tr class="group hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex flex-col">
+                            <span class="text-white font-bold">${enrollment.course_code || 'N/A'}: ${enrollment.course_name || ''}</span>
+                            <span class="text-[#9dabb9] text-xs">${enrollment.department || 'N/A'}</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2 text-white text-sm">
+                            <span class="material-symbols-outlined text-[#9dabb9]">schedule</span>
+                            ${enrollment.schedule || 'TBA'}
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 bg-[#111418] rounded-full overflow-hidden">
+                                <div class="h-full ${progressColor} w-[${Math.min(percentage, 100)}%]"></div>
+                            </div>
+                            <span class="text-white text-xs">${enrolled}/${capacity}</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        ${isAssigned ? `
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 rounded-full bg-gradient-to-br from-primary to-purple-600"></div>
+                                <div class="flex flex-col">
+                                    <span class="text-white text-sm font-medium">${enrollment.instructor_name || 'Unknown'}</span>
+                                    <span class="text-[#9dabb9] text-[10px]">Assigned</span>
+                                </div>
+                            </div>
+                        ` : `
+                            <span class="text-[#9dabb9] text-sm italic">No instructor assigned</span>
+                        `}
+                    </td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${statusColor} text-xs font-medium border">
+                            <span class="size-1.5 rounded-full ${statusDot}"></span>
+                            ${statusText}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        ${isAssigned ? `
+                            <button class="text-[#9dabb9] hover:text-white p-2 rounded hover:bg-[#343e4a] transition-colors" onclick="editEnrollment('${enrollment.id}')">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                        ` : `
+                            <button class="bg-primary hover:bg-[#106cc9] text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors" onclick="assignInstructor('${enrollment.id}')">
+                                Assign
+                            </button>
+                        `}
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            document.getElementById('enrollment-table-body').innerHTML = rows;
+
+            // Update pagination
+            document.getElementById('enrollment-pagination-start').textContent = start + 1;
+            document.getElementById('enrollment-pagination-end').textContent = Math.min(end, filteredEnrollments.length);
+            document.getElementById('enrollment-pagination-total').textContent = filteredEnrollments.length;
+
+            renderEnrollmentPaginationButtons();
+        }
+
+        function renderEnrollmentPaginationButtons() {
+            const totalPages = Math.ceil(filteredEnrollments.length / enrollmentItemsPerPage);
+            const container = document.getElementById('enrollment-pagination-buttons');
+            container.innerHTML = '';
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'size-8 flex items-center justify-center rounded-lg border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#283039] disabled:opacity-50';
+            prevBtn.disabled = currentEnrollmentPage === 1;
+            prevBtn.innerHTML = '<span class="material-symbols-outlined">chevron_left</span>';
+            prevBtn.onclick = () => {
+                if (currentEnrollmentPage > 1) {
+                    currentEnrollmentPage--;
+                    renderEnrollmentTable();
+                }
+            };
+            container.appendChild(prevBtn);
+
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                const btn = document.createElement('button');
+                btn.className = `size-8 flex items-center justify-center rounded-lg ${i === currentEnrollmentPage ? 'bg-primary text-white' : 'border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#283039]'} font-medium text-sm`;
+                btn.textContent = i;
+                btn.onclick = () => {
+                    currentEnrollmentPage = i;
+                    renderEnrollmentTable();
+                };
+                container.appendChild(btn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'size-8 flex items-center justify-center rounded-lg border border-[#3b4754] text-[#9dabb9] hover:text-white hover:bg-[#283039] disabled:opacity-50';
+            nextBtn.disabled = currentEnrollmentPage >= totalPages;
+            nextBtn.innerHTML = '<span class="material-symbols-outlined">chevron_right</span>';
+            nextBtn.onclick = () => {
+                if (currentEnrollmentPage < totalPages) {
+                    currentEnrollmentPage++;
+                    renderEnrollmentTable();
+                }
+            };
+            container.appendChild(nextBtn);
+        }
+
+        function applyEnrollmentFilters() {
+            const searchInput = document.getElementById('enrollment-search');
+            const deptFilterInput = document.getElementById('enrollment-dept-filter');
+            
+            if (!searchInput || !deptFilterInput) {
+                console.warn('Search or filter elements not found');
+                return;
+            }
+            
+            const searchTerm = searchInput.value.toLowerCase();
+            const deptFilter = deptFilterInput.value;
+
+            filteredEnrollments = allEnrollments.filter(enrollment => {
+                const matchesSearch = !searchTerm || 
+                                    (enrollment.course_code && enrollment.course_code.toLowerCase().includes(searchTerm)) || 
+                                    (enrollment.course_name && enrollment.course_name.toLowerCase().includes(searchTerm)) ||
+                                    (enrollment.instructor_name && enrollment.instructor_name.toLowerCase().includes(searchTerm));
+                const matchesDept = !deptFilter || (enrollment.department && enrollment.department === deptFilter);
+                return matchesSearch && matchesDept;
+            });
+
+            currentEnrollmentPage = 1;
+            
+            // Re-render the active tab
+            const activeTab = document.querySelector('.enrollment-tab.active');
+            if (activeTab) {
+                const tabName = activeTab.getAttribute('data-tab');
+                if (tabName === 'assign') {
+                    renderEnrollmentTable();
+                } else if (tabName === 'enroll') {
+                    renderEnrollStudentsTable();
+                }
+            } else {
+                // Default to rendering enrollment table
+                renderEnrollmentTable();
+            }
+        }
+
+        function assignInstructor(courseId) {
+            // Find the course/enrollment data
+            const enrollment = allEnrollments.find(e => e.id === courseId);
+            if (!enrollment) {
+                alert('Course not found');
+                return;
+            }
+
+            // Fetch instructors list
+            fetch(`${API_BASE}/admin/instructors`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            })
+            .then(res => res.json())
+            .then(instructors => {
+                // Create modal
+                const modal = document.createElement('div');
+                modal.id = 'assign-instructor-modal';
+                modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+                
+                const instructorOptions = instructors.map(inst => 
+                    `<option value="${inst.id}">${inst.full_name} (${inst.department || 'N/A'})</option>`
+                ).join('');
+                
+                modal.innerHTML = `
+                    <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-white text-xl font-bold">Assign Instructor</h3>
+                            <button onclick="document.getElementById('assign-instructor-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div class="mb-4 p-3 bg-[#1f2a31] rounded-lg border border-[#3b4754]">
+                            <p class="text-[#9dabb9] text-sm"><strong>${enrollment.course_code}</strong> - ${enrollment.course_name}</p>
+                        </div>
+                        <form id="assign-instructor-form" class="flex flex-col gap-4">
+                            <div>
+                                <label class="text-white text-sm font-medium mb-1 block">Select Instructor</label>
+                                <select id="instructor-select" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required>
+                                    <option value="">-- Choose an instructor --</option>
+                                    ${instructorOptions}
+                                </select>
+                            </div>
+                            <div class="flex gap-3 mt-6">
+                                <button type="button" onclick="document.getElementById('assign-instructor-modal').remove()" class="flex-1 px-4 py-2 bg-[#3b4754] text-white rounded-lg hover:bg-[#4b5764] transition-colors">Cancel</button>
+                                <button type="submit" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">Assign</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                document.getElementById('assign-instructor-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const instructorId = document.getElementById('instructor-select').value;
+                    if (!instructorId) {
+                        alert('Please select an instructor');
+                        return;
+                    }
+                    assignInstructorToCourse(courseId, instructorId);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching instructors:', error);
+                alert('Failed to load instructors');
+            });
+        }
+
+        async function assignInstructorToCourse(courseId, instructorId) {
+            try {
+                const response = await fetch(`${API_BASE}/admin/courses/${courseId}/assign-instructor`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        instructor_id: instructorId
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to assign instructor');
+                }
+                
+                document.getElementById('assign-instructor-modal').remove();
+                alert('Instructor assigned successfully!');
+                loadEnrollments(); // Reload to see the update
+            } catch (error) {
+                console.error('Error assigning instructor:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function editEnrollment(courseId) {
+            assignInstructor(courseId);
+        }
+
+        // Render Enroll Students Table
+        function renderEnrollStudentsTable() {
+            const tbody = document.getElementById('enrollment-students-table');
+            if (!tbody) return;
+
+            if (filteredEnrollments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#9dabb9]">No courses found</td></tr>`;
+                return;
+            }
+
+            const rows = filteredEnrollments.map(course => {
+                const enrolled = course.enrolled_count || 0;
+                const capacity = course.capacity || 50;
+                const percentage = Math.round((enrolled / capacity) * 100);
+                const availableSpots = capacity - enrolled;
+                const statusColor = availableSpots > 0 ? 'text-green-400' : 'text-red-400';
+
+                return `
+                <tr class="group hover:bg-[#283039]/50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex flex-col">
+                            <span class="text-white font-bold">${course.course_code || 'N/A'}: ${course.course_name || ''}</span>
+                            <span class="text-[#9dabb9] text-xs">${course.department || 'N/A'}</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2 text-white text-sm">
+                            <span class="material-symbols-outlined text-[#9dabb9]">schedule</span>
+                            ${course.schedule || 'TBA'}
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex flex-col">
+                            <span class="text-white font-medium">${capacity}</span>
+                            <span class="text-[#9dabb9] text-xs">${availableSpots} available</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-white text-sm">${course.instructor_name || 'Unassigned'}</span>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-2 bg-[#111418] rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500 w-[${Math.min(percentage, 100)}%]"></div>
+                            </div>
+                            <span class="text-white text-xs">${enrolled}/${capacity}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button class="bg-primary hover:bg-[#106cc9] text-white text-xs font-bold py-2 px-4 rounded-lg transition-colors" onclick="enrollStudent('${course.id}')">
+                            Enroll
+                        </button>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            tbody.innerHTML = rows;
+        }
+
+        // Render Waitlist Table
+        function renderWaitlistTable() {
+            const tbody = document.getElementById('enrollment-waitlist-table');
+            if (!tbody) return;
+
+            // For now, show a message that waitlist is empty
+            tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-[#9dabb9]">No students on waitlists</td></tr>`;
+        }
+
+        // Setup enrollment page event listeners
+        function setupEnrollmentPageListeners() {
+            // Use a slight delay to ensure DOM elements are ready
+            setTimeout(() => {
+                const searchInput = document.getElementById('enrollment-search');
+                const deptFilter = document.getElementById('enrollment-dept-filter');
+                
+                if (searchInput) {
+                    searchInput.addEventListener('input', applyEnrollmentFilters);
+                }
+                if (deptFilter) {
+                    deptFilter.addEventListener('change', applyEnrollmentFilters);
+                }
+            }, 100);
+            
+            // Tab switching
+            document.querySelectorAll('.enrollment-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    document.querySelectorAll('.enrollment-tab').forEach(t => {
+                        t.classList.remove('active', 'border-b-2', 'border-primary', 'text-white');
+                        t.classList.add('border-b-2', 'border-transparent', 'text-[#9dabb9]');
+                    });
+                    tab.classList.add('active', 'border-b-2', 'border-primary', 'text-white');
+                    tab.classList.remove('border-transparent', 'text-[#9dabb9]');
+                    
+                    // Show/hide tab content
+                    document.querySelectorAll('.enrollment-tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+
+                    // Render appropriate table when switching tabs
+                    if (tabName === 'assign') {
+                        renderEnrollmentTable();
+                    } else if (tabName === 'enroll') {
+                        renderEnrollStudentsTable();
+                    } else if (tabName === 'waitlist') {
+                        renderWaitlistTable();
+                    }
+                });
+            });
+
+            // Bulk enroll button
+            document.getElementById('bulk-enroll-btn')?.addEventListener('click', () => {
+                alert('Bulk enrollment via CSV coming soon');
+            });
+        }
+
+        // Setup course page event listeners
+        function setupCoursePageListeners() {
+            document.getElementById('course-search')?.addEventListener('input', applyCourseFilters);
+            document.getElementById('course-department-filter')?.addEventListener('change', applyCourseFilters);
+            document.getElementById('course-status-filter')?.addEventListener('change', applyCourseFilters);
+            document.getElementById('add-course-btn')?.addEventListener('click', () => {
+                showAddCourseModal();
+            });
+        }
+
+        // Setup instructor page event listeners
+        function setupInstructorPageListeners() {
+            document.getElementById('instructor-search')?.addEventListener('input', applyInstructorFilters);
+            document.getElementById('department-filter')?.addEventListener('change', applyInstructorFilters);
+            document.getElementById('instructor-status-filter')?.addEventListener('change', applyInstructorFilters);
+            document.getElementById('add-instructor-btn')?.addEventListener('click', () => {
+                showAddInstructorModal();
+            });
+        }
+
+        // Setup student page event listeners
+        function setupStudentPageListeners() {
+            document.getElementById('student-search')?.addEventListener('input', applyFilters);
+            document.getElementById('major-filter')?.addEventListener('change', applyFilters);
+            document.getElementById('year-filter')?.addEventListener('change', applyFilters);
+            document.getElementById('prev-page')?.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderStudentTable();
+                }
+            });
+            document.getElementById('next-page')?.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderStudentTable();
+                }
+            });
+            document.getElementById('add-student-btn')?.addEventListener('click', () => {
+                showAddStudentModal();
+            });
+        }
+
+        // Hook into navigation to load students when page is clicked
+        const originalSetupNavigation = setupNavigation;
+        setupNavigation = function() {
+            originalSetupNavigation();
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const page = link.getAttribute('data-page');
+                    if (page === 'students' && allStudents.length === 0) {
+                        loadStudents();
+                    }
+                });
+            });
+        };
+    </script>
+</body>
+</html>
+

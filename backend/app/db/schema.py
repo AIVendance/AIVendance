@@ -56,6 +56,7 @@ class Admin(Base):
     full_name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True)
     department = Column(String(100))
+    role = Column(String(50), default="instructor", nullable=False)  # "instructor" or "admin"
     is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)
