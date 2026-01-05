@@ -198,6 +198,7 @@ def get_course_students(
                 "student_id": str(student.id),
                 "university_id": student.university_id,
                 "full_name": student.full_name,
+                "email": student.email,
                 "total_sessions": total_sessions,
                 "present": present,
                 "late": late,

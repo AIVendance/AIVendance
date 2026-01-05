@@ -137,18 +137,18 @@
               </div>
               <input class="block w-full rounded-lg border-0 bg-white py-3.5 pl-11 pr-12 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#1c2127] dark:text-white dark:ring-slate-700 dark:focus:ring-primary sm:text-sm sm:leading-6" id="password" name="password" placeholder="••••••••" type="password"/>
               <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                <button class="flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" type="button">
-                  <span class="material-symbols-outlined !text-[20px]">visibility_off</span>
+                <button id="toggle-password" class="flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" type="button" onclick="togglePasswordVisibility()">
+                  <span id="password-icon" class="material-symbols-outlined !text-[20px]">visibility_off</span>
                 </button>
               </div>
             </div>
           </div>
           <!-- Remember Me & Forgot Password -->
           <div class="flex items-center justify-between pt-1">
-            <div class="flex items-center gap-2">
-              <input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-[#1c2127] dark:ring-offset-[#101922]" id="remember-me" name="remember-me" type="checkbox"/>
-              <label class="block text-sm text-slate-600 dark:text-slate-400" for="remember-me">Remember me</label>
-            </div>
+            <label class="flex items-center gap-2 cursor-pointer group">
+              <input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-slate-600 dark:bg-[#1c2127] dark:ring-offset-[#101922] dark:focus:ring-offset-[#101922] cursor-pointer" id="remember-me" name="remember-me" type="checkbox"/>
+              <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Remember me</span>
+            </label>
             <div class="text-sm">
               <a class="font-semibold text-primary hover:text-blue-500 hover:underline" href="#">Forgot password?</a>
             </div>
@@ -187,21 +187,90 @@
   </div>
 </div>
 
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
 <script>
   const API_BASE = "http://127.0.0.1:8000";
+
+  // Toggle password visibility
+  function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('password-icon');
+    
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      passwordIcon.textContent = 'visibility';
+    } else {
+      passwordInput.type = 'password';
+      passwordIcon.textContent = 'visibility_off';
+    }
+  }
+
+  // Toast notification function
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    const colors = {
+      success: 'bg-green-500',
+      error: 'bg-red-500',
+      warning: 'bg-yellow-500',
+      info: 'bg-blue-500'
+    };
+    
+    const icons = {
+      success: 'check_circle',
+      error: 'error',
+      warning: 'warning',
+      info: 'info'
+    };
+    
+    toast.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 transform transition-all duration-300 translate-x-[400px] pointer-events-auto min-w-[320px] max-w-md`;
+    toast.innerHTML = `
+      <span class="material-symbols-outlined flex-shrink-0" style="font-size: 24px;">${icons[type]}</span>
+      <p class="flex-1 font-medium text-sm">${message}</p>
+      <button onclick="this.parentElement.remove()" class="flex-shrink-0 hover:bg-white/20 rounded p-1 transition-colors">
+        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+      </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(400px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 5000);
+  }
 
   async function login(event) {
     event.preventDefault();
 
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
+    const rememberMe = document.getElementById("remember-me").checked;
 
     const roleValue = document.querySelector('input[name="role"]:checked')?.value;
     const userId = usernameInput.value.trim();
     const password = passwordInput.value.trim();
 
+    // Save credentials if remember me is checked
+    if (rememberMe) {
+      localStorage.setItem('aiv_remembered_user', userId);
+      localStorage.setItem('aiv_remembered_role', roleValue);
+    } else {
+      localStorage.removeItem('aiv_remembered_user');
+      localStorage.removeItem('aiv_remembered_role');
+    }
+
     if (!roleValue || !userId || !password) {
-      alert("Please select role and enter University ID and password.");
+      showToast("Please select role and enter University ID and password.", 'warning');
       return;
     }
 
@@ -221,7 +290,8 @@
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        alert("Login failed: " + JSON.stringify(data));
+        const errorMsg = data.detail || data.message || "Invalid credentials. Please try again.";
+        showToast(errorMsg, 'error');
         return;
       }
 
@@ -234,22 +304,40 @@
       localStorage.setItem('aiv_role', role);
       localStorage.setItem('aiv_user_id', uid);
 
-      alert("Logged in as " + role + " (" + uid + ")");
+      showToast(`Welcome back! Redirecting to ${role} dashboard...`, 'success');
 
-      // Redirect to appropriate dashboard
-      if (role === 'admin') {
-        window.location.href = '/static/admin-dashboard.html';
-      } else if (role === 'instructor') {
-        window.location.href = '/static/instructor-dashboard.html';
-      } else if (role === 'student') {
-        window.location.href = '/static/student-dashboard.html';
-      }
+      // Redirect to appropriate dashboard after brief delay
+      setTimeout(() => {
+        if (role === 'admin') {
+          window.location.href = '/static/admin-dashboard.html';
+        } else if (role === 'instructor') {
+          window.location.href = '/static/instructor-dashboard.html';
+        } else if (role === 'student') {
+          window.location.href = '/static/student-dashboard.html';
+        }
+      }, 1500);
     } catch (err) {
-      alert("Network error: " + (err.message || String(err)));
+      showToast("Network error: " + (err.message || "Unable to connect to server"), 'error');
     }
   }
 
   document.querySelector("form").addEventListener("submit", login);
+
+  // Auto-fill remembered credentials on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    const rememberedUser = localStorage.getItem('aiv_remembered_user');
+    const rememberedRole = localStorage.getItem('aiv_remembered_role');
+    
+    if (rememberedUser) {
+      document.getElementById('username').value = rememberedUser;
+      document.getElementById('remember-me').checked = true;
+    }
+    
+    if (rememberedRole) {
+      const roleInput = document.querySelector(`input[name="role"][value="${rememberedRole}"]`);
+      if (roleInput) roleInput.checked = true;
+    }
+  });
 </script>
 </body>
 </html>

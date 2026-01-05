@@ -1,6 +1,6 @@
+from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from uuid import uuid4
 from app.core.security import get_password_hash
 
@@ -41,6 +41,15 @@ class AssignScheduleRequest(BaseModel):
 
 class AssignInstructorRequest(BaseModel):
     instructor_id: str
+
+
+class BulkEnrollItem(BaseModel):
+    university_id: str
+    course_code: str
+
+
+class BulkEnrollRequest(BaseModel):
+    enrollments: list[BulkEnrollItem]
 
 
 @router.get("/dashboard")
@@ -631,3 +640,59 @@ def enroll_student(
     db.commit()
     
     return {"message": "Student enrolled successfully"}
+
+
+@router.post("/bulk-enroll")
+def bulk_enroll(
+    request: BulkEnrollRequest,
+    db: Session = Depends(get_db_session),
+    current_user: dict = Depends(require_role("admin")),
+):
+    """Bulk enroll students in courses by university_id and course_code."""
+    success = 0
+    fail = 0
+    details = []
+    
+    for item in request.enrollments:
+        # Find student by university_id
+        student = db.query(models.Student).filter(models.Student.university_id == item.university_id).first()
+        if not student:
+            fail += 1
+            details.append({"university_id": item.university_id, "course_code": item.course_code, "reason": "Student not found"})
+            continue
+        
+        # Find course by code
+        course = db.query(models.Course).filter(models.Course.code == item.course_code).first()
+        if not course:
+            fail += 1
+            details.append({"university_id": item.university_id, "course_code": item.course_code, "reason": "Course not found"})
+            continue
+        
+        # Find course instructor
+        course_instructor = db.query(models.CourseInstructor).filter(models.CourseInstructor.course_id == course.id).first()
+        if not course_instructor:
+            fail += 1
+            details.append({"university_id": item.university_id, "course_code": item.course_code, "reason": "No instructor assigned"})
+            continue
+        
+        # Check if already enrolled
+        existing = db.query(models.Enrollment).filter(
+            models.Enrollment.student_id == student.id,
+            models.Enrollment.course_instructors_id == course_instructor.id
+        ).first()
+        if existing:
+            fail += 1
+            details.append({"university_id": item.university_id, "course_code": item.course_code, "reason": "Already enrolled"})
+            continue
+        
+        # Create enrollment
+        new_enrollment = models.Enrollment(
+            id=uuid4(),
+            student_id=student.id,
+            course_instructors_id=course_instructor.id
+        )
+        db.add(new_enrollment)
+        success += 1
+    
+    db.commit()
+    return {"success_count": success, "fail_count": fail, "details": details}
