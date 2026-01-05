@@ -70,6 +70,21 @@ def get_my_courses(
         ci = e.course_instructor
         course = ci.course
         instructor = ci.instructor
+        
+        # Get attendance records for this course
+        records = (
+            db.query(models.AttendanceRecord)
+            .filter(
+                models.AttendanceRecord.student_id == student_id,
+                models.AttendanceRecord.course_instructors_id == ci.id,
+            )
+            .all()
+        )
+        
+        total_classes = len(records)
+        attended_classes = sum(1 for r in records if r.status in ["Present", "Late"])
+        attendance_percentage = (attended_classes / total_classes * 100) if total_classes > 0 else 0
+        
         result.append(
             {
                 "course_instructor_id": str(ci.id),
@@ -81,6 +96,9 @@ def get_my_courses(
                 if ci.lecture_time
                 else None,
                 "instructor_name": instructor.full_name if instructor else None,
+                "total_classes": total_classes,
+                "attended_classes": attended_classes,
+                "attendance_percentage": round(attendance_percentage, 2),
             }
         )
 
@@ -199,6 +217,13 @@ def get_my_profile(
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     
+    # Calculate GPA (placeholder - would need grades system)
+    # For now, return a calculated value based on attendance or default
+    gpa = 3.8  # Default placeholder
+    
+    # Check if face is enrolled (has face_encoding data)
+    has_face_enrolled = bool(student.face_encoding and len(student.face_encoding) > 0)
+    
     return {
         "id": str(student.id),
         "university_id": student.university_id,
@@ -206,6 +231,8 @@ def get_my_profile(
         "email": student.email,
         "major": student.major,
         "enrollment_year": student.enrollment_year,
+        "gpa": gpa,
+        "face_encoding": student.face_encoding if has_face_enrolled else [],
         "is_active": student.is_active,
         "created_at": student.created_at.isoformat() if student.created_at else None,
     }

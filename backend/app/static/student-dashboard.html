@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aivendance - Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111418",
+                        "surface-dark": "#283039",
+                        "border-dark": "#3b4754",
+                        "text-secondary": "#9dabb9"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white h-screen overflow-hidden flex selection:bg-primary/20 selection:text-primary transition-colors duration-300">
+    <aside class="w-64 md:w-72 bg-[#111418] border-r border-[#283039] flex-shrink-0 flex flex-col justify-between h-full p-4 overflow-y-auto">
+        <div class="flex flex-col gap-6">
+            <!-- Brand -->
+            <div class="flex gap-3 items-center px-2">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 bg-gradient-to-br from-primary to-purple-600 shadow-lg"></div>
+                <div class="flex flex-col">
+                    <h1 class="text-white text-lg font-bold leading-normal tracking-tight">Aivendance</h1>
+                    <p class="text-text-secondary text-xs font-medium leading-normal">Student Portal</p>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="flex flex-col gap-2">
+                <a class="nav-link active flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/20 border border-primary/10 transition-all hover:bg-primary/30 group" href="#">
+                    <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors">dashboard</span>
+                    <p class="text-white text-sm font-medium leading-normal">Dashboard</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">book</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">My Courses</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">calendar_month</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Attendance</p>
+                </a>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">history</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">History</p>
+                </a>
+                <a onclick="showPage('faceEnrollment')" class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group cursor-pointer" href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">face</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Face Enrollment</p>
+                </a>
+                <div class="h-px bg-[#283039] my-2 mx-3"></div>
+                <a class="nav-link flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-[#283039] transition-all group" href="#">
+                    <span class="material-symbols-outlined text-text-secondary group-hover:text-white">settings</span>
+                    <p class="text-text-secondary group-hover:text-white text-sm font-medium leading-normal">Settings</p>
+                </a>
+            </nav>
+        </div>
+        <!-- Footer / Logout -->
+        <button id="logout-btn" class="flex w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-[#283039] hover:bg-[#3b4754] text-white text-sm font-bold leading-normal transition-colors border border-transparent hover:border-[#3b4754]">
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            <span class="truncate">Logout</span>
+        </button>
+    </aside>
+    <main class="flex-1 flex flex-col h-full overflow-y-auto relative scroll-smooth bg-background-light dark:bg-background-dark">
+        <div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 shadow-sm">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">school</span>
+                <span class="font-bold text-lg text-slate-900 dark:text-white">Aivendance</span>
+            </div>
+            <button class="text-slate-600 dark:text-slate-300 p-1">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+        <div id="dashboardPage" class="p-6 lg:p-10 max-w-[1400px] w-full mx-auto flex flex-col gap-8 pb-20">
+            <header class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="flex flex-col gap-1">
+                    <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Good Morning, Alex</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-lg font-normal">Monday, Oct 24th <span class="mx-2 text-slate-300 dark:text-slate-700">|</span> You have <span class="text-primary font-bold">2 classes</span> today.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="size-11 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary/30 transition-all relative shadow-sm">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="absolute top-2.5 right-3 size-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-800"></span>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Attendance Statistics -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-all group">
+                    <div class="size-14 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-primary text-[28px]">trending_up</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Overall Attendance</span>
+                        <span id="overallAttendance" class="text-2xl font-black text-slate-900 dark:text-white">0%</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-all group">
+                    <div class="size-14 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-green-500 text-[28px]">check_circle</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Days Present</span>
+                        <span id="daysPresent" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-all group">
+                    <div class="size-14 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-orange-500 text-[28px]">schedule</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Days Late</span>
+                        <span id="daysLate" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-4 hover:shadow-md transition-all group">
+                    <div class="size-14 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-red-500 text-[28px]">cancel</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Days Absent</span>
+                        <span id="daysAbsent" class="text-2xl font-black text-slate-900 dark:text-white">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                <div class="lg:col-span-4 flex flex-col gap-6">
+                    <div onclick="showPage('profile')" class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden group cursor-pointer hover:border-primary/30 hover:shadow-lg transition-all">
+                        <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-slate-900"></div>
+                        <div class="relative flex flex-col items-center text-center mt-8">
+                            <div class="size-24 rounded-full bg-cover bg-center shrink-0 border-4 border-white dark:border-slate-900 shadow-lg mb-4" data-alt="Profile picture of student Alex" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDT_W5FiXC0bkRiggfWF-4751cVoU2-J9lW3OlmloYPJp8RgjpV-XPMqMusteLou-efY49XtBlk_WqmvTp7mcNt0QVenQ2u-4DP0mr6GIFT9vFJMEaqeYibh6apzLfnUyzNHVC5FedtSJuxgUkfxaE8RAQ1L52Iq_UzIkQt2VRkVChvT8CGpLJLuIgbdR1TpfEQrzBB7TMkguSZbjZuNUTEjxNeHs9YV6hqPWW4HXuLBg6sqDSUWkSuMGCbfWO-tsjiRUkrYsS0MLc");'></div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Alex Johnson</h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Computer Science Major</p>
+                            <div class="mt-6 grid grid-cols-2 gap-3 w-full">
+                                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 flex flex-col items-center border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Student ID</span>
+                                    <span class="text-slate-900 dark:text-white font-bold font-mono">123456</span>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 flex flex-col items-center border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">GPA</span>
+                                    <span class="text-slate-900 dark:text-white font-bold font-mono">3.8</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                                <div class="size-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                                </div>
+                                <span id="scheduleTitle">Today's Schedule</span>
+                            </h3>
+                            <button id="viewAllScheduleBtn" class="text-xs font-bold text-primary hover:text-blue-600 dark:hover:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-md transition-colors">View All</button>
+                        </div>
+                        <div class="relative pl-3">
+                            <div class="text-center py-8 text-slate-500 dark:text-slate-400">
+                                <div class="animate-spin inline-block size-8 border-[3px] border-current border-t-transparent text-primary rounded-full" role="status"></div>
+                                <p class="mt-2">Loading schedule...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-indigo-950 dark:to-slate-900 dark:border dark:border-white/10 rounded-2xl p-5 text-white flex items-center justify-between shadow-lg">
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="material-symbols-outlined text-yellow-400">waving_hand</span>
+                                <span class="text-sm font-bold">Need a leave?</span>
+                            </div>
+                            <span class="text-xs text-slate-400 max-w-[150px]">Request formal leave for sickness or personal reasons.</span>
+                        </div>
+                        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-lg border border-white/10 transition-colors backdrop-blur-sm">Request</button>
+                    </div>
+                </div>
+                <div class="lg:col-span-8 flex flex-col gap-6">
+                    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h3 class="text-lg font-bold flex items-center gap-3 text-slate-900 dark:text-white">
+                            <div class="size-8 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">school</span>
+                            </div>
+                            Enrolled Courses
+                        </h3>
+                        <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                            <button id="gridViewBtn" class="p-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all"><span class="material-symbols-outlined text-[20px]">grid_view</span></button>
+                            <button id="listViewBtn" class="p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"><span class="material-symbols-outlined text-[20px]">view_list</span></button>
+                        </div>
+                    </div>
+                    <div id="coursesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-primary/30 transition-all group flex flex-col h-full justify-between relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 size-32 bg-orange-50 dark:bg-orange-500/10 rounded-full blur-3xl group-hover:bg-orange-100 dark:group-hover:bg-orange-500/20 transition-colors"></div>
+                            <div class="flex justify-between items-start mb-6 relative z-10">
+                                <div class="flex gap-4">
+                                    <div class="size-14 rounded-2xl bg-orange-50 dark:bg-orange-900/20 text-orange-500 dark:text-orange-400 flex items-center justify-center shrink-0 shadow-sm border border-orange-100 dark:border-orange-900/30">
+                                        <span class="material-symbols-outlined text-[28px]">code</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">CS101</span>
+                                        <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Data Structures</h4>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Prof. Alan Smith</p>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                            </div>
+                            <div class="mt-2 relative z-10 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                <div class="flex justify-between text-sm mb-2 font-bold">
+                                    <span class="text-slate-600 dark:text-slate-300">Attendance</span>
+                                    <span class="text-primary">92%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden mb-2">
+                                    <div class="bg-primary h-2 rounded-full shadow-[0_0_10px_rgba(19,127,236,0.4)]" style="width: 92%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 mt-1">
+                                    <span>23/25 Classes</span>
+                                    <span>Last: Oct 22nd</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-purple-500/30 transition-all group flex flex-col h-full justify-between relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 size-32 bg-purple-50 dark:bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors"></div>
+                            <div class="flex justify-between items-start mb-6 relative z-10">
+                                <div class="flex gap-4">
+                                    <div class="size-14 rounded-2xl bg-purple-50 dark:bg-purple-900/20 text-purple-500 dark:text-purple-400 flex items-center justify-center shrink-0 shadow-sm border border-purple-100 dark:border-purple-900/30">
+                                        <span class="material-symbols-outlined text-[28px]">language</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">CS204</span>
+                                        <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-500 transition-colors leading-tight">Web Development</h4>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Dr. Sarah Connor</p>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                            </div>
+                            <div class="mt-2 relative z-10 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                <div class="flex justify-between text-sm mb-2 font-bold">
+                                    <span class="text-slate-600 dark:text-slate-300">Attendance</span>
+                                    <span class="text-green-600">85%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden mb-2">
+                                    <div class="bg-green-500 h-2 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.4)]" style="width: 85%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 mt-1">
+                                    <span>17/20 Classes</span>
+                                    <span>Last: Oct 21st</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-red-500/30 transition-all group flex flex-col h-full justify-between relative overflow-hidden">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>
+                            <div class="absolute -right-10 -top-10 size-32 bg-red-50 dark:bg-red-500/10 rounded-full blur-3xl group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors"></div>
+                            <div class="flex justify-between items-start mb-6 relative z-10 pl-3">
+                                <div class="flex gap-4">
+                                    <div class="size-14 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm border border-blue-100 dark:border-blue-900/30">
+                                        <span class="material-symbols-outlined text-[28px]">functions</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">MAT301</span>
+                                        <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors leading-tight">Linear Algebra</h4>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Prof. John Nash</p>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                            </div>
+                            <div class="mt-2 relative z-10 bg-red-50 dark:bg-red-500/10 p-4 rounded-xl border border-red-100 dark:border-red-900/30 ml-1.5">
+                                <div class="flex justify-between text-sm mb-2 font-bold">
+                                    <span class="text-red-800 dark:text-red-200">Attendance Low</span>
+                                    <span class="text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-[16px] animate-pulse">warning</span> 65%</span>
+                                </div>
+                                <div class="w-full bg-white dark:bg-slate-700 rounded-full h-2 overflow-hidden mb-2">
+                                    <div class="bg-red-500 h-2 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.4)]" style="width: 65%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-red-600/70 dark:text-red-400/70 mt-1">
+                                    <span>13/20 Classes</span>
+                                    <span>Warning Status</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-teal-500/30 transition-all group flex flex-col h-full justify-between relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 size-32 bg-teal-50 dark:bg-teal-500/10 rounded-full blur-3xl group-hover:bg-teal-100 dark:group-hover:bg-teal-500/20 transition-colors"></div>
+                            <div class="flex justify-between items-start mb-6 relative z-10">
+                                <div class="flex gap-4">
+                                    <div class="size-14 rounded-2xl bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 shadow-sm border border-teal-100 dark:border-teal-900/30">
+                                        <span class="material-symbols-outlined text-[28px]">database</span>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">CS301</span>
+                                        <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-teal-600 transition-colors leading-tight">Database Systems</h4>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Dr. E. Codd</p>
+                                    </div>
+                                </div>
+                                <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                            </div>
+                            <div class="mt-2 relative z-10 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                <div class="flex justify-between text-sm mb-2 font-bold">
+                                    <span class="text-slate-600 dark:text-slate-300">Attendance</span>
+                                    <span class="text-teal-600">88%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden mb-2">
+                                    <div class="bg-teal-500 h-2 rounded-full shadow-[0_0_10px_rgba(20,184,166,0.4)]" style="width: 88%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 mt-1">
+                                    <span>22/25 Classes</span>
+                                    <span>Last: Oct 23rd</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="hidden p-6 lg:p-10 max-w-[1400px] w-full mx-auto flex flex-col gap-8 pb-20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="showPage('dashboard')" class="size-11 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary/30 transition-all shadow-sm">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Student Profile</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Profile Card -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 sticky top-6">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="relative group">
+                                <div id="profileAvatar" class="size-32 rounded-full bg-cover bg-center shrink-0 border-4 border-white dark:border-slate-900 shadow-lg mb-4" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDT_W5FiXC0bkRiggfWF-4751cVoU2-J9lW3OlmloYPJp8RgjpV-XPMqMusteLou-efY49XtBlk_WqmvTp7mcNt0QVenQ2u-4DP0mr6GIFT9vFJMEaqeYibh6apzLfnUyzNHVC5FedtSJuxgUkfxaE8RAQ1L52Iq_UzIkQt2VRkVChvT8CGpLJLuIgbdR1TpfEQrzBB7TMkguSZbjZuNUTEjxNeHs9YV6hqPWW4HXuLBg6sqDSUWkSuMGCbfWO-tsjiRUkrYsS0MLc");'></div>
+                                <input type="file" id="profilePictureInput" accept="image/*" class="hidden" onchange="handleProfilePictureChange(event)">
+                                <button onclick="document.getElementById('profilePictureInput').click()" class="absolute bottom-4 right-0 size-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition-all group-hover:scale-110">
+                                    <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+                                </button>
+                            </div>
+                            <h3 id="profileName" class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Loading...</h3>
+                            <p id="profileMajor" class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-6">-</p>
+                            <div class="w-full space-y-3">
+                                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-1">Student ID</span>
+                                    <span id="profileStudentId" class="text-slate-900 dark:text-white font-bold font-mono text-lg">-</span>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-1">GPA</span>
+                                    <span id="profileGpa" class="text-slate-900 dark:text-white font-bold font-mono text-lg">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Information -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Personal Information -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">person</span>
+                            Personal Information
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-2">Full Name</label>
+                                <p id="profileFullName" class="text-slate-900 dark:text-white font-semibold">-</p>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-2">University ID</label>
+                                <p id="profileUniversityId" class="text-slate-900 dark:text-white font-semibold font-mono">-</p>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-2">Major</label>
+                                <p id="profileMajorFull" class="text-slate-900 dark:text-white font-semibold">-</p>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-2">Current GPA</label>
+                                <p id="profileGpaFull" class="text-slate-900 dark:text-white font-semibold">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Academic Overview -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">school</span>
+                            Academic Overview
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-900/30">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-primary text-[20px]">menu_book</span>
+                                    </div>
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Enrolled Courses</span>
+                                </div>
+                                <p id="profileEnrolledCourses" class="text-2xl font-black text-slate-900 dark:text-white">0</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-100 dark:border-green-900/30">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="size-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-green-500 text-[20px]">trending_up</span>
+                                    </div>
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Avg Attendance</span>
+                                </div>
+                                <p id="profileAvgAttendance" class="text-2xl font-black text-slate-900 dark:text-white">0%</p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 border border-purple-100 dark:border-purple-900/30">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="size-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-purple-500 text-[20px]">calendar_month</span>
+                                    </div>
+                                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Total Classes</span>
+                                </div>
+                                <p id="profileTotalClasses" class="text-2xl font-black text-slate-900 dark:text-white">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Face Enrollment Status -->
+                    <div id="faceEnrollmentStatus" class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">face</span>
+                            Face Recognition Status
+                        </h3>
+                        <div id="faceEnrolledView" class="hidden">
+                            <div class="flex items-start gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-900/30">
+                                <div class="size-12 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-white text-[24px]">check_circle</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-green-900 dark:text-green-100 font-bold mb-1">Face Enrolled Successfully</h4>
+                                    <p class="text-green-700 dark:text-green-300 text-sm">Your face has been registered for AI-powered attendance tracking. You can now check in to classes using facial recognition.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="faceNotEnrolledView" class="hidden">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-start gap-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-200 dark:border-orange-900/30">
+                                    <div class="size-12 rounded-full bg-orange-500 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined text-white text-[24px]">warning</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-orange-900 dark:text-orange-100 font-bold mb-1">Face Not Enrolled</h4>
+                                        <p class="text-orange-700 dark:text-orange-300 text-sm mb-4">You need to enroll your face to use AI-powered attendance tracking. This is required to check in to classes.</p>
+                                        <button onclick="showPage('faceEnrollment')" class="px-6 py-3 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl">
+                                            <span class="material-symbols-outlined">face</span>
+                                            <span>Enroll Your Face Now</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                    <div class="flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-primary text-[20px]">speed</span>
+                                        <div>
+                                            <p class="font-bold text-slate-900 dark:text-white">Quick & Easy</p>
+                                            <p class="text-slate-500 dark:text-slate-400 text-xs">Takes only 2-3 minutes</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-primary text-[20px]">lock</span>
+                                        <div>
+                                            <p class="font-bold text-slate-900 dark:text-white">Secure & Private</p>
+                                            <p class="text-slate-500 dark:text-slate-400 text-xs">Data is encrypted</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
+                                        <div>
+                                            <p class="font-bold text-slate-900 dark:text-white">AI-Powered</p>
+                                            <p class="text-slate-500 dark:text-slate-400 text-xs">Accurate recognition</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Enrolled Courses List -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">list</span>
+                            Enrolled Courses
+                        </h3>
+                        <div id="profileCoursesList" class="space-y-3">
+                            <div class="text-center py-8 text-slate-500 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-4xl opacity-50">hourglass_empty</span>
+                                <p class="mt-2">Loading courses...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Face Enrollment Page -->
+        <div id="faceEnrollmentPage" class="hidden p-6 lg:p-10 max-w-[1400px] w-full mx-auto flex flex-col gap-8 pb-20">
+            <!-- Header Section -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="showPage('dashboard')" class="size-11 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary/30 transition-all shadow-sm">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <div class="flex flex-col gap-1">
+                        <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Face Enrollment Setup</h2>
+                        <p class="text-slate-500 dark:text-slate-400">To ensure accurate attendance tracking, please provide 10 clear photos of your face for our AI model.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg bg-green-500/10 px-3 py-1.5 border border-green-500/20">
+                    <span class="material-symbols-outlined text-green-500 text-sm">verified_user</span>
+                    <span class="text-green-600 dark:text-green-400 text-sm font-medium">Data is encrypted</span>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
+                <!-- Left Column: Camera & Guidelines -->
+                <div class="flex flex-col gap-6">
+                    <!-- Tabs -->
+                    <div class="border-b border-slate-200 dark:border-slate-700">
+                        <div class="flex gap-8">
+                            <button id="uploadTab" onclick="switchEnrollmentTab('upload')" class="group flex flex-col items-center justify-center border-b-[3px] border-b-transparent hover:border-b-primary/50 text-slate-500 dark:text-slate-400 gap-2 pb-3 px-2 transition-all">
+                                <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">cloud_upload</span>
+                                <p class="text-sm font-bold leading-normal tracking-[0.015em] group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Upload Files</p>
+                            </button>
+                            <button id="cameraTab" onclick="switchEnrollmentTab('camera')" class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary gap-2 pb-3 px-2">
+                                <span class="material-symbols-outlined text-2xl">photo_camera</span>
+                                <p class="text-sm font-bold leading-normal tracking-[0.015em]">Use Camera</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Files View -->
+                    <div id="uploadView" class="hidden flex-col gap-4">
+                        <div id="dropZone" class="relative w-full aspect-video bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 hover:border-primary dark:hover:border-primary transition-colors overflow-hidden group cursor-pointer">
+                            <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" multiple class="hidden" onchange="handleFileSelect(event)">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
+                                <div class="size-20 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-5xl text-primary">cloud_upload</span>
+                                </div>
+                                <div>
+                                    <p class="text-slate-900 dark:text-white font-bold mb-1">Drag and drop your photos here</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm">or <span class="text-primary font-semibold">click to browse</span></p>
+                                </div>
+                                <div class="flex gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                    <span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded">JPG</span>
+                                    <span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded">PNG</span>
+                                    <span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded">Max 10 photos</span>
+                                </div>
+                            </div>
+                            <!-- Drag Overlay -->
+                            <div id="dragOverlay" class="hidden absolute inset-0 bg-primary/10 dark:bg-primary/20 backdrop-blur-sm border-4 border-primary rounded-xl flex items-center justify-center">
+                                <div class="text-center">
+                                    <span class="material-symbols-outlined text-6xl text-primary mb-2">file_download</span>
+                                    <p class="text-primary font-bold text-lg">Drop files here</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm px-1">
+                            <p class="text-slate-500 dark:text-slate-400">Upload up to 10 clear photos of your face</p>
+                            <p class="text-primary font-bold"><span id="uploadedCount">0</span> <span class="text-slate-500 dark:text-slate-400 font-normal">/ 10 uploaded</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Camera View -->
+                    <div id="cameraView" class="flex flex-col gap-4">
+                        <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-lg group border border-slate-200 dark:border-slate-700">
+                            <!-- Camera Feed Placeholder -->
+                            <video id="cameraFeed" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline></video>
+                            
+                            <!-- Face Guide Overlay -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-48 h-64 border-2 border-white/50 rounded-[40%] shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]"></div>
+                                <div class="absolute top-4 right-4 flex gap-2">
+                                    <div class="px-2 py-1 bg-black/60 rounded text-xs text-white font-mono">REC ●</div>
+                                </div>
+                            </div>
+
+                            <!-- Camera Controls -->
+                            <div class="absolute bottom-6 left-0 right-0 flex justify-center items-center gap-6">
+                                <button id="cameraToggleBtn" onclick="toggleCameraOnOff()" class="bg-slate-800 hover:bg-slate-700 text-white p-3 rounded-full transition-colors" title="Turn Camera Off">
+                                    <span class="material-symbols-outlined">videocam</span>
+                                </button>
+                                <button onclick="capturePhoto()" class="size-16 rounded-full bg-white border-4 border-primary flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform" title="Capture Photo">
+                                    <div class="size-12 rounded-full bg-primary"></div>
+                                </button>
+                                <button onclick="switchCamera()" class="bg-slate-800 hover:bg-slate-700 text-white p-3 rounded-full transition-colors" title="Switch Camera">
+                                    <span class="material-symbols-outlined">flip_camera_ios</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm px-1">
+                            <p class="text-slate-500 dark:text-slate-400">Position your face within the frame</p>
+                            <p class="text-primary font-bold"><span id="capturedCount">0</span> <span class="text-slate-500 dark:text-slate-400 font-normal">/ 10 captured</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Guidelines Grid -->
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700">
+                        <h3 class="text-slate-900 dark:text-white font-bold mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">info</span> Guidelines
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                            <div class="flex gap-3 items-start">
+                                <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl mt-0.5">light_mode</span>
+                                <div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold">Lighting</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-xs">Ensure your face is evenly lit, avoid strong backlight.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl mt-0.5">face</span>
+                                <div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold">Expression</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-xs">Keep a neutral expression. Look directly at camera.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl mt-0.5">eyeglasses</span>
+                                <div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold">Accessories</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-xs">Remove masks or dark sunglasses. Regular glasses are OK.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-xl mt-0.5">crop_free</span>
+                                <div>
+                                    <p class="text-slate-900 dark:text-white text-sm font-bold">Position</p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-xs">Face forward directly at the camera. Do not tilt head.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Gallery & Submit -->
+                <div class="flex flex-col gap-6">
+                    <!-- Progress Card -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-900 dark:text-white font-bold text-sm">Progress</span>
+                            <span class="text-primary font-bold text-sm"><span id="progressPercent">0</span>%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:border-slate-700 rounded-full h-2.5">
+                            <div id="progressBar" class="bg-primary h-2.5 rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                            You need <span id="remainingCount" class="text-slate-900 dark:text-white font-bold">10 more</span> photos to complete enrollment.
+                        </p>
+                    </div>
+
+                    <!-- Gallery Grid -->
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-slate-900 dark:text-white font-bold text-sm">Captured Images</h3>
+                        <div id="capturedImagesGrid" class="grid grid-cols-2 gap-3">
+                            <!-- Placeholder Slots -->
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">1</span>
+                            </div>
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">2</span>
+                            </div>
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">3</span>
+                            </div>
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">4</span>
+                            </div>
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">5</span>
+                            </div>
+                            <div class="aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50">
+                                <span class="text-slate-400 text-xs">...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Action -->
+                    <div class="mt-auto pt-4">
+                        <button id="submitEnrollmentBtn" onclick="submitEnrollment()" class="w-full flex cursor-not-allowed items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-slate-700 dark:bg-slate-800 text-slate-400 text-base font-bold leading-normal tracking-[0.015em] transition-all opacity-70" disabled>
+                            <span class="truncate">Submit Enrollment</span>
+                        </button>
+                        <p class="text-center text-slate-500 dark:text-slate-400 text-xs mt-3">
+                            By submitting, you consent to Aivendance processing your biometric data for attendance purposes only.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = "http://127.0.0.1:8000";
+        let authToken = null;
+        let currentStudent = null;
+        let enrolledCourses = [];
+
+        // Face enrollment variables
+        let capturedImages = [];
+        let cameraStream = null;
+        let facingMode = 'user'; // 'user' for front camera, 'environment' for back camera
+        let currentEnrollmentTab = 'camera';
+        let dragDropInitialized = false;
+
+        // Toggle between upload and camera tabs
+        function switchEnrollmentTab(tab) {
+            currentEnrollmentTab = tab;
+            const uploadTab = document.getElementById('uploadTab');
+            const cameraTab = document.getElementById('cameraTab');
+            const uploadView = document.getElementById('uploadView');
+            const cameraView = document.getElementById('cameraView');
+
+            if (tab === 'upload') {
+                // Switch to upload tab
+                uploadTab.classList.remove('border-b-transparent', 'text-slate-500', 'dark:text-slate-400');
+                uploadTab.classList.add('border-b-primary', 'text-primary');
+                cameraTab.classList.remove('border-b-primary', 'text-primary');
+                cameraTab.classList.add('border-b-transparent', 'text-slate-500', 'dark:text-slate-400');
+                
+                uploadView.classList.remove('hidden');
+                uploadView.classList.add('flex');
+                cameraView.classList.add('hidden');
+                
+                // Stop camera when switching to upload
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+            } else {
+                // Switch to camera tab
+                cameraTab.classList.remove('border-b-transparent', 'text-slate-500', 'dark:text-slate-400');
+                cameraTab.classList.add('border-b-primary', 'text-primary');
+                uploadTab.classList.remove('border-b-primary', 'text-primary');
+                uploadTab.classList.add('border-b-transparent', 'text-slate-500', 'dark:text-slate-400');
+                
+                cameraView.classList.remove('hidden');
+                uploadView.classList.add('hidden');
+                
+                // Initialize camera when switching back
+                initCamera();
+            }
+        }
+
+        // Handle file selection from input
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            processFiles(files);
+        }
+
+        // Process uploaded files
+        function processFiles(files) {
+            const remainingSlots = 10 - capturedImages.length;
+            const filesToProcess = files.slice(0, remainingSlots);
+
+            if (files.length > remainingSlots) {
+                alert(`You can only upload ${remainingSlots} more photo(s). Maximum 10 photos allowed.`);
+            }
+
+            filesToProcess.forEach(file => {
+                // Validate file type
+                if (!file.type.match('image/(jpeg|jpg|png)')) {
+                    alert(`${file.name} is not a valid image format. Please upload JPG or PNG files.`);
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name} is too large. Maximum file size is 5MB.`);
+                    return;
+                }
+
+                // Read and convert to base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    capturedImages.push(e.target.result);
+                    updateCapturedImagesUI();
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Reset file input
+            document.getElementById('fileInput').value = '';
+        }
+
+        // Setup drag and drop functionality
+        function setupDragAndDrop() {
+            // Only initialize once
+            if (dragDropInitialized) return;
+            
+            const dropZone = document.getElementById('dropZone');
+            const dragOverlay = document.getElementById('dragOverlay');
+            const fileInput = document.getElementById('fileInput');
+            
+            // Safety check - ensure elements exist
+            if (!dropZone || !dragOverlay || !fileInput) {
+                console.warn('Drag and drop elements not found');
+                return;
+            }
+
+            dragDropInitialized = true;
+
+            // Click to open file dialog
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight drop zone when dragging over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dragOverlay.classList.remove('hidden');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dragOverlay.classList.add('hidden');
+                }, false);
+            });
+
+            // Handle dropped files
+            dropZone.addEventListener('drop', (e) => {
+                const files = Array.from(e.dataTransfer.files);
+                processFiles(files);
+            }, false);
+        }
+
+        // Page navigation
+        function showPage(pageName) {
+            const dashboardPage = document.getElementById('dashboardPage');
+            const profilePage = document.getElementById('profilePage');
+            const faceEnrollmentPage = document.getElementById('faceEnrollmentPage');
+            
+            // Hide all pages
+            dashboardPage.classList.add('hidden');
+            profilePage.classList.add('hidden');
+            faceEnrollmentPage.classList.add('hidden');
+            
+            // Stop camera if switching away from face enrollment
+            if (pageName !== 'faceEnrollment' && cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            
+            if (pageName === 'dashboard') {
+                dashboardPage.classList.remove('hidden');
+            } else if (pageName === 'profile') {
+                profilePage.classList.remove('hidden');
+                loadProfilePage();
+            } else if (pageName === 'faceEnrollment') {
+                faceEnrollmentPage.classList.remove('hidden');
+                setupDragAndDrop();
+                if (currentEnrollmentTab === 'camera') {
+                    initCamera();
+                }
+            }
+        }
+
+        // Initialize camera
+        async function initCamera() {
+            try {
+                const video = document.getElementById('cameraFeed');
+                const constraints = {
+                    video: {
+                        facingMode: facingMode,
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+                
+                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = cameraStream;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Could not access camera. Please ensure you have granted camera permissions.');
+            }
+        }
+
+        // Switch camera (front/back)
+        async function switchCamera() {
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+            await initCamera();
+        }
+
+        // Toggle camera on/off
+        function toggleCameraOnOff() {
+            const video = document.getElementById('cameraFeed');
+            const toggleBtn = document.getElementById('cameraToggleBtn');
+            const toggleIcon = toggleBtn.querySelector('.material-symbols-outlined');
+            
+            if (cameraStream && cameraStream.active) {
+                // Turn camera off
+                cameraStream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                cameraStream = null;
+                toggleIcon.textContent = 'videocam_off';
+                toggleBtn.title = 'Turn Camera On';
+                toggleBtn.classList.remove('bg-slate-800', 'hover:bg-slate-700');
+                toggleBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+            } else {
+                // Turn camera on
+                initCamera();
+                toggleIcon.textContent = 'videocam';
+                toggleBtn.title = 'Turn Camera Off';
+                toggleBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                toggleBtn.classList.add('bg-slate-800', 'hover:bg-slate-700');
+            }
+        }
+
+        // Capture photo from camera
+        function capturePhoto() {
+            if (capturedImages.length >= 10) {
+                alert('You have already captured 10 photos. Please submit your enrollment.');
+                return;
+            }
+
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            const imageData = canvas.toDataURL('image/jpeg', 0.8);
+            capturedImages.push(imageData);
+            
+            updateCapturedImagesUI();
+            updateProgress();
+        }
+
+        // Update captured images UI
+        function updateCapturedImagesUI() {
+            const grid = document.getElementById('capturedImagesGrid');
+            grid.innerHTML = '';
+            
+            // Add captured images
+            capturedImages.forEach((imgData, index) => {
+                const div = document.createElement('div');
+                div.className = 'relative group aspect-square rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700';
+                div.innerHTML = `
+                    <img class="w-full h-full object-cover" src="${imgData}" alt="Captured photo ${index + 1}">
+                    <button onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-500/90 hover:bg-red-600 text-white p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                `;
+                grid.appendChild(div);
+            });
+            
+            // Add placeholder slots
+            for (let i = capturedImages.length; i < 10; i++) {
+                const div = document.createElement('div');
+                div.className = 'aspect-square rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-800/50';
+                div.innerHTML = `<span class="text-slate-400 text-xs">${i === 9 ? '...' : i + 1}</span>`;
+                grid.appendChild(div);
+            }
+        }
+
+        // Remove captured image
+        function removeImage(index) {
+            capturedImages.splice(index, 1);
+            updateCapturedImagesUI();
+            updateProgress();
+        }
+
+        // Update progress bar and counts
+        function updateProgress() {
+            const count = capturedImages.length;
+            const percent = (count / 10) * 100;
+            const remaining = 10 - count;
+            
+            document.getElementById('capturedCount').textContent = count;
+            if (document.getElementById('uploadedCount')) {
+                document.getElementById('uploadedCount').textContent = count;
+            }
+            document.getElementById('progressPercent').textContent = Math.round(percent);
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('remainingCount').textContent = remaining + ' more';
+            
+            // Enable/disable submit button
+            const submitBtn = document.getElementById('submitEnrollmentBtn');
+            if (count >= 10) {
+                submitBtn.disabled = false;
+                submitBtn.className = 'w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-primary hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-all';
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.className = 'w-full flex cursor-not-allowed items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-slate-700 dark:bg-slate-800 text-slate-400 text-base font-bold leading-normal tracking-[0.015em] transition-all opacity-70';
+            }
+        }
+
+        // Toggle camera settings (placeholder)
+        function toggleCameraSettings() {
+            alert('Camera settings coming soon!');
+        }
+
+        // Submit enrollment
+        async function submitEnrollment() {
+            if (capturedImages.length < 10) {
+                alert('Please capture at least 10 photos before submitting.');
+                return;
+            }
+
+            try {
+                const submitBtn = document.getElementById('submitEnrollmentBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="truncate">Submitting...</span>';
+
+                // TODO: Send images to backend for face embedding generation
+                // const response = await fetch(`${API_BASE}/student/face-enrollment`, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Authorization': `Bearer ${authToken}`,
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({ images: capturedImages })
+                // });
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                alert('Face enrollment submitted successfully! Your face data will be processed and stored as embeddings for attendance tracking.');
+                
+                // Reset and go back to dashboard
+                capturedImages = [];
+                updateCapturedImagesUI();
+                updateProgress();
+                showPage('dashboard');
+
+            } catch (error) {
+                console.error('Error submitting enrollment:', error);
+                alert('Failed to submit enrollment. Please try again.');
+                const submitBtn = document.getElementById('submitEnrollmentBtn');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="truncate">Submit Enrollment</span>';
+            }
+        }
+
+        // Handle profile picture change
+        function handleProfilePictureChange(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    // Update all profile avatars (dashboard and profile page)
+                    const avatars = document.querySelectorAll('[id="profileAvatar"], .size-24.rounded-full');
+                    avatars.forEach(avatar => {
+                        avatar.style.backgroundImage = `url("${imageUrl}")`;
+                    });
+                    
+                    // TODO: Upload to server
+                    // This would need a backend endpoint to save the image
+                    // For now, it's just stored locally in the browser
+                    console.log('Profile picture changed locally. Server upload not implemented yet.');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load profile page with data
+        function loadProfilePage() {
+            if (!currentStudent) return;
+
+            // Update profile card
+            document.getElementById('profileName').textContent = currentStudent.full_name;
+            document.getElementById('profileMajor').textContent = currentStudent.major || 'Computer Science';
+            document.getElementById('profileStudentId').textContent = currentStudent.university_id;
+            document.getElementById('profileGpa').textContent = currentStudent.gpa ? currentStudent.gpa.toFixed(1) : '-';
+
+            // Update personal information
+            document.getElementById('profileFullName').textContent = currentStudent.full_name;
+            document.getElementById('profileUniversityId').textContent = currentStudent.university_id;
+            document.getElementById('profileMajorFull').textContent = currentStudent.major || '-';
+            document.getElementById('profileGpaFull').textContent = currentStudent.gpa ? currentStudent.gpa.toFixed(1) : '-';
+
+            // Calculate academic stats
+            const totalCourses = enrolledCourses.length;
+            let totalAttended = 0;
+            let totalClasses = 0;
+
+            enrolledCourses.forEach(course => {
+                totalAttended += course.attended_classes || 0;
+                totalClasses += course.total_classes || 0;
+            });
+
+            const avgAttendance = totalClasses > 0 ? Math.round((totalAttended / totalClasses) * 100) : 0;
+
+            document.getElementById('profileEnrolledCourses').textContent = totalCourses;
+            document.getElementById('profileAvgAttendance').textContent = avgAttendance + '%';
+            document.getElementById('profileTotalClasses').textContent = totalClasses;
+
+            // Update face enrollment status
+            const faceEnrolledView = document.getElementById('faceEnrolledView');
+            const faceNotEnrolledView = document.getElementById('faceNotEnrolledView');
+            
+            if (currentStudent.face_encoding && currentStudent.face_encoding.length > 0) {
+                // Face is enrolled
+                faceEnrolledView.classList.remove('hidden');
+                faceNotEnrolledView.classList.add('hidden');
+            } else {
+                // Face is not enrolled
+                faceEnrolledView.classList.add('hidden');
+                faceNotEnrolledView.classList.remove('hidden');
+            }
+
+            // Render courses list
+            const coursesList = document.getElementById('profileCoursesList');
+            const colors = ['blue', 'green', 'purple', 'orange', 'teal', 'pink'];
+
+            coursesList.innerHTML = enrolledCourses.map((course, index) => {
+                const color = colors[index % colors.length];
+                const attendance = course.attendance_percentage || 0;
+                const isLow = attendance < 70;
+
+                return `
+                    <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-${color}-500/30 transition-all group">
+                        <div class="flex items-center gap-4 flex-1">
+                            <div class="size-12 rounded-xl bg-${color}-50 dark:bg-${color}-900/20 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-${color}-500 text-[24px]">book</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-white group-hover:text-${color}-500 transition-colors">${course.course_name}</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">${course.course_code} • ${course.instructor_name || 'Instructor'}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="text-center">
+                                <p class="text-xs text-slate-400 mb-1">Attendance</p>
+                                <p class="font-bold ${isLow ? 'text-red-600' : 'text-green-600'}">${Math.round(attendance)}%</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-slate-400 mb-1">Classes</p>
+                                <p class="font-bold text-slate-900 dark:text-white">${course.attended_classes || 0}/${course.total_classes || 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Student Dashboard: Page loaded');
+            authToken = localStorage.getItem('aiv_token');
+            if (!authToken) {
+                console.log('No auth token found, redirecting to login');
+                window.location.href = '/';
+                return;
+            }
+
+            console.log('Auth token found, loading student data...');
+            loadStudentData();
+            setupLogout();
+        });
+
+        // Setup logout
+        function setupLogout() {
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('aiv_token');
+                    localStorage.removeItem('aiv_role');
+                    localStorage.removeItem('aiv_user_id');
+                    window.location.href = '/';
+                });
+            }
+        }
+
+        // Get time of day greeting
+        function getTimeOfDay() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'Morning';
+            if (hour < 18) return 'Afternoon';
+            return 'Evening';
+        }
+
+        // Format date
+        function formatDate() {
+            const now = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            const dayName = days[now.getDay()];
+            const monthName = months[now.getMonth()];
+            const date = now.getDate();
+            
+            const suffix = date === 1 || date === 21 || date === 31 ? 'st' :
+                          date === 2 || date === 22 ? 'nd' :
+                          date === 3 || date === 23 ? 'rd' : 'th';
+            
+            return `${dayName}, ${monthName} ${date}${suffix}`;
+        }
+
+        // Load student data
+        async function loadStudentData() {
+            try {
+                console.log('Loading profile from:', `${API_BASE}/student/profile`);
+                // Load profile
+                const profileRes = await fetch(`${API_BASE}/student/profile`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (!profileRes.ok) {
+                    console.error('Profile request failed:', profileRes.status, profileRes.statusText);
+                    throw new Error('Failed to load profile');
+                }
+                
+                const profile = await profileRes.json();
+                console.log('Profile loaded:', profile);
+                currentStudent = profile;
+
+                // Update UI with profile data
+                updateProfileUI(profile);
+
+                // Load courses
+                await loadCourses();
+
+            } catch (error) {
+                console.error('Error loading student data:', error);
+                if (error.message.includes('401')) {
+                    localStorage.removeItem('aiv_token');
+                    window.location.href = '/';
+                } else {
+                    alert('Failed to load dashboard data. Please try refreshing the page.');
+                }
+            }
+        }
+
+        // Update profile UI
+        function updateProfileUI(profile) {
+            const firstName = profile.full_name.split(' ')[0];
+            
+            // Update greeting
+            const greetingElements = document.querySelectorAll('h2');
+            greetingElements.forEach(el => {
+                if (el.textContent.includes('Good')) {
+                    el.textContent = `Good ${getTimeOfDay()}, ${firstName}`;
+                }
+            });
+
+            // Update date
+            const dateElements = document.querySelectorAll('p');
+            dateElements.forEach(el => {
+                if (el.textContent.includes('You have')) {
+                    const dateText = formatDate();
+                    const coursesCount = enrolledCourses.filter(c => {
+                        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+                        return c.days && c.days.split(',').some(day => day.trim() === today);
+                    }).length;
+                    el.innerHTML = `${dateText} <span class="mx-2 text-slate-300 dark:text-slate-700">|</span> You have <span class="text-primary font-bold">${coursesCount} ${coursesCount === 1 ? 'class' : 'classes'}</span> today.`;
+                }
+            });
+
+            // Update profile card
+            const profileNameElements = document.querySelectorAll('h3, p');
+            profileNameElements.forEach(el => {
+                if (el.textContent === 'Alex Johnson' || el.classList.contains('truncate')) {
+                    el.textContent = profile.full_name;
+                }
+            });
+
+            // Update student ID and GPA
+            const studentIdEl = document.querySelector('.font-mono');
+            if (studentIdEl && studentIdEl.textContent === '123456') {
+                studentIdEl.textContent = profile.university_id;
+            }
+
+            const gpaEl = document.querySelectorAll('.font-mono')[1];
+            if (gpaEl && profile.gpa) {
+                gpaEl.textContent = profile.gpa.toFixed(1);
+            }
+
+            // Update major
+            const majorElements = document.querySelectorAll('p');
+            majorElements.forEach(el => {
+                if (el.textContent === 'Computer Science Major') {
+                    el.textContent = profile.major || 'Computer Science Major';
+                }
+            });
+        }
+
+        // Load courses
+        async function loadCourses() {
+            try {
+                console.log('Loading courses from:', `${API_BASE}/student/courses`);
+                const res = await fetch(`${API_BASE}/student/courses`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (!res.ok) {
+                    console.error('Courses request failed:', res.status, res.statusText);
+                    throw new Error('Failed to load courses');
+                }
+                
+                const data = await res.json();
+                console.log('Courses loaded:', data);
+                enrolledCourses = data.courses || [];
+                
+                renderCourses();
+                renderTodaySchedule();
+                updateClassesCount();
+                updateAttendanceStats();
+                
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        }
+
+        // Update attendance statistics
+        function updateAttendanceStats() {
+            if (enrolledCourses.length === 0) return;
+            
+            let totalAttended = 0;
+            let totalClasses = 0;
+            let totalPresent = 0;
+            let totalLate = 0;
+            let totalAbsent = 0;
+            
+            enrolledCourses.forEach(course => {
+                totalAttended += course.attended_classes || 0;
+                totalClasses += course.total_classes || 0;
+                
+                // Assuming we can get individual attendance records if available
+                // For now, we'll calculate based on attendance percentage
+                const attended = course.attended_classes || 0;
+                const total = course.total_classes || 0;
+                const absent = total - attended;
+                
+                totalPresent += attended;
+                totalAbsent += absent;
+                // Note: Late data would need to come from backend if tracked separately
+            });
+            
+            const overallAttendance = totalClasses > 0 ? Math.round((totalAttended / totalClasses) * 100) : 0;
+            
+            // Update the UI
+            document.getElementById('overallAttendance').textContent = overallAttendance + '%';
+            document.getElementById('daysPresent').textContent = totalPresent;
+            document.getElementById('daysLate').textContent = totalLate; // This would need backend support
+            document.getElementById('daysAbsent').textContent = totalAbsent;
+        }
+
+        // Current view mode
+        let currentView = 'grid';
+        let showingAllSchedule = false;
+
+        // Render courses grid
+        function renderCourses(viewMode = 'grid') {
+            const coursesGrid = document.getElementById('coursesContainer');
+            if (!coursesGrid) return;
+
+            currentView = viewMode;
+
+            // Update container classes based on view mode
+            if (viewMode === 'list') {
+                coursesGrid.className = 'flex flex-col gap-4';
+            } else {
+                coursesGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+            }
+
+            const colors = [
+                { bg: 'orange', icon: 'code', name: 'orange' },
+                { bg: 'purple', icon: 'language', name: 'purple' },
+                { bg: 'blue', icon: 'functions', name: 'blue' },
+                { bg: 'teal', icon: 'database', name: 'teal' }
+            ];
+
+            coursesGrid.innerHTML = enrolledCourses.map((course, index) => {
+                const color = colors[index % colors.length];
+                const attendance = course.attendance_percentage || 0;
+                const attendedClasses = course.attended_classes || 0;
+                const totalClasses = course.total_classes || 0;
+                
+                let statusClass = '';
+                let barColor = 'bg-primary';
+                let textColor = 'text-primary';
+                let warningBorder = '';
+                
+                if (attendance < 70) {
+                    statusClass = 'border-red-500/30';
+                    barColor = 'bg-red-500';
+                    textColor = 'text-red-600';
+                    warningBorder = '<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-red-500"></div>';
+                } else if (attendance < 80) {
+                    barColor = 'bg-green-500';
+                    textColor = 'text-green-600';
+                } else {
+                    barColor = 'bg-primary';
+                    textColor = 'text-primary';
+                }
+
+                const lastClass = course.last_class_date ? new Date(course.last_class_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'N/A';
+
+                if (viewMode === 'list') {
+                    return `
+                        <div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:${statusClass || 'border-' + color.name + '-500/30'} transition-all group relative overflow-hidden flex items-center gap-6">
+                            ${warningBorder}
+                            <div class="size-14 rounded-2xl bg-${color.name}-50 dark:bg-${color.name}-900/20 text-${color.name}-500 dark:text-${color.name}-400 flex items-center justify-center shrink-0 shadow-sm border border-${color.name}-100 dark:border-${color.name}-900/30">
+                                <span class="material-symbols-outlined text-[28px]">${color.icon}</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">${course.course_code}</span>
+                                    <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-${color.name}-500 transition-colors">${course.course_name}</h4>
+                                </div>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">${course.instructor_name || 'Instructor'}</p>
+                            </div>
+                            <div class="w-64 bg-${attendance < 70 ? 'red' : 'slate'}-50 dark:bg-${attendance < 70 ? 'red' : 'slate'}-${attendance < 70 ? '500/10' : '800/50'} p-3 rounded-xl border border-${attendance < 70 ? 'red' : 'slate'}-100 dark:border-${attendance < 70 ? 'red' : 'slate'}-${attendance < 70 ? '900/30' : '800'}">
+                                <div class="flex justify-between text-xs mb-2 font-bold">
+                                    <span class="text-${attendance < 70 ? 'red-800 dark:text-red-200' : 'slate-600 dark:text-slate-300'}">Attendance</span>
+                                    <span class="${textColor} flex items-center gap-1">
+                                        ${attendance < 70 ? '<span class="material-symbols-outlined text-[14px] animate-pulse">warning</span>' : ''}
+                                        ${Math.round(attendance)}%
+                                    </span>
+                                </div>
+                                <div class="w-full bg-${attendance < 70 ? 'white dark:bg-slate-700' : 'slate-200 dark:bg-slate-700'} rounded-full h-1.5 overflow-hidden">
+                                    <div class="${barColor} h-1.5 rounded-full shadow-[0_0_10px_rgba(19,127,236,0.4)]" style="width: ${attendance}%"></div>
+                                </div>
+                            </div>
+                            <div class="text-sm text-slate-500 dark:text-slate-400 text-center min-w-[80px]">
+                                <div class="font-bold text-slate-900 dark:text-white">${attendedClasses}/${totalClasses}</div>
+                                <div class="text-xs">Classes</div>
+                            </div>
+                            <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-md hover:${statusClass || 'border-' + color.name + '-500/30'} transition-all group flex flex-col h-full justify-between relative overflow-hidden">
+                        ${warningBorder}
+                        <div class="absolute -right-10 -top-10 size-32 bg-${color.name}-50 dark:bg-${color.name}-500/10 rounded-full blur-3xl group-hover:bg-${color.name}-100 dark:group-hover:bg-${color.name}-500/20 transition-colors"></div>
+                        <div class="flex justify-between items-start mb-6 relative z-10 ${warningBorder ? 'pl-3' : ''}">
+                            <div class="flex gap-4">
+                                <div class="size-14 rounded-2xl bg-${color.name}-50 dark:bg-${color.name}-900/20 text-${color.name}-500 dark:text-${color.name}-400 flex items-center justify-center shrink-0 shadow-sm border border-${color.name}-100 dark:border-${color.name}-900/30">
+                                    <span class="material-symbols-outlined text-[28px]">${color.icon}</span>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 w-fit px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-700">${course.course_code}</span>
+                                    <h4 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-${color.name}-500 transition-colors leading-tight">${course.course_name}</h4>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">${course.instructor_name || 'Instructor'}</p>
+                                </div>
+                            </div>
+                            <button class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-200"><span class="material-symbols-outlined">more_vert</span></button>
+                        </div>
+                        <div class="mt-2 relative z-10 bg-${attendance < 70 ? 'red' : 'slate'}-50 dark:bg-${attendance < 70 ? 'red' : 'slate'}-${attendance < 70 ? '500/10' : '800/50'} p-4 rounded-xl border border-${attendance < 70 ? 'red' : 'slate'}-100 dark:border-${attendance < 70 ? 'red' : 'slate'}-${attendance < 70 ? '900/30' : '800'} ${warningBorder ? 'ml-1.5' : ''}">
+                            <div class="flex justify-between text-sm mb-2 font-bold">
+                                <span class="text-${attendance < 70 ? 'red-800 dark:text-red-200' : 'slate-600 dark:text-slate-300'}">${attendance < 70 ? 'Attendance Low' : 'Attendance'}</span>
+                                <span class="${textColor} flex items-center gap-1">
+                                    ${attendance < 70 ? '<span class="material-symbols-outlined text-[16px] animate-pulse">warning</span>' : ''}
+                                    ${Math.round(attendance)}%
+                                </span>
+                            </div>
+                            <div class="w-full bg-${attendance < 70 ? 'white dark:bg-slate-700' : 'slate-200 dark:bg-slate-700'} rounded-full h-2 overflow-hidden mb-2">
+                                <div class="${barColor} h-2 rounded-full shadow-[0_0_10px_rgba(19,127,236,0.4)]" style="width: ${attendance}%"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-${attendance < 70 ? 'red-600/70 dark:text-red-400/70' : 'slate-400'} mt-1">
+                                <span>${attendedClasses}/${totalClasses} Classes</span>
+                                <span>${attendance < 70 ? 'Warning Status' : 'Last: ' + lastClass}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Format time to 12-hour format
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        // Calculate time difference in minutes
+        function getTimeDifference(classTime, currentTime) {
+            return classTime - currentTime;
+        }
+
+        // Get current week's days (Monday to Sunday)
+        function getCurrentWeekDays() {
+            const now = new Date();
+            const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+            const monday = new Date(now);
+            
+            // Calculate days until Monday (if today is Sunday, go back 6 days, if Monday go back 0, etc.)
+            const daysUntilMonday = currentDay === 0 ? -6 : 1 - currentDay;
+            monday.setDate(now.getDate() + daysUntilMonday);
+            
+            const weekDays = [];
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(monday);
+                day.setDate(monday.getDate() + i);
+                const dayName = daysOfWeek[day.getDay()];
+                weekDays.push(dayName);
+            }
+            
+            return weekDays;
+        }
+
+        // Render today's schedule
+        function renderTodaySchedule(showAll = false) {
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+            
+            let classesToShow = [];
+            if (showAll) {
+                // Show only current week's classes grouped by day
+                const currentWeekDays = getCurrentWeekDays();
+                const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                
+                enrolledCourses.forEach(course => {
+                    if (course.days) {
+                        course.days.split(',').forEach(day => {
+                            const trimmedDay = day.trim();
+                            // Only include days that are in the current week
+                            if (currentWeekDays.includes(trimmedDay)) {
+                                classesToShow.push({
+                                    ...course,
+                                    displayDay: trimmedDay,
+                                    sortDay: daysOfWeek.indexOf(trimmedDay)
+                                });
+                            }
+                        });
+                    }
+                });
+                // Sort by day then time
+                classesToShow.sort((a, b) => {
+                    if (a.sortDay !== b.sortDay) return a.sortDay - b.sortDay;
+                    const [aHours, aMinutes] = a.lecture_time.split(':');
+                    const [bHours, bMinutes] = b.lecture_time.split(':');
+                    const aTime = parseInt(aHours) * 60 + parseInt(aMinutes);
+                    const bTime = parseInt(bHours) * 60 + parseInt(bMinutes);
+                    return aTime - bTime;
+                });
+            } else {
+                // Show only today's classes
+                classesToShow = enrolledCourses.filter(c => {
+                    return c.days && c.days.split(',').some(day => day.trim() === today);
+                }).map(c => ({ ...c, displayDay: today }));
+                
+                // Sort by time
+                classesToShow.sort((a, b) => {
+                    const [aHours, aMinutes] = a.lecture_time.split(':');
+                    const [bHours, bMinutes] = b.lecture_time.split(':');
+                    const aTime = parseInt(aHours) * 60 + parseInt(aMinutes);
+                    const bTime = parseInt(bHours) * 60 + parseInt(bMinutes);
+                    return aTime - bTime;
+                });
+            }
+            
+            const todayClasses = classesToShow;
+
+            const scheduleContainer = document.querySelector('.relative.pl-3');
+            if (!scheduleContainer) return;
+
+            if (todayClasses.length === 0) {
+                scheduleContainer.innerHTML = `
+                    <div class="text-center py-8 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-4xl opacity-50">event_available</span>
+                        <p class="mt-2">No classes scheduled for today</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            // Find the next class and current class
+            let nextClassIndex = -1;
+            let currentClassIndex = -1;
+
+            todayClasses.forEach((course, index) => {
+                const [hours, minutes] = course.lecture_time.split(':');
+                const classTime = parseInt(hours) * 60 + parseInt(minutes);
+                const timeDiff = classTime - currentTime;
+                
+                // Class is happening now (within 60 minutes of start time and not yet ended)
+                if (timeDiff >= -60 && timeDiff <= 0) {
+                    currentClassIndex = index;
+                }
+                // Next upcoming class
+                else if (timeDiff > 0 && nextClassIndex === -1) {
+                    nextClassIndex = index;
+                }
+            });
+
+            let lastDay = '';
+            scheduleContainer.innerHTML = `
+                <div class="absolute left-[15px] top-3 bottom-6 w-[2px] bg-slate-100 dark:bg-slate-800"></div>
+                ${todayClasses.map((course, index) => {
+                    const dayHeader = showAll && course.displayDay !== lastDay ? `
+                        <div class="mb-4 mt-${index > 0 ? '6' : '0'}">
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">${course.displayDay}</div>
+                        </div>
+                    ` : '';
+                    if (showAll) lastDay = course.displayDay;
+                    const [hours, minutes] = course.lecture_time.split(':');
+                    const classTime = parseInt(hours) * 60 + parseInt(minutes);
+                    const timeDiff = getTimeDifference(classTime, currentTime);
+                    
+                    const isNow = currentClassIndex === index;
+                    const isNext = nextClassIndex === index;
+                    const isPast = timeDiff < -60; // Class ended more than 60 minutes ago
+                    
+                    // Calculate time until class for "NEXT" indicator
+                    let timeUntil = '';
+                    if (isNext) {
+                        const hoursUntil = Math.floor(timeDiff / 60);
+                        const minutesUntil = timeDiff % 60;
+                        if (hoursUntil > 0) {
+                            timeUntil = `in ${hoursUntil}h ${minutesUntil}m`;
+                        } else {
+                            timeUntil = `in ${minutesUntil}m`;
+                        }
+                    }
+
+                    return `
+                        ${dayHeader}
+                        <div class="relative flex gap-5 ${index < todayClasses.length - 1 ? 'pb-8' : ''} group ${isPast && !showAll ? 'opacity-40' : isNow || isNext ? '' : 'opacity-70 hover:opacity-100'} transition-opacity">
+                            <div class="z-10 relative mt-1">
+                                <div class="size-8 rounded-full ${isNow ? 'bg-primary border-[3px] border-white dark:border-slate-900 shadow-md shadow-blue-500/20' : isNext ? 'bg-green-500 border-[3px] border-white dark:border-slate-900 shadow-md shadow-green-500/20' : 'bg-white dark:bg-slate-800 border-[3px] border-slate-200 dark:border-slate-700'} flex items-center justify-center">
+                                    ${isNow ? '<span class="material-symbols-outlined text-white text-[14px] font-bold">play_arrow</span>' : isNext ? '<span class="material-symbols-outlined text-white text-[14px] font-bold">schedule</span>' : '<div class="size-2 rounded-full bg-slate-300 dark:bg-slate-600"></div>'}
+                                </div>
+                            </div>
+                            <div class="flex flex-col flex-1 ${isNow ? 'bg-blue-50/50 dark:bg-slate-800/30 p-3 rounded-xl border border-blue-100 dark:border-slate-700/50 hover:border-primary/30' : isNext ? 'bg-green-50/50 dark:bg-green-900/10 p-3 rounded-xl border border-green-100 dark:border-green-900/30 hover:border-green-500/30' : 'p-2'} transition-colors">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-xs font-bold ${isNow ? 'text-primary uppercase tracking-wider' : isNext ? 'text-green-600 dark:text-green-400 uppercase tracking-wider' : 'text-slate-400'}">${formatTime(course.lecture_time)}</span>
+                                    ${isNow ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary text-white border border-blue-100 dark:border-slate-700 shadow-sm">NOW</span>' : ''}
+                                    ${isNext ? `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-green-500 text-white border border-green-100 dark:border-green-900 shadow-sm">NEXT • ${timeUntil}</span>` : ''}
+                                </div>
+                                <h4 class="text-base font-bold ${isNow || isNext ? 'text-slate-900 dark:text-white' : isPast ? 'text-slate-400 dark:text-slate-500 line-through' : 'text-slate-700 dark:text-slate-200'}">${course.course_name}</h4>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-${isNow || isNext ? '2' : '1'}">
+                                    <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                                    ${course.room}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        // Update classes count
+        function updateClassesCount() {
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+            const todayClasses = enrolledCourses.filter(c => {
+                return c.days && c.days.split(',').some(day => day.trim() === today);
+            });
+
+            const dateElements = document.querySelectorAll('p');
+            dateElements.forEach(el => {
+                if (el.innerHTML.includes('You have')) {
+                    const dateText = formatDate();
+                    el.innerHTML = `${dateText} <span class="mx-2 text-slate-300 dark:text-slate-700">|</span> You have <span class="text-primary font-bold">${todayClasses.length} ${todayClasses.length === 1 ? 'class' : 'classes'}</span> today.`;
+                }
+            });
+        }
+
+        // Setup view toggle buttons
+        const gridViewBtn = document.getElementById('gridViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+
+        if (gridViewBtn && listViewBtn) {
+            gridViewBtn.addEventListener('click', () => {
+                gridViewBtn.className = 'p-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all';
+                listViewBtn.className = 'p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all';
+                renderCourses('grid');
+            });
+
+            listViewBtn.addEventListener('click', () => {
+                listViewBtn.className = 'p-1.5 rounded-md bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all';
+                gridViewBtn.className = 'p-1.5 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all';
+                renderCourses('list');
+            });
+        }
+
+        // Setup View All button for schedule
+        const viewAllScheduleBtn = document.getElementById('viewAllScheduleBtn');
+        const scheduleTitle = document.getElementById('scheduleTitle');
+        
+        if (viewAllScheduleBtn && scheduleTitle) {
+            viewAllScheduleBtn.addEventListener('click', () => {
+                showingAllSchedule = !showingAllSchedule;
+                if (showingAllSchedule) {
+                    viewAllScheduleBtn.textContent = 'Show Today';
+                    scheduleTitle.textContent = 'Weekly Schedule';
+                } else {
+                    viewAllScheduleBtn.textContent = 'View All';
+                    scheduleTitle.textContent = "Today's Schedule";
+                }
+                renderTodaySchedule(showingAllSchedule);
+            });
+        }
+    </script>
+</body>
+</html>
