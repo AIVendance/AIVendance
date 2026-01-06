@@ -240,7 +240,7 @@
                     <div id="activity-feed" class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
                         <p class="text-[#9dabb9] text-sm">Loading activity...</p>
                     </div>
-                    <button class="w-full py-3 text-center text-primary text-sm font-bold border-t border-[#3b4754] hover:bg-[#283039] transition-colors">View All Logs</button>
+                    <button onclick="viewAllLogs()" class="w-full py-3 text-center text-primary text-sm font-bold border-t border-[#3b4754] hover:bg-[#283039] transition-colors">View All Logs</button>
                 </div>
             </div>
 
@@ -295,7 +295,7 @@
                         <p class="text-[#9dabb9] text-base font-normal">Manage student accounts, enrollment status, and records.</p>
                     </div>
                     <div class="flex gap-3">
-                        <button class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-[#283039] text-white text-sm font-bold hover:bg-[#343e4a] transition-colors border border-white/5">
+                        <button onclick="exportStudentsToCSV()" class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-[#283039] text-white text-sm font-bold hover:bg-[#343e4a] transition-colors border border-white/5">
                             <span class="material-symbols-outlined text-lg">download</span>
                             <span class="hidden sm:inline">Export</span>
                         </button>
@@ -356,10 +356,10 @@
                         <div class="relative min-w-[140px]">
                             <select id="major-filter" class="w-full bg-[#111418] border border-[#283039] text-white text-sm rounded-lg h-10 pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
                                 <option value="">All Majors</option>
+                                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                <option value="Software engineering">Software engineering</option>
                                 <option value="Computer Science">Computer Science</option>
-                                <option value="Engineering">Engineering</option>
-                                <option value="Business">Business</option>
-                                <option value="Arts">Arts</option>
+                                <option value="Networks and cybersecurity">Networks and cybersecurity</option>
                             </select>
                             <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[#9dabb9] material-symbols-outlined pointer-events-none text-xl">expand_more</span>
                         </div>
@@ -381,9 +381,6 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-[#283039] text-[#9dabb9] text-xs uppercase tracking-wider font-semibold border-b border-[#283039]">
-                                    <th class="p-4 w-12">
-                                        <input id="select-all" class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
-                                    </th>
                                     <th class="p-4">Student</th>
                                     <th class="p-4">Student ID</th>
                                     <th class="p-4">Major</th>
@@ -394,7 +391,7 @@
                             </thead>
                             <tbody id="students-table-body" class="divide-y divide-[#283039] text-sm text-white">
                                 <tr class="text-center">
-                                    <td colspan="7" class="p-8 text-[#9dabb9]">Loading students...</td>
+                                    <td colspan="6" class="p-8 text-[#9dabb9]">Loading students...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -598,11 +595,19 @@
                                     <span class="material-symbols-outlined text-[16px]">book</span>
                                     Select Course
                                 </label>
-                                <div class="relative">
-                                    <select id="schedule-course-select" class="appearance-none bg-[#1a1f28] border-2 border-[#3b4754] text-white text-base rounded-xl focus:ring-2 focus:ring-primary focus:border-primary block w-full p-4 pr-10 transition-all duration-200 hover:border-[#4a5663] cursor-pointer">
-                                        <option value="">Choose a course to assign schedule...</option>
-                                    </select>
-                                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none">expand_more</span>
+                                
+                                <!-- Search Input -->
+                                <div class="relative mb-3">
+                                    <input type="text" id="course-search-input" placeholder="Search courses..." class="bg-[#1a1f28] border-2 border-[#3b4754] text-white text-sm rounded-xl focus:ring-2 focus:ring-primary focus:border-primary block w-full p-3 pl-10 transition-all duration-200 hover:border-[#4a5663] placeholder-[#586472]" />
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#9dabb9] text-[20px]">search</span>
+                                </div>
+                                
+                                <!-- Course Cards Grid -->
+                                <input type="hidden" id="schedule-course-select" value="" />
+                                <div id="course-cards-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto p-1">
+                                    <div class="col-span-full text-center py-8 text-[#9dabb9] text-sm">
+                                        No courses available. Please add courses first.
+                                    </div>
                                 </div>
                             </div>
 
@@ -836,20 +841,24 @@
                     <div class="bg-[#283039] border border-[#3b4754] p-4 rounded-xl flex flex-col md:flex-row gap-4 items-end">
                         <div class="flex-1">
                             <label class="text-white text-sm font-medium mb-2 block">Academic Term</label>
-                            <select id="enrollment-term-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-8 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                                <option value="">Fall 2023</option>
-                                <option value="">Spring 2024</option>
-                                <option value="">Summer 2024</option>
-                            </select>
+                            <div class="relative">
+                                <select id="enrollment-term-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-10 rounded-lg focus:ring-2 focus:ring-primary outline-none cursor-pointer hover:border-primary/50 transition-colors">
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none text-lg">expand_more</span>
+                            </div>
                         </div>
                         <div class="flex-1">
                             <label class="text-white text-sm font-medium mb-2 block">Department</label>
-                            <select id="enrollment-dept-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-8 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                                <option value="">All Departments</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Engineering">Engineering</option>
-                                <option value="Mathematics">Mathematics</option>
-                            </select>
+                            <div class="relative">
+                                <select id="enrollment-dept-filter" class="w-full appearance-none bg-[#111418] border border-[#3b4754] text-white py-2.5 pl-4 pr-10 rounded-lg focus:ring-2 focus:ring-primary outline-none cursor-pointer hover:border-primary/50 transition-colors">
+                                    <option value="">All Departments</option>
+                                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                    <option value="Software engineering">Software engineering</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Networks and cybersecurity">Networks and cybersecurity</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none text-lg">expand_more</span>
+                            </div>
                         </div>
                         <div class="flex-[2]">
                             <label class="text-white text-sm font-medium mb-2 block">Search Course or Instructor</label>
@@ -1024,6 +1033,26 @@
         </div>
     </main>
 
+    <!-- Activity Logs Modal -->
+    <div id="activity-logs-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-[#111418] rounded-2xl border border-[#3b4754] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-[#3b4754] flex items-center justify-between">
+                <h2 class="text-white text-2xl font-bold">Activity Logs</h2>
+                <button onclick="closeActivityLogsModal()" class="text-[#9dabb9] hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="all-activity-logs" class="flex flex-col gap-3">
+                    <!-- Activity logs will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = "http://127.0.0.1:8000";
         let currentAdmin = null;
@@ -1045,7 +1074,137 @@
             setupInstructorPageListeners();
             setupCoursePageListeners();
             setupEnrollmentPageListeners();
+            setupGlobalSearch();
         });
+
+        // Setup global search functionality
+        function setupGlobalSearch() {
+            const searchInput = document.getElementById('search-input');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                const query = e.target.value.trim().toLowerCase();
+
+                // Debounce search by 300ms
+                searchTimeout = setTimeout(() => {
+                    if (query.length === 0) {
+                        // Clear search results
+                        return;
+                    }
+
+                    if (query.length < 2) {
+                        // Minimum 2 characters to search
+                        return;
+                    }
+
+                    performGlobalSearch(query);
+                }, 300);
+            });
+
+            // Handle Enter key
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim().toLowerCase();
+                    if (query.length >= 2) {
+                        performGlobalSearch(query);
+                    }
+                }
+            });
+        }
+
+        // Perform global search across all entities
+        function performGlobalSearch(query) {
+            const results = {
+                students: [],
+                instructors: [],
+                courses: []
+            };
+
+            // Search students
+            if (allStudents && allStudents.length > 0) {
+                results.students = allStudents.filter(student => {
+                    const fullName = student.full_name.toLowerCase();
+                    const universityId = student.university_id.toLowerCase();
+                    const email = (student.email || '').toLowerCase();
+                    return fullName.includes(query) || universityId.includes(query) || email.includes(query);
+                }).slice(0, 5); // Limit to 5 results
+            }
+
+            // Search instructors
+            if (allInstructors && allInstructors.length > 0) {
+                results.instructors = allInstructors.filter(instructor => {
+                    const fullName = instructor.full_name.toLowerCase();
+                    const username = instructor.username.toLowerCase();
+                    const email = (instructor.email || '').toLowerCase();
+                    const department = (instructor.department || '').toLowerCase();
+                    return fullName.includes(query) || username.includes(query) || email.includes(query) || department.includes(query);
+                }).slice(0, 5);
+            }
+
+            // Search courses
+            if (allCourses && allCourses.length > 0) {
+                results.courses = allCourses.filter(course => {
+                    const code = course.code.toLowerCase();
+                    const name = course.name.toLowerCase();
+                    return code.includes(query) || name.includes(query);
+                }).slice(0, 5);
+            }
+
+            displaySearchResults(results, query);
+        }
+
+        // Display search results
+        function displaySearchResults(results, query) {
+            const totalResults = results.students.length + results.instructors.length + results.courses.length;
+
+            if (totalResults === 0) {
+                alert(`No results found for "${query}"`);
+                return;
+            }
+
+            let message = `Found ${totalResults} result(s) for "${query}":\n\n`;
+
+            if (results.students.length > 0) {
+                message += `Students (${results.students.length}):\n`;
+                results.students.forEach(s => {
+                    message += `  • ${s.full_name} (${s.university_id})\n`;
+                });
+                message += '\n';
+            }
+
+            if (results.instructors.length > 0) {
+                message += `Instructors (${results.instructors.length}):\n`;
+                results.instructors.forEach(i => {
+                    message += `  • ${i.full_name} (${i.username})\n`;
+                });
+                message += '\n';
+            }
+
+            if (results.courses.length > 0) {
+                message += `Courses (${results.courses.length}):\n`;
+                results.courses.forEach(c => {
+                    message += `  • ${c.code} - ${c.name}\n`;
+                });
+            }
+
+            // For now, show in alert. You could create a modal or dropdown instead
+            if (confirm(message + '\nWould you like to view the first result?')) {
+                navigateToFirstResult(results);
+            }
+        }
+
+        // Navigate to the first search result
+        function navigateToFirstResult(results) {
+            if (results.students.length > 0) {
+                showPage('students');
+                // Could scroll to or highlight the student in the table
+            } else if (results.instructors.length > 0) {
+                showPage('instructors');
+            } else if (results.courses.length > 0) {
+                showPage('courses');
+            }
+        }
 
         // Load admin data from API
         async function loadAdminData() {
@@ -1071,6 +1230,14 @@
                 await loadStudents();
                 await loadCourses();
                 await loadInstructors();
+                await loadEnrollments();
+                
+                console.log('Data loaded:', {
+                    students: allStudents?.length,
+                    courses: allCourses?.length,
+                    instructors: allInstructors?.length,
+                    enrollments: allEnrollments?.length
+                });
                 
                 // Load recent activity with real data
                 loadRecentActivity();
@@ -1129,85 +1296,244 @@
         }
 
         // Load recent activity
-        async function loadRecentActivity() {
+        function loadRecentActivity() {
+            console.log('=== Loading Recent Activity ===');
+            const feed = document.getElementById('activity-feed');
+            
+            if (!feed) {
+                console.error('Activity feed element not found!');
+                return;
+            }
+            
+            console.log('Data available:', {
+                students: allStudents?.length,
+                instructors: allInstructors?.length,
+                courses: allCourses?.length,
+                enrollments: allEnrollments?.length
+            });
+            
+            const allActivities = [];
+            
             try {
-                // Fetch real system events
-                const activities = [];
-                
-                // Check for recent student additions
+                // Recent student additions
                 if (allStudents && allStudents.length > 0) {
-                    const recentStudents = allStudents.slice(-3).reverse();
-                    recentStudents.forEach(student => {
-                        activities.push({
-                            type: 'success',
-                            title: 'New Student Registered',
-                            description: `${student.full_name} added to ${student.major || 'Unknown'} Dept.`,
-                            time: getRelativeTime(student.created_at)
-                        });
+                    allStudents.forEach(student => {
+                        if (student.created_at) {
+                            allActivities.push({
+                                type: 'success',
+                                title: 'New Student Registered',
+                                description: `${student.full_name} added to ${student.major || 'Unknown'} Dept.`,
+                                timestamp: new Date(student.created_at),
+                                time: getRelativeTime(student.created_at)
+                            });
+                        }
                     });
                 }
                 
-                // Check for courses without instructors
-                if (allCourses) {
-                    const unassignedCourses = allCourses.filter(c => !c.instructor_id || c.instructor_id === null);
-                    if (unassignedCourses.length > 0) {
-                        const course = unassignedCourses[0];
-                        activities.push({
-                            type: 'warning',
-                            title: `Course Pending: ${course.course_code}`,
-                            description: 'No instructor assigned yet.',
-                            time: 'Pending'
-                        });
-                    }
-                }
-                
-                // Check for recent instructors
+                // Recent instructors
                 if (allInstructors && allInstructors.length > 0) {
-                    const recentInstructor = allInstructors[allInstructors.length - 1];
-                    activities.push({
-                        type: 'info',
-                        title: 'Instructor Added',
-                        description: `${recentInstructor.full_name} joined ${recentInstructor.department || 'Unknown'} Dept.`,
-                        time: getRelativeTime(recentInstructor.created_at)
+                    allInstructors.forEach(instructor => {
+                        if (instructor.created_at) {
+                            allActivities.push({
+                                type: 'info',
+                                title: 'Instructor Added',
+                                description: `${instructor.full_name} joined ${instructor.department || 'Unknown'} Dept.`,
+                                timestamp: new Date(instructor.created_at),
+                                time: getRelativeTime(instructor.created_at)
+                            });
+                        }
                     });
                 }
                 
-                // Add system status
-                activities.push({
-                    type: 'success',
-                    title: 'System Status',
-                    description: `Database operational - ${allStudents?.length || 0} students, ${allCourses?.length || 0} courses.`,
-                    time: 'Just now'
-                });
-
-                const feed = document.getElementById('activity-feed');
-                if (activities.length === 0) {
-                    feed.innerHTML = '<p class="text-[#9dabb9] text-sm">No recent activity</p>';
-                    return;
+                // Recent courses
+                if (allCourses && allCourses.length > 0) {
+                    allCourses.forEach(course => {
+                        if (course.created_at) {
+                            allActivities.push({
+                                type: 'success',
+                                title: 'Course Created',
+                                description: `${course.code} - ${course.name}`,
+                                timestamp: new Date(course.created_at),
+                                time: getRelativeTime(course.created_at)
+                            });
+                        }
+                    });
                 }
                 
-                feed.innerHTML = activities.slice(0, 5).map(activity => {
-                const colorMap = { error: 'red', success: 'green', info: 'blue', warning: 'yellow' };
-                const color = colorMap[activity.type] || 'blue';
-                return `
-                    <div class="flex gap-3 items-start">
-                        <div class="mt-1 size-2 rounded-full bg-${color}-500 shrink-0"></div>
-                        <div class="flex flex-col gap-1">
-                            <p class="text-white text-sm font-medium">${activity.title}</p>
-                            <p class="text-[#9dabb9] text-xs">${activity.description}</p>
-                            <p class="text-[#55606d] text-[10px] mt-1">${activity.time}</p>
+                // Recent enrollments
+                if (allEnrollments && allEnrollments.length > 0) {
+                    allEnrollments.forEach(enrollment => {
+                        if (enrollment.created_at) {
+                            allActivities.push({
+                                type: 'info',
+                                title: 'Student Enrolled',
+                                description: `${enrollment.student_name || 'Student'} enrolled in ${enrollment.course_code || 'course'}`,
+                                timestamp: new Date(enrollment.created_at),
+                                time: getRelativeTime(enrollment.created_at)
+                            });
+                        }
+                    });
+                }
+                
+                // Sort by timestamp (most recent first)
+                allActivities.sort((a, b) => b.timestamp - a.timestamp);
+                
+                console.log('Total activities found:', allActivities.length);
+                
+                // Add system status if no activities
+                if (allActivities.length === 0) {
+                    allActivities.push({
+                        type: 'success',
+                        title: 'System Status',
+                        description: `Database operational - ${allStudents?.length || 0} students, ${allCourses?.length || 0} courses.`,
+                        timestamp: new Date(),
+                        time: 'Just now'
+                    });
+                }
+                
+                // Take only the 5 most recent activities
+                const recentActivities = allActivities.slice(0, 5);
+                console.log('Displaying', recentActivities.length, 'activities');
+                
+                feed.innerHTML = recentActivities.map(activity => {
+                    const colorMap = { 
+                        error: 'red-500', 
+                        success: 'green-500', 
+                        info: 'blue-500', 
+                        warning: 'yellow-500' 
+                    };
+                    const color = colorMap[activity.type] || 'blue-500';
+                    
+                    return `
+                        <div class="flex gap-3 items-start hover:bg-[#283039]/50 p-2 rounded-lg transition-colors">
+                            <div class="mt-1 size-2 rounded-full bg-${color} shrink-0"></div>
+                            <div class="flex flex-col gap-1 flex-1">
+                                <p class="text-white text-sm font-medium">${activity.title}</p>
+                                <p class="text-[#9dabb9] text-xs">${activity.description}</p>
+                                <p class="text-[#55606d] text-[10px] mt-1">${activity.time}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="h-px bg-[#3b4754]/50 w-full"></div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+                
+                console.log('Activity feed rendered with', allActivities.length, 'activities');
+
             } catch (error) {
-                console.error('Error loading activity:', error);
-                document.getElementById('activity-feed').innerHTML = '<p class="text-[#9dabb9] text-sm">Unable to load activity</p>';
+                console.error('Error loading recent activity:', error);
+                const feed = document.getElementById('activity-feed');
+                feed.innerHTML = '<p class="text-red-500 text-sm">Failed to load activity</p>';
             }
         }
         
-        // Get relative time from timestamp
+        // View all logs function
+        function viewAllLogs() {
+            const modal = document.getElementById('activity-logs-modal');
+            const logsContainer = document.getElementById('all-activity-logs');
+            
+            // Collect all activities
+            const allActivities = [];
+            
+            // Students
+            if (allStudents && allStudents.length > 0) {
+                allStudents.forEach(student => {
+                    if (student.created_at) {
+                        allActivities.push({
+                            type: 'success',
+                            title: 'New Student Registered',
+                            description: `${student.full_name} added to ${student.major || 'Unknown'} Dept.`,
+                            timestamp: new Date(student.created_at),
+                            time: getRelativeTime(student.created_at),
+                            details: `ID: ${student.university_id}, Email: ${student.email || 'N/A'}`
+                        });
+                    }
+                });
+            }
+            
+            // Instructors
+            if (allInstructors && allInstructors.length > 0) {
+                allInstructors.forEach(instructor => {
+                    if (instructor.created_at) {
+                        allActivities.push({
+                            type: 'info',
+                            title: 'Instructor Added',
+                            description: `${instructor.full_name} joined ${instructor.department || 'Unknown'} Dept.`,
+                            timestamp: new Date(instructor.created_at),
+                            time: getRelativeTime(instructor.created_at),
+                            details: `Username: ${instructor.username}, Email: ${instructor.email || 'N/A'}`
+                        });
+                    }
+                });
+            }
+            
+            // Courses
+            if (allCourses && allCourses.length > 0) {
+                allCourses.forEach(course => {
+                    if (course.created_at) {
+                        allActivities.push({
+                            type: 'success',
+                            title: 'Course Created',
+                            description: `${course.code} - ${course.name}`,
+                            timestamp: new Date(course.created_at),
+                            time: getRelativeTime(course.created_at),
+                            details: `Status: ${course.status || 'Active'}`
+                        });
+                    }
+                });
+            }
+            
+            // Enrollments
+            if (allEnrollments && allEnrollments.length > 0) {
+                allEnrollments.forEach(enrollment => {
+                    if (enrollment.created_at) {
+                        allActivities.push({
+                            type: 'info',
+                            title: 'Student Enrolled',
+                            description: `${enrollment.student_name || 'Student'} enrolled in ${enrollment.course_code || 'course'}`,
+                            timestamp: new Date(enrollment.created_at),
+                            time: getRelativeTime(enrollment.created_at),
+                            details: enrollment.course_name || ''
+                        });
+                    }
+                });
+            }
+            
+            // Sort by timestamp (most recent first)
+            allActivities.sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Render all activities
+            logsContainer.innerHTML = allActivities.map(activity => {
+                const colorMap = { 
+                    error: { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-500', dot: 'bg-red-500' },
+                    success: { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-500', dot: 'bg-green-500' },
+                    info: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-500', dot: 'bg-blue-500' },
+                    warning: { bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', text: 'text-yellow-500', dot: 'bg-yellow-500' }
+                };
+                const colors = colorMap[activity.type] || colorMap.info;
+                
+                return `
+                    <div class="flex gap-4 items-start p-4 rounded-xl border ${colors.border} ${colors.bg} hover:bg-[#283039]/50 transition-colors">
+                        <div class="mt-1.5 size-3 rounded-full ${colors.dot} shrink-0"></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-4 mb-1">
+                                <p class="text-white font-bold text-sm">${activity.title}</p>
+                                <span class="text-[#9dabb9] text-xs whitespace-nowrap">${activity.time}</span>
+                            </div>
+                            <p class="text-[#9dabb9] text-sm mb-1">${activity.description}</p>
+                            ${activity.details ? `<p class="text-[#55606d] text-xs">${activity.details}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p class="text-[#9dabb9] text-center py-8">No activity logs available</p>';
+            
+            modal.classList.remove('hidden');
+        }
+        
+        // Close activity logs modal
+        function closeActivityLogsModal() {
+            document.getElementById('activity-logs-modal').classList.add('hidden');
+        }
+
+        // Helper function to get relative time
         function getRelativeTime(timestamp) {
             if (!timestamp) return 'Recently';
             
@@ -1219,9 +1545,13 @@
             const diffDays = Math.floor(diffMs / 86400000);
             
             if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins} min ago`;
-            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            if (diffMins === 1) return '1 minute ago';
+            if (diffMins < 60) return `${diffMins} minutes ago`;
+            if (diffHours === 1) return '1 hour ago';
+            if (diffHours < 24) return `${diffHours} hours ago`;
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
             return past.toLocaleDateString();
         }
 
@@ -1300,7 +1630,16 @@
                         </div>
                         <div>
                             <label class="text-white text-sm font-medium mb-1 block">Major</label>
-                            <input type="text" id="student-major" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                            <div class="relative">
+                                <select id="student-major" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 pr-10 rounded-lg focus:ring-2 focus:ring-primary outline-none appearance-none cursor-pointer hover:border-primary/50 transition-colors" required>
+                                    <option value="" class="bg-[#111418] text-[#9dabb9]">Select a major...</option>
+                                    <option value="Artificial Intelligence" class="bg-[#111418] text-white">Artificial Intelligence</option>
+                                    <option value="Software engineering" class="bg-[#111418] text-white">Software engineering</option>
+                                    <option value="Computer Science" class="bg-[#111418] text-white">Computer Science</option>
+                                    <option value="Networks and cybersecurity" class="bg-[#111418] text-white">Networks and cybersecurity</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none text-lg">expand_more</span>
+                            </div>
                         </div>
                         <div class="flex gap-3 mt-4">
                             <button type="submit" class="flex-1 bg-primary hover:bg-[#106cc9] text-white py-2 rounded-lg font-bold transition-colors">Add Student</button>
@@ -1717,7 +2056,7 @@
                 renderStudentTable();
             } catch (error) {
                 console.error('Error loading students:', error);
-                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-400">Failed to load students</td></tr>`;
+                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to load students</td></tr>`;
             }
         }
 
@@ -1725,8 +2064,27 @@
         function updateStudentStats() {
             const totalStudents = allStudents.length;
             const activeStudents = allStudents.filter(s => s.is_active).length;
+            
+            // Calculate new enrollments today
+            const today = new Date();
+            const todayDateString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+            
+            const newEnrollmentsToday = allStudents.filter(student => {
+                if (!student.created_at) return false;
+                const createdDateString = student.created_at.split('T')[0]; // Get YYYY-MM-DD part
+                return createdDateString === todayDateString;
+            }).length;
+            
+            console.log('Today:', todayDateString);
+            console.log('New enrollments today:', newEnrollmentsToday);
+            console.log('Students with created_at:', allStudents.filter(s => s.created_at).map(s => ({
+                name: s.full_name,
+                created: s.created_at.split('T')[0]
+            })));
+            
             document.getElementById('stat-total-students').textContent = totalStudents.toLocaleString();
             document.getElementById('stat-active-students').textContent = activeStudents.toLocaleString();
+            document.getElementById('stat-new-enrollments').textContent = newEnrollmentsToday.toLocaleString();
         }
 
         // Render student table with pagination
@@ -1736,15 +2094,12 @@
             const paginatedStudents = filteredStudents.slice(start, end);
 
             if (paginatedStudents.length === 0) {
-                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="7" class="p-8 text-center text-[#9dabb9]">No students found</td></tr>`;
+                document.getElementById('students-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#9dabb9]">No students found</td></tr>`;
                 return;
             }
 
             const rows = paginatedStudents.map(student => `
                 <tr class="group hover:bg-[#283039]/50 transition-colors">
-                    <td class="p-4">
-                        <input class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-0 focus:ring-offset-0 size-4" type="checkbox"/>
-                    </td>
                     <td class="p-4">
                         <div class="flex items-center gap-3">
                             <div class="size-10 rounded-full bg-gradient-to-br from-primary to-purple-600"></div>
@@ -1840,11 +2195,161 @@
 
         // Student actions
         function editStudent(studentId) {
-            alert('Edit functionality coming soon for student: ' + studentId);
+            const student = allStudents.find(s => s.id === studentId);
+            if (!student) {
+                alert('Student not found');
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.id = 'edit-student-modal';
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-[#283039] rounded-xl border border-[#3b4754] p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-white text-xl font-bold">Edit Student</h3>
+                        <button onclick="document.getElementById('edit-student-modal').remove()" class="text-[#9dabb9] hover:text-white">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <form id="edit-student-form" class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Full Name</label>
+                            <input type="text" id="edit-student-name" value="${student.full_name || ''}" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">University ID</label>
+                            <input type="text" id="edit-student-id" value="${student.university_id || ''}" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Email</label>
+                            <input type="email" id="edit-student-email" value="${student.email || ''}" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Password <span class="text-[#9dabb9] text-xs">(leave blank to keep current)</span></label>
+                            <input type="password" id="edit-student-password" placeholder="••••••••" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none"/>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Major</label>
+                            <div class="relative">
+                                <select id="edit-student-major" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 pr-10 rounded-lg focus:ring-2 focus:ring-primary outline-none appearance-none cursor-pointer hover:border-primary/50 transition-colors" required>
+                                    <option value="" class="bg-[#111418] text-[#9dabb9]">Select a major...</option>
+                                    <option value="Artificial Intelligence" ${student.major === 'Artificial Intelligence' ? 'selected' : ''} class="bg-[#111418] text-white">Artificial Intelligence</option>
+                                    <option value="Software engineering" ${student.major === 'Software engineering' ? 'selected' : ''} class="bg-[#111418] text-white">Software engineering</option>
+                                    <option value="Computer Science" ${student.major === 'Computer Science' ? 'selected' : ''} class="bg-[#111418] text-white">Computer Science</option>
+                                    <option value="Networks and cybersecurity" ${student.major === 'Networks and cybersecurity' ? 'selected' : ''} class="bg-[#111418] text-white">Networks and cybersecurity</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none text-lg">expand_more</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm font-medium mb-1 block">Enrollment Year</label>
+                            <input type="number" id="edit-student-year" value="${student.enrollment_year || new Date().getFullYear()}" min="2000" max="2099" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required/>
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="edit-student-active" ${student.is_active ? 'checked' : ''} class="rounded border-[#586472] bg-[#111418] text-primary focus:ring-2 focus:ring-primary size-4"/>
+                                <span class="text-white text-sm font-medium">Active Account</span>
+                            </label>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button type="submit" class="flex-1 bg-primary hover:bg-[#106cc9] text-white py-2 rounded-lg font-bold transition-colors">Save Changes</button>
+                            <button type="button" onclick="document.getElementById('edit-student-modal').remove()" class="flex-1 bg-[#3b4754] hover:bg-[#4b5663] text-white py-2 rounded-lg font-bold transition-colors">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            document.getElementById('edit-student-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const password = document.getElementById('edit-student-password').value;
+                const updateData = {
+                    full_name: document.getElementById('edit-student-name').value,
+                    university_id: document.getElementById('edit-student-id').value,
+                    email: document.getElementById('edit-student-email').value,
+                    major: document.getElementById('edit-student-major').value,
+                    enrollment_year: parseInt(document.getElementById('edit-student-year').value),
+                    is_active: document.getElementById('edit-student-active').checked,
+                };
+                
+                // Only include password if it was changed
+                if (password) {
+                    updateData.password = password;
+                }
+                
+                await updateStudent(studentId, updateData);
+                modal.remove();
+            });
         }
 
         function deleteStudent(studentId) {
             deleteRecord('student', studentId);
+        }
+
+        // Update student API function
+        async function updateStudent(studentId, data) {
+            try {
+                const res = await fetch(`${API_BASE}/admin/students/${studentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.detail || 'Failed to update student');
+                }
+                
+                await loadStudents();
+                alert('Student updated successfully!');
+            } catch (error) {
+                console.error('Error updating student:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Export students to CSV
+        function exportStudentsToCSV() {
+            if (!filteredStudents || filteredStudents.length === 0) {
+                alert('No students to export');
+                return;
+            }
+
+            // CSV headers
+            const headers = ['Student ID', 'Full Name', 'Email', 'Major', 'Year', 'Status'];
+            
+            // CSV rows
+            const rows = filteredStudents.map(student => [
+                student.university_id || '',
+                student.full_name || '',
+                student.email || '',
+                student.major || '',
+                student.enrollment_year || '',
+                student.is_active ? 'Active' : 'Inactive'
+            ]);
+
+            // Combine headers and rows
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            // Create blob and download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `students_export_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // ==================== INSTRUCTOR PAGE FUNCTIONS ====================
@@ -2350,6 +2855,7 @@
                 filteredEnrollments = allEnrollments;
                 updateEnrollmentStats();
                 renderEnrollmentTable();
+                updateRecentActions(); // Update recent actions
             } catch (error) {
                 console.error('Error loading enrollments:', error);
                 document.getElementById('enrollment-table-body').innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to load enrollment data</td></tr>`;
@@ -2363,6 +2869,99 @@
             document.getElementById('stat-enrolled-total').textContent = totalEnrolled.toLocaleString();
             document.getElementById('stat-pending-approval').textContent = pendingCount.toLocaleString();
             document.getElementById('pending-count').textContent = `${pendingCount} Pending Assignments`;
+        }
+
+        // Update recent actions based on enrollments, courses, students, and instructors
+        function updateRecentActions() {
+            const container = document.getElementById('recent-actions');
+            if (!container) return;
+            
+            const actions = [];
+            
+            // Course creation activities
+            if (allCourses && allCourses.length > 0) {
+                allCourses.forEach(course => {
+                    if (course.created_at) {
+                        actions.push({
+                            type: 'success',
+                            icon: 'book',
+                            text: `Course ${course.course_code} created`,
+                            detail: course.course_name,
+                            timestamp: new Date(course.created_at),
+                            time: getRelativeTime(course.created_at)
+                        });
+                    }
+                });
+            }
+            
+            // Student enrollment activities
+            if (allStudents && allStudents.length > 0) {
+                allStudents.slice(0, 5).forEach(student => {
+                    if (student.created_at) {
+                        actions.push({
+                            type: 'info',
+                            icon: 'person_add',
+                            text: `${student.full_name} enrolled`,
+                            detail: student.major || '',
+                            timestamp: new Date(student.created_at),
+                            time: getRelativeTime(student.created_at)
+                        });
+                    }
+                });
+            }
+            
+            // Instructor assignment activities
+            if (allEnrollments && allEnrollments.length > 0) {
+                allEnrollments.filter(e => e.instructor_name).slice(0, 5).forEach(enrollment => {
+                    actions.push({
+                        type: 'success',
+                        icon: 'person_check',
+                        text: `${enrollment.instructor_name} assigned to ${enrollment.course_code}`,
+                        detail: enrollment.course_name,
+                        timestamp: new Date(),
+                        time: 'Recently'
+                    });
+                });
+            }
+            
+            // Sort by timestamp (most recent first) and take top 5
+            actions.sort((a, b) => b.timestamp - a.timestamp);
+            const recentActions = actions.slice(0, 5);
+            
+            if (recentActions.length === 0) {
+                container.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <div class="size-2 rounded-full bg-gray-500 mt-1.5 shrink-0"></div>
+                        <div class="flex flex-col">
+                            <p class="text-white text-sm">No recent actions</p>
+                            <p class="text-[#586370] text-xs">Activity will appear here</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render actions
+            container.innerHTML = recentActions.map(action => {
+                const colorMap = {
+                    success: 'bg-green-500',
+                    info: 'bg-blue-500',
+                    warning: 'bg-yellow-500',
+                    error: 'bg-red-500'
+                };
+                const dotColor = colorMap[action.type] || 'bg-gray-500';
+                
+                return `
+                    <div class="flex items-start gap-3">
+                        <div class="size-2 rounded-full ${dotColor} mt-1.5 shrink-0"></div>
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <p class="text-white text-sm font-medium">${action.text}</p>
+                            ${action.detail ? `<p class="text-[#9dabb9] text-xs truncate">${action.detail}</p>` : ''}
+                            <p class="text-[#586370] text-xs mt-0.5">${action.time}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderEnrollmentTable() {
@@ -2574,11 +3173,14 @@
                         </div>
                         <form id="assign-instructor-form" class="flex flex-col gap-4">
                             <div>
-                                <label class="text-white text-sm font-medium mb-1 block">Select Instructor</label>
-                                <select id="instructor-select" class="w-full bg-[#111418] border border-[#3b4754] text-white py-2 px-3 rounded-lg focus:ring-2 focus:ring-primary outline-none" required>
-                                    <option value="">-- Choose an instructor --</option>
-                                    ${instructorOptions}
-                                </select>
+                                <label class="text-white text-sm font-medium mb-2 block">Select Instructor</label>
+                                <div class="relative">
+                                    <select id="instructor-select" class="w-full bg-[#111418] border-2 border-[#3b4754] text-white py-3 pl-4 pr-12 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none cursor-pointer hover:border-primary/50 transition-all duration-200 font-medium" required>
+                                        <option value="" class="bg-[#111418] text-[#9dabb9]">-- Choose an instructor --</option>
+                                        ${instructorOptions}
+                                    </select>
+                                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-[#9dabb9] pointer-events-none text-xl">expand_more</span>
+                                </div>
                             </div>
                             <div class="flex gap-3 mt-6">
                                 <button type="button" onclick="document.getElementById('assign-instructor-modal').remove()" class="flex-1 px-4 py-2 bg-[#3b4754] text-white rounded-lg hover:bg-[#4b5764] transition-colors">Cancel</button>
@@ -2826,8 +3428,60 @@
             reader.readAsText(file);
         }
 
+        // Populate academic terms based on current date
+        function populateAcademicTerms() {
+            const termSelect = document.getElementById('enrollment-term-filter');
+            if (!termSelect) return;
+            
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1; // 0-indexed, so add 1
+            
+            // Determine current term based on month
+            // Fall: August-December (8-12)
+            // Spring: January-May (1-5)
+            // Summer: June-July (6-7)
+            let currentTerm, currentTermYear;
+            
+            if (currentMonth >= 8 && currentMonth <= 12) {
+                currentTerm = 'Fall';
+                currentTermYear = currentYear;
+            } else if (currentMonth >= 1 && currentMonth <= 5) {
+                currentTerm = 'Spring';
+                currentTermYear = currentYear;
+            } else {
+                currentTerm = 'Summer';
+                currentTermYear = currentYear;
+            }
+            
+            // Generate terms: current term, next term, and previous 2 terms
+            const terms = [];
+            const termOrder = ['Spring', 'Summer', 'Fall'];
+            
+            // Add previous year's terms
+            terms.push({ term: 'Fall', year: currentYear - 1 });
+            
+            // Add current year's terms
+            terms.push({ term: 'Spring', year: currentYear });
+            terms.push({ term: 'Summer', year: currentYear });
+            terms.push({ term: 'Fall', year: currentYear });
+            
+            // Add next year's terms
+            terms.push({ term: 'Spring', year: currentYear + 1 });
+            terms.push({ term: 'Summer', year: currentYear + 1 });
+            
+            // Populate dropdown
+            termSelect.innerHTML = terms.map(t => {
+                const isCurrentTerm = t.term === currentTerm && t.year === currentTermYear;
+                return `<option value="${t.term} ${t.year}" ${isCurrentTerm ? 'selected' : ''}>${t.term} ${t.year}</option>`;
+            }).join('');
+        }
+
         // Setup enrollment page event listeners
         function setupEnrollmentPageListeners() {
+            // Populate academic terms dynamically
+            populateAcademicTerms();
+            
             // Template download button
             document.getElementById('download-enrollment-template-btn')?.addEventListener('click', downloadEnrollmentTemplate);
             
@@ -3030,16 +3684,101 @@
         }
         
         function populateScheduleCourseDropdown() {
-            const select = document.getElementById('schedule-course-select');
-            if (!select) return;
+            const container = document.getElementById('course-cards-container');
+            const hiddenSelect = document.getElementById('schedule-course-select');
+            const searchInput = document.getElementById('course-search-input');
             
-            select.innerHTML = '<option value="">Choose a course to assign schedule...</option>';
-            allCourses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = course.id;
-                option.textContent = `${course.course_code} - ${course.course_name}`;
-                select.appendChild(option);
-            });
+            if (!container) return;
+            
+            // Function to render course cards
+            function renderCourseCards(coursesToShow = allCourses) {
+                if (!coursesToShow || coursesToShow.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-8 text-[#9dabb9] text-sm">No courses available. Please add courses first.</div>';
+                    return;
+                }
+                
+                container.innerHTML = coursesToShow.map(course => `
+                    <div 
+                        class="course-card group relative bg-[#1a1f28] border-2 border-[#3b4754] rounded-xl p-4 cursor-pointer transition-all duration-200 hover:border-primary hover:bg-[#1e252e] hover:shadow-lg hover:shadow-primary/20"
+                        data-course-id="${course.id}"
+                        onclick="selectCourse('${course.id}', '${course.course_code}', '${course.course_name}')"
+                    >
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                                <span class="material-symbols-outlined text-primary text-[20px]">menu_book</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="font-bold text-white text-sm group-hover:text-primary transition-colors">${course.course_code}</span>
+                                    <span class="size-1.5 rounded-full bg-[#3b4754]"></span>
+                                    <span class="text-xs text-[#9dabb9] font-medium">${course.course_name?.substring(0, 20)}${course.course_name?.length > 20 ? '...' : ''}</span>
+                                </div>
+                                <p class="text-xs text-[#9dabb9] truncate">${course.course_name}</p>
+                            </div>
+                            <span class="material-symbols-outlined text-[#3b4754] group-hover:text-primary transition-colors text-[20px]">chevron_right</span>
+                        </div>
+                        <div class="selected-indicator hidden absolute inset-0 border-2 border-primary bg-primary/5 rounded-xl pointer-events-none">
+                            <div class="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
+                                <span class="material-symbols-outlined text-[16px]">check</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Initial render
+            renderCourseCards();
+            
+            // Search functionality
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    if (!query) {
+                        renderCourseCards();
+                        return;
+                    }
+                    
+                    const filtered = allCourses.filter(course => 
+                        course.course_code?.toLowerCase().includes(query) ||
+                        course.course_name?.toLowerCase().includes(query)
+                    );
+                    
+                    if (filtered.length === 0) {
+                        container.innerHTML = '<div class="col-span-full text-center py-8 text-[#9dabb9] text-sm">No courses match your search.</div>';
+                    } else {
+                        renderCourseCards(filtered);
+                    }
+                });
+            }
+        }
+        
+        // New function to handle course selection
+        function selectCourse(courseId, courseCode, courseName) {
+            const hiddenSelect = document.getElementById('schedule-course-select');
+            const selectedCard = document.querySelector(`[data-course-id="${courseId}"]`);
+            
+            if (!selectedCard) return;
+            
+            const indicator = selectedCard.querySelector('.selected-indicator');
+            const isCurrentlySelected = !indicator.classList.contains('hidden');
+            
+            // If clicking the same course, deselect it
+            if (isCurrentlySelected) {
+                hiddenSelect.value = '';
+                indicator.classList.add('hidden');
+            } else {
+                // Remove previous selection
+                document.querySelectorAll('.course-card .selected-indicator').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                
+                // Select new course
+                hiddenSelect.value = courseId;
+                indicator.classList.remove('hidden');
+            }
+            
+            // Update schedule preview
+            updateSchedulePreview();
         }
         
         async function saveSchedule() {

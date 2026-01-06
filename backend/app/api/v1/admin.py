@@ -19,6 +19,16 @@ class CreateStudentRequest(BaseModel):
     major: str
 
 
+class UpdateStudentRequest(BaseModel):
+    full_name: str | None = None
+    university_id: str | None = None
+    email: str | None = None
+    password: str | None = None
+    major: str | None = None
+    enrollment_year: int | None = None
+    is_active: bool | None = None
+
+
 class CreateInstructorRequest(BaseModel):
     full_name: str
     username: str
@@ -151,6 +161,7 @@ def list_students(
             "major": s.major,
             "enrollment_year": s.enrollment_year,
             "is_active": s.is_active,
+            "created_at": s.created_at.isoformat() if s.created_at else None,
         }
         for s in students
     ]
@@ -195,6 +206,50 @@ def create_student(
         "email": new_student.email,
         "major": new_student.major,
         "is_active": new_student.is_active,
+        "created_at": new_student.created_at.isoformat() if new_student.created_at else None,
+    }
+
+
+@router.put("/students/{student_id}")
+def update_student(
+    student_id: str,
+    request: UpdateStudentRequest,
+    db: Session = Depends(get_db_session),
+    current_user: dict = Depends(require_role("admin")),
+):
+    """Update a student's information."""
+    student = db.query(models.Student).filter(models.Student.id == student_id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    # Update only provided fields
+    if request.full_name is not None:
+        student.full_name = request.full_name
+    if request.university_id is not None:
+        student.university_id = request.university_id
+    if request.email is not None:
+        student.email = request.email
+    if request.password is not None:
+        student.password_hash = get_password_hash(request.password)
+    if request.major is not None:
+        student.major = request.major
+    if request.enrollment_year is not None:
+        student.enrollment_year = request.enrollment_year
+    if request.is_active is not None:
+        student.is_active = request.is_active
+    
+    db.commit()
+    db.refresh(student)
+    
+    return {
+        "id": str(student.id),
+        "university_id": student.university_id,
+        "full_name": student.full_name,
+        "email": student.email,
+        "major": student.major,
+        "enrollment_year": student.enrollment_year,
+        "is_active": student.is_active,
+        "created_at": student.created_at.isoformat() if student.created_at else None,
     }
 
 
